@@ -1,0 +1,13 @@
+.env
+__pycache__/
+modifiche.md
+app/__pycache__/
+app/routes/__pycache__/
+app/services/__pycache__/
+app/routes/admin/__pycache__/
+app/routes/admin/admin_asset/__pycache__/
+app/routes/admin/admin_auction/__pycache__/
+app/routes/admin/admin_bids/__pycache__/
+app/routes/assets/__pycache__/
+app/routes/auctions/__pycache__/
+app/routes/bids/__pycache__/
