@@ -1,0 +1,72 @@
+{% extends "base.html" %} {% block title %} Login - BuySellChain {% endblock %}
+{% block scripts %}
+<script defer src="static/js/login.js"></script>
+{% endblock %} {% block content %}
+<article class="grid">
+	<div x-data="loginForm">
+		<hgroup>
+			<h1>Log in</h1>
+			<h2>Please enter your credentials</h2>
+		</hgroup>
+
+		<form @submit.prevent="login_request()">
+			<label for="email">
+				Email
+				<input
+					type="email"
+					id="email"
+					name="email"
+					placeholder="Enter your email"
+					autocomplete="email"
+					aria-label="Email"
+					required
+					x-model="email"
+					:aria-invalid="emailError ? 'true' : null"
+					@input="message = ''"
+				/>
+				<small x-show="emailError" x-text="emailError" class="pico-color-red-500"></small>
+			</label>
+
+			<label for="password">
+				Password
+				<input
+					type="password"
+					id="password"
+					name="password"
+					placeholder="Enter your password"
+					autocomplete="current-password"
+					required
+					x-model="password"
+					@input="message = ''"
+				/>
+			</label>
+
+			<fieldset>
+				<label for="remember">
+					<input
+						type="checkbox"
+						role="switch"
+						id="remember"
+						name="remember"
+						x-model="remember"
+					/>
+					Remember me
+				</label>
+			</fieldset>
+			
+			<div
+				x-show="message"
+				x-transition.opacity
+				role="alert"
+				class="pico-background-red-100 pico-color-red-600"
+				style="padding: 1rem; margin-bottom: 1rem; border-radius: var(--pico-border-radius); border: 1px solid currentColor;"
+			>
+				<strong x-text="message"></strong>
+			</div>
+
+			<button type="submit" :disabled="emailError || !password || !email" class="contrast">Login</button>
+		</form>
+	</div>
+	<div></div>
+</article>
+{% endblock %}
