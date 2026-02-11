@@ -150,3 +150,8 @@ wxPython==4.2.4
 x_wr_timezone==2.0.1
 zipp==3.21.0
 zstandard==0.25.0
+MarkupSafe==3.0.3
+pycparser==3.0
+PyJWT==2.11.0
+Werkzeug==3.1.5
+python-dotenv==1.2.1

@@ -57,6 +57,14 @@ def user_lookup_callback(_jwt_header, jwt_data):
 
 from .middleware.logger import register_logger_middleware
 
+from app.routes.admin.admin_asset.api_admin_asset import api_admin_asset
+from app.routes.admin.admin_auction.api_admin_auctions import api_admin_auctions
+from app.routes.assets.api_assets import api_assets
+from app.routes.auctions.api_auctions import api_auctions
+from app.routes.auth.api import api_auth
+from app.routes.bids.api_bids import api_bids
+from app.routes.admin.api_admin import api_admin
+
 def create_app():
     app = Flask(__name__)
     
@@ -94,5 +102,13 @@ def create_app():
 
     # Import modelli per Migrate
     from app.models.models import User
+    
+    app.register_blueprint(api_auth, url_prefix='/api/v1/auth')
+    app.register_blueprint(api_assets, url_prefix='/api/v1/')
+    app.register_blueprint(api_auctions, url_prefix='/api/v1/')
+    app.register_blueprint(api_bids, url_prefix='/api/v1/')
+    app.register_blueprint(api_admin, url_prefix='/api/v1/admin/')
+    app.register_blueprint(api_admin_asset, url_prefix='/api/v1/admin/')
+    app.register_blueprint(api_admin_auctions, url_prefix='/api/v1/admin/')
 
     return app
