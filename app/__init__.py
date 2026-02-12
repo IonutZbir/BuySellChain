@@ -6,6 +6,10 @@ from flask_migrate import Migrate
 from logging.config import dictConfig
 from flask_jwt_extended import JWTManager
 import logging
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # 1. Configurazione Logging (Prima di tutto)
 dictConfig({
@@ -57,13 +61,6 @@ def user_lookup_callback(_jwt_header, jwt_data):
 
 from .middleware.logger import register_logger_middleware
 
-from app.routes.admin.admin_asset.api_admin_asset import api_admin_asset
-from app.routes.admin.admin_auction.api_admin_auctions import api_admin_auctions
-from app.routes.assets.api_assets import api_assets
-from app.routes.auctions.api_auctions import api_auctions
-from app.routes.auth.api import api_auth
-from app.routes.bids.api_bids import api_bids
-from app.routes.admin.api_admin import api_admin
 
 def create_app():
     app = Flask(__name__)
@@ -74,7 +71,8 @@ def create_app():
     CORS(app) 
     
     # Configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ionut:ionut@localhost/buysellchain'
+    # .env PSQLURL
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["JWT_SECRET_KEY"] = "super-secret" # da modificare
     
@@ -87,22 +85,24 @@ def create_app():
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    
-    Migrate(app, db)
 
+    Migrate(app, db)
+    # db.create_all()  # Rimuovi questa linea e usa `flask db upgrade` da CLI
+    
     # Middleware
     register_logger_middleware(app) 
     
     # Blueprints
+    from app.routes.admin.admin_asset.api_admin_asset import api_admin_asset
+    from app.routes.admin.admin_auction.api_admin_auctions import api_admin_auctions
+    from app.routes.assets.api_assets import api_assets
+    from app.routes.auctions.api_auctions import api_auctions
+    from app.routes.bids.api_bids import api_bids
+    from app.routes.admin.api_admin import api_admin
     from app.routes.auth.api import api_auth
     from app.routes.frontend.routes import frontend_bp
 
-    app.register_blueprint(api_auth, url_prefix='/api/v1/auth')
     app.register_blueprint(frontend_bp, url_prefix="/")
-
-    # Import modelli per Migrate
-    from app.models.models import User
-    
     app.register_blueprint(api_auth, url_prefix='/api/v1/auth')
     app.register_blueprint(api_assets, url_prefix='/api/v1/')
     app.register_blueprint(api_auctions, url_prefix='/api/v1/')
@@ -111,4 +111,15 @@ def create_app():
     app.register_blueprint(api_admin_asset, url_prefix='/api/v1/admin/')
     app.register_blueprint(api_admin_auctions, url_prefix='/api/v1/admin/')
 
+    # Import modelli per Migrate
+    from app.models.models import User
+    
+    from flask_migrate import upgrade
+    with app.app_context():
+        try:
+            upgrade()
+            app.logger.info("Database migrato/aggiornato con successo!")
+        except Exception as e:
+            app.logger.error(f"Errore durante l'upgrade del database: {e}")
+    
     return app
