@@ -78,6 +78,9 @@ def create_app():
     
     app.config["JWT_ALGORITHM"] = "HS256"
     
+    # DA MODIFICARE SERVE PER LA SESSIONE
+    app.secret_key = 'una_chiave_temporanea_molto_segreta' # <--- Aggiungi questa
+    
     # Rimuove l'errore 422 assicurando che la gestione dell'identità sia flessibile
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 

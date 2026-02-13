@@ -43,4 +43,12 @@ class User(db.Model):
     lastLoginAt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
-        
+
+# class Auction:
+# class Bid:
+class Asset:
+    def __init__(self, parametri):
+        pass
+    # gestione percoso immagine
+    # def get_url_immagine():
+    

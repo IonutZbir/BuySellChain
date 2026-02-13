@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %} Login - BuySellChain {% endblock %}
 {% block scripts %}
-<script defer src="static/js/login.js"></script>
+<script defer src="{{ url_for('static', filename='js/login.js') }}"></script>
 {% endblock %} {% block content %}
 <article class="grid">
 	<div x-data="loginForm">

@@ -1,23 +1,23 @@
-async function sendGetRequest() {
-    try {
-        const response = await fetch("/api/v1/auth/test", {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization')
-            }
-        });
+function auctionList() {
+	return {
+		auctions: [],
+		loading: false,
 
-        if (!response.ok) {
-            console.log(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log(data);
-        console.log(localStorage.getItem('Authorization'))
-        return data;
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        throw error;
-    }
+		async fetchAuctions() {
+			this.loading = true;
+			try {
+				// Sostituisci con il tuo endpoint API reale
+				const response = await fetch("/api/v1/auctions");
+				const data = await response.json();
+
+				if (data.status === "success") {
+					this.auctions = data.data;
+				}
+			} catch (error) {
+				console.error("Errore nel recupero delle aste:", error);
+			} finally {
+				this.loading = false;
+			}
+		},
+	};
 }

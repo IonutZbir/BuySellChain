@@ -1,1036 +1,222 @@
-[2026-02-09 12:31:20,202] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:31:20,293] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:31:20,553] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:31:20,554] INFO in _internal:  * Debugger PIN: 156-768-868
-[2026-02-09 12:32:04,438] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='2312341241', password='3123123'
-[2026-02-09 12:32:04,646] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2082s)
-[2026-02-09 12:32:04,646] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:32:04] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:32:04,681] INFO in logger: [127.0.0.1] GET / - 200 (0.0026s)
-[2026-02-09 12:32:04,681] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:32:04] "GET / HTTP/1.1" 200 -
-[2026-02-09 12:32:47,733] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0016s)
-[2026-02-09 12:32:47,734] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:32:47] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:32:47,758] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:32:47] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:32:51,948] DEBUG in api: name='', surname='', email='', birthday=None cellularNumber='', password=''
-[2026-02-09 12:32:51,960] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:32:51] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-09 12:34:39,226] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+[2026-02-12 10:13:14,370] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
-[2026-02-09 12:34:39,227] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-09 12:34:39,227] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:34:39,474] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:34:39,476] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:35:09,221] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0044s)
-[2026-02-09 12:35:09,221] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:35:09] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:35:09,257] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:35:09] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:35:20,250] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3132131', password='31321313'
-[2026-02-09 12:35:20,448] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1982s)
-[2026-02-09 12:35:20,448] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:35:20] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:36:16,580] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3132131', password='31321313'
-[2026-02-09 12:36:16,775] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1953s)
-[2026-02-09 12:36:16,776] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:36:16] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:36:19,346] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-09 12:36:19,346] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:36:19] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:36:19,379] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:36:19] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:36:30,236] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3123123', password='312312'
-[2026-02-09 12:36:30,430] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1943s)
-[2026-02-09 12:36:30,430] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:36:30] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:37:20,421] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:37:20,503] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:37:20,763] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:37:20,764] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:37:39,793] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3123123', password='312312'
-[2026-02-09 12:37:39,986] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1933s)
-[2026-02-09 12:37:39,987] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:37:39] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:37:53,912] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3123123', password='312312'
-[2026-02-09 12:37:54,117] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2055s)
-[2026-02-09 12:37:54,117] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:37:54] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:06,188] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0029s)
-[2026-02-09 12:38:06,188] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:06] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:38:06,224] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:06] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:38:15,649] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3121231', password='31231231'
-[2026-02-09 12:38:15,843] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1939s)
-[2026-02-09 12:38:15,844] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:15] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:20,762] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3121231', password='31231231'
-[2026-02-09 12:38:20,969] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2074s)
-[2026-02-09 12:38:20,969] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:20] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:28,678] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3121231', password='31231231'
-[2026-02-09 12:38:28,873] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1958s)
-[2026-02-09 12:38:28,874] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:28] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:29,431] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3121231', password='31231231'
-[2026-02-09 12:38:29,626] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1961s)
-[2026-02-09 12:38:29,627] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:29] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:30,547] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-09 12:38:30,547] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:30] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:38:30,576] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:30] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:38:38,701] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='3132131', password='3123213'
-[2026-02-09 12:38:38,894] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1924s)
-[2026-02-09 12:38:38,894] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:38] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:38:58,918] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-09 12:38:58,919] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:58] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:38:58,950] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:38:58] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:39:07,946] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='311231', password='31231231'
-[2026-02-09 12:39:08,155] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2093s)
-[2026-02-09 12:39:08,155] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:39:08] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:42:01,788] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday=None cellularNumber='311231', password='31231231'
-[2026-02-09 12:42:01,983] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.1954s)
-[2026-02-09 12:42:01,984] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:42:01] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:42:06,251] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-09 12:42:06,251] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:42:06] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:42:06,288] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:42:06] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-09 12:42:16,672] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-06' cellularNumber='3132131', password='33123121'
-[2026-02-09 12:42:16,883] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2109s)
-[2026-02-09 12:42:16,883] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:42:16] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:43:19,731] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:43:19,821] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:43:20,085] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:43:20,087] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:44:12,645] INFO in logger: [127.0.0.1] GET /login - 200 (0.0036s)
-[2026-02-09 12:44:12,646] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:44:12] "GET /login HTTP/1.1" 200 -
-[2026-02-09 12:44:12,684] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:44:12] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-09 12:44:12,947] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-09 12:44:12,947] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:44:12] "GET /login HTTP/1.1" 200 -
-[2026-02-09 12:44:12,974] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:44:12] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 12:47:29,515] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:47:29,624] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:47:29,897] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:47:29,898] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:48:02,088] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:48:02,179] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:48:02,432] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:48:02,433] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:51:58,781] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:51:58,857] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:51:59,122] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:51:59,124] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:52:03,134] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0025s)
-[2026-02-09 12:52:03,134] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:52:03] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:52:03,174] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:52:03] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-09 12:52:03,863] INFO in logger: [127.0.0.1] GET /login - 200 (0.0023s)
-[2026-02-09 12:52:03,864] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:52:03] "GET /login HTTP/1.1" 200 -
-[2026-02-09 12:52:03,892] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:52:03] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-09 12:52:21,172] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-09 12:52:21,397] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:52:21] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-09 12:55:10,204] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:55:10,276] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:55:10,525] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:55:10,526] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:55:18,268] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0042s)
-[2026-02-09 12:55:18,269] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:55:18] "GET /signin HTTP/1.1" 200 -
-[2026-02-09 12:55:18,304] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:55:18] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-09 12:55:35,816] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma10@gmail.com', birthday='2026-02-05' cellularNumber='3299224170', password='ionut'
-[2026-02-09 12:55:36,020] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2039s)
-[2026-02-09 12:55:36,020] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:55:36] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-09 12:56:38,576] DEBUG in api: email='ionut.roma9@gmail.com', password='9112002f123'
-[2026-02-09 12:56:38,772] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:56:38] "[35m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 500 -
-[2026-02-09 12:57:00,151] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:57:00,241] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:57:00,502] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:57:00,503] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:57:04,693] DEBUG in api: email='ionut.roma9@gmail.com', password='9112002f123'
-[2026-02-09 12:57:05,084] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:57:05] "[35m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 500 -
-[2026-02-09 12:57:15,610] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 12:57:15,705] INFO in _internal:  * Restarting with stat
-[2026-02-09 12:57:15,967] WARNING in _internal:  * Debugger is active!
-[2026-02-09 12:57:15,969] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 12:57:17,974] DEBUG in api: email='ionut.roma9@gmail.com', password='9112002f123'
-[2026-02-09 12:57:18,357] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3833s)
-[2026-02-09 12:57:18,358] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:57:18] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 12:57:18,385] INFO in logger: [127.0.0.1] GET / - 200 (0.0022s)
-[2026-02-09 12:57:18,385] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 12:57:18] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:08:26,770] INFO in logger: [127.0.0.1] GET / - 200 (0.003s)
-[2026-02-09 13:08:26,770] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:08:26] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:12:27,966] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:27] "[35m[1mGET / HTTP/1.1[0m" 500 -
-[2026-02-09 13:12:28,005] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:28] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:12:28,006] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:28] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
-[2026-02-09 13:12:28,023] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:28] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=KsXlP1OkuvuwCerNIauc HTTP/1.1" 200 -
-[2026-02-09 13:12:29,255] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:29] "[35m[1mGET / HTTP/1.1[0m" 500 -
-[2026-02-09 13:12:29,288] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:29] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
-[2026-02-09 13:12:29,289] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:29] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:12:29,310] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:29] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=KsXlP1OkuvuwCerNIauc HTTP/1.1[0m" 304 -
-[2026-02-09 13:12:42,613] INFO in logger: [127.0.0.1] GET / - 200 (0.0011s)
-[2026-02-09 13:12:42,613] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:42] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:12:42,634] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:12:42] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:13:02,562] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:13:02,562] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:02] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:13:02,581] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:02] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:13:03,021] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:13:03,021] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:03] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:13:03,037] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:03] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:13:19,521] INFO in logger: [127.0.0.1] GET / - 200 (0.001s)
-[2026-02-09 13:13:19,521] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:19] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:13:19,544] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:19] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:13:40,517] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:13:40,614] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:13:40,878] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:13:40,880] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:13:50,424] INFO in logger: [127.0.0.1] GET / - 200 (0.0042s)
-[2026-02-09 13:13:50,425] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:50] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:13:50,450] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:13:50] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:14:07,044] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:14:07,135] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:14:07,387] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:14:07,388] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:14:21,312] INFO in logger: [127.0.0.1] GET / - 200 (0.0024s)
-[2026-02-09 13:14:21,312] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:14:21] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:14:21,335] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:14:21] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:14:45,601] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:14:45,682] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:14:45,944] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:14:45,945] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:14:50,485] INFO in logger: [127.0.0.1] GET / - 200 (0.0024s)
-[2026-02-09 13:14:50,485] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:14:50] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:14:50,508] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:14:50] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:15:18,302] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:15:18,302] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:15:18] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:15:18,333] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:15:18] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:15:26,938] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+[2026-02-12 10:13:14,370] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-02-12 10:13:14,370] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:13:14,678] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:13:14,682] INFO in _internal:  * Debugger PIN: 115-002-494
+[2026-02-12 10:13:17,205] INFO in logger: [127.0.0.1] GET / - 200 (0.0044s)
+[2026-02-12 10:13:17,206] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "GET / HTTP/1.1" 200 -
+[2026-02-12 10:13:17,225] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
+[2026-02-12 10:13:17,226] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
+[2026-02-12 10:13:23,189] INFO in logger: [127.0.0.1] GET /signin - 200 (0.002s)
+[2026-02-12 10:13:23,190] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "GET /signin HTTP/1.1" 200 -
+[2026-02-12 10:13:23,208] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
+[2026-02-12 10:13:23,209] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
+[2026-02-12 10:13:51,794] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:13:51,816] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:51] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:18:46,866] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
-[2026-02-09 13:15:26,938] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-09 13:15:26,939] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:15:27,193] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:15:27,194] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:15:34,810] INFO in logger: [127.0.0.1] GET / - 200 (0.0043s)
-[2026-02-09 13:15:34,811] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:15:34] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:15:34,843] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:15:34] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:16:37,826] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:16:37,826] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:16:37] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:16:37,854] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:16:37] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:18:11,216] INFO in logger: [127.0.0.1] GET / - 200 (0.0014s)
-[2026-02-09 13:18:11,216] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:18:11] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:18:11,245] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:18:11] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:18:35,769] INFO in logger: [127.0.0.1] GET / - 200 (0.0014s)
-[2026-02-09 13:18:35,769] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:18:35] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:18:35,790] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:18:35] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:18:37,047] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0003s)
-[2026-02-09 13:18:37,047] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:18:37] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:19:06,157] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:19:06,157] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:06] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:19:06,180] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:06] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:19:07,209] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0009s)
-[2026-02-09 13:19:07,210] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:07] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:19:25,670] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0001s)
-[2026-02-09 13:19:25,670] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:25] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:19:26,881] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-09 13:19:26,882] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:26] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:19:26,903] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:26] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:19:27,428] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0005s)
-[2026-02-09 13:19:27,428] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:27] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:19:48,436] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:19:48,436] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:48] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:19:48,461] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:48] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:19:49,137] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0007s)
-[2026-02-09 13:19:49,139] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:19:49] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:20:14,586] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:20:14,586] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:14] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:20:14,605] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:14] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:20:15,202] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0005s)
-[2026-02-09 13:20:15,203] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:15] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:20:42,724] INFO in logger: [127.0.0.1] GET /login - 200 (0.0015s)
-[2026-02-09 13:20:42,724] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:42] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:20:42,748] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:42] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-09 13:20:47,827] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:20:48,228] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.4013s)
-[2026-02-09 13:20:48,229] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:48] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:20:48,272] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-09 13:20:48,272] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:48] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:20:48,313] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:48] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:20:50,951] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0002s)
-[2026-02-09 13:20:50,952] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:20:50] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:21:29,292] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:21:29,292] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:29] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:21:29,324] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:29] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:21:32,820] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-09 13:21:32,821] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:32] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:21:32,855] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:32] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-09 13:21:41,320] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:21:41,718] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3984s)
-[2026-02-09 13:21:41,718] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:41] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:21:41,736] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-09 13:21:41,736] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:41] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:21:41,789] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:41] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:21:43,300] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0007s)
-[2026-02-09 13:21:43,301] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:21:43] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:22:09,033] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-09 13:22:09,033] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:09] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:22:09,074] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:09] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:22:13,312] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:22:13,693] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3816s)
-[2026-02-09 13:22:13,694] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:13] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:22:13,730] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:22:13,731] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:13] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:22:13,768] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:13] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:22:15,017] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0006s)
-[2026-02-09 13:22:15,018] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:15] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:22:49,647] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-09 13:22:49,647] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:49] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:22:49,685] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:49] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:22:53,612] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:22:54,008] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3964s)
-[2026-02-09 13:22:54,008] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:54] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:22:54,025] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:22:54,026] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:54] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:22:54,081] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:54] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:22:55,188] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0009s)
-[2026-02-09 13:22:55,189] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:22:55] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:23:13,724] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:23:14,102] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3783s)
-[2026-02-09 13:23:14,103] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:23:14] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:23:14,121] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:23:14,122] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:23:14] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:23:14,152] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:23:14] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:23:15,372] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0011s)
-[2026-02-09 13:23:15,373] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:23:15] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:27:44,978] INFO in logger: [127.0.0.1] GET /login - 200 (0.0005s)
-[2026-02-09 13:27:44,979] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:44] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:27:45,012] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:45] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:27:53,875] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:27:54,262] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3879s)
-[2026-02-09 13:27:54,263] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:54] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:27:54,278] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-09 13:27:54,279] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:54] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:27:54,337] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:54] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:27:55,778] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0007s)
-[2026-02-09 13:27:55,779] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:27:55] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-09 13:28:29,868] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:28:29,952] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:28:30,206] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:28:30,208] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:28:45,109] INFO in logger: [127.0.0.1] GET /login - 200 (0.003s)
-[2026-02-09 13:28:45,110] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:45] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:28:45,150] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:45] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:28:54,236] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:28:54,624] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3888s)
-[2026-02-09 13:28:54,625] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:54] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:28:54,650] INFO in logger: [127.0.0.1] GET / - 200 (0.0016s)
-[2026-02-09 13:28:54,650] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:54] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:28:54,713] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:54] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:28:56,124] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0007s)
-[2026-02-09 13:28:56,125] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:28:56] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-09 13:30:18,821] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:30:18,899] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:30:19,164] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:30:19,166] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:30:33,753] INFO in logger: [127.0.0.1] GET /login - 200 (0.004s)
-[2026-02-09 13:30:33,753] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:33] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:30:33,799] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:33] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:30:40,045] DEBUG in api: email='ionut.roma10@gmail.com', password='ionut'
-[2026-02-09 13:30:40,452] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.4074s)
-[2026-02-09 13:30:40,453] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:40] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:30:40,487] INFO in logger: [127.0.0.1] GET / - 200 (0.0009s)
-[2026-02-09 13:30:40,487] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:40] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:30:40,527] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:40] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:30:41,633] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.0013s)
-[2026-02-09 13:30:41,633] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:30:41] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:31:18,511] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:31:18,591] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:31:18,842] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:31:18,843] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:31:28,904] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:31:28,987] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:31:29,248] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:31:29,249] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:31:32,273] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:31:32,362] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:31:32,626] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:31:32,627] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:32:06,820] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:32:06,910] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:32:07,166] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:32:07,167] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:32:20,026] INFO in logger: [127.0.0.1] GET /login - 200 (0.0032s)
-[2026-02-09 13:32:20,026] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:20] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:32:20,070] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:20] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:32:25,390] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:32:25,786] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3964s)
-[2026-02-09 13:32:25,787] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:25] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:32:25,805] INFO in logger: [127.0.0.1] GET / - 200 (0.0014s)
-[2026-02-09 13:32:25,805] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:25] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:32:25,855] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:25] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:32:28,286] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.002s)
-[2026-02-09 13:32:28,287] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:32:28] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:34:36,965] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:34:37,049] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:34:37,303] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:34:37,304] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:34:42,532] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.0031s)
-[2026-02-09 13:34:42,533] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:34:42] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:36:43,015] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:36:43,088] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:36:43,339] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:36:43,341] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:36:46,728] INFO in logger: [127.0.0.1] GET / - 200 (0.0028s)
-[2026-02-09 13:36:46,729] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:46] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:36:46,771] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:46] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-09 13:36:52,094] INFO in logger: [127.0.0.1] GET /login - 200 (0.0009s)
-[2026-02-09 13:36:52,094] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:52] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:36:52,129] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:52] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:36:56,661] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:36:57,056] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3959s)
-[2026-02-09 13:36:57,057] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:57] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:36:57,085] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-09 13:36:57,085] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:57] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:36:57,130] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:57] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:36:58,557] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.001s)
-[2026-02-09 13:36:58,557] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:36:58] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:37:56,740] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:37:56,831] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:37:57,091] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:37:57,092] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:38:00,221] INFO in logger: [127.0.0.1] GET /login - 200 (0.0026s)
-[2026-02-09 13:38:00,221] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:00] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:38:00,260] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:00] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:38:04,916] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:38:05,322] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.4074s)
-[2026-02-09 13:38:05,323] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:05] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:38:05,358] INFO in logger: [127.0.0.1] GET / - 200 (0.0015s)
-[2026-02-09 13:38:05,358] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:05] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:38:05,398] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:05] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:38:06,462] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.0022s)
-[2026-02-09 13:38:06,463] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:38:06] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:39:30,624] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:39:30,713] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:39:30,970] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:39:30,972] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:39:51,107] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:39:51,207] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:39:51,480] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:39:51,481] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:39:57,690] INFO in logger: [127.0.0.1] GET /login - 200 (0.0024s)
-[2026-02-09 13:39:57,690] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:39:57] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:39:57,740] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:39:57] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:40:01,538] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:40:01,933] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.395s)
-[2026-02-09 13:40:01,934] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:40:01] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:40:01,974] INFO in logger: [127.0.0.1] GET / - 200 (0.0015s)
-[2026-02-09 13:40:01,975] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:40:01] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:40:02,024] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:40:02] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:40:02,979] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 422 (0.0014s)
-[2026-02-09 13:40:02,979] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:40:02] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 422 -
-[2026-02-09 13:41:49,117] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:41:49,203] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:41:49,462] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:41:49,463] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:41:59,661] INFO in logger: [127.0.0.1] GET /login - 200 (0.0031s)
-[2026-02-09 13:41:59,662] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:41:59] "GET /login HTTP/1.1" 200 -
-[2026-02-09 13:41:59,709] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:41:59] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:42:03,331] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-09 13:42:03,719] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3878s)
-[2026-02-09 13:42:03,719] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:42:03] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-09 13:42:03,762] INFO in logger: [127.0.0.1] GET / - 200 (0.0017s)
-[2026-02-09 13:42:03,762] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:42:03] "GET / HTTP/1.1" 200 -
-[2026-02-09 13:42:03,808] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:42:03] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-09 13:42:04,991] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-09 13:42:04,992] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0007s)
-[2026-02-09 13:42:04,992] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:42:04] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-09 13:43:12,881] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-09 13:43:12,965] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:43:13,225] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:43:13,227] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:43:26,310] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-09 13:43:26,398] INFO in _internal:  * Restarting with stat
-[2026-02-09 13:43:26,650] WARNING in _internal:  * Debugger is active!
-[2026-02-09 13:43:26,652] INFO in _internal:  * Debugger PIN: 700-695-515
-[2026-02-09 13:43:30,654] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-09 13:43:30,654] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0033s)
-[2026-02-09 13:43:30,656] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:43:30] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-09 13:43:53,670] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-09 13:43:53,671] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.002s)
-[2026-02-09 13:43:53,672] INFO in _internal: 127.0.0.1 - - [09/Feb/2026 13:43:53] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:04:11,516] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+[2026-02-12 10:18:46,866] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-02-12 10:18:50,113] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:18:50,122] ERROR in app: Exception on /api/v1/auth/signin [POST]
+Traceback (most recent call last):
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3309, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: FATAL:  role "user_bsc" does not exist
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/app/routes/auth/api.py", line 45, in signin
+    existing_user = db.session.execute(select(User).where(User.email == email)).scalar_one_or_none()
+                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/scoping.py", line 765, in execute
+    return self._proxied.execute(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3285, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 145, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 2448, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3309, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: FATAL:  role "user_bsc" does not exist
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2026-02-12 10:18:50,130] ERROR in logger: [127.0.0.1] POST /api/v1/auth/signin - 500 (0.018s)
+[2026-02-12 10:18:50,131] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:18:50] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:21:30,364] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:5000
-[2026-02-10 09:04:11,516] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-10 09:04:11,517] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:04:11,767] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:04:11,770] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:04:14,308] INFO in logger: [127.0.0.1] GET / - 200 (0.0039s)
-[2026-02-10 09:04:14,309] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:04:14] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:04:14,333] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:04:14] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-10 09:04:14,722] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:04:14,722] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:04:14] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:04:14,742] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:04:14] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:09:45,329] INFO in logger: [127.0.0.1] GET /login - 200 (0.0009s)
-[2026-02-10 09:09:45,329] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:09:45] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:09:45,352] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:09:45] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:09:49,784] DEBUG in api: email='', password=''
-[2026-02-10 09:09:49,789] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:09:49] "[35m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 500 -
-[2026-02-10 09:09:59,910] DEBUG in api: email='ionut.roma8@gmail.com', password='31312'
-[2026-02-10 09:10:00,171] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:00] "[35m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 500 -
-[2026-02-10 09:10:10,539] DEBUG in api: email='ionut.roma8@gmail.com', password='31312'
-[2026-02-10 09:10:10,746] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:10] "[35m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 500 -
-[2026-02-10 09:10:33,802] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:10:33,883] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:10:34,140] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:10:34,141] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:10:35,929] DEBUG in api: email='ionut.roma8@gmail.com', password='31312'
-[2026-02-10 09:10:36,138] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2091s)
-[2026-02-10 09:10:36,139] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:36] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:10:48,940] INFO in logger: [127.0.0.1] GET /login - 200 (0.0028s)
-[2026-02-10 09:10:48,941] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:48] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:10:48,969] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:48] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:10:51,937] DEBUG in api: email='ionut.roma9@gmail.com', password='31231'
-[2026-02-10 09:10:52,310] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3732s)
-[2026-02-10 09:10:52,311] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:52] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:10:52,340] INFO in logger: [127.0.0.1] GET / - 200 (0.0012s)
-[2026-02-10 09:10:52,340] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:52] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:10:52,413] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:52] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:10:55,236] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:10:55,236] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0007s)
-[2026-02-10 09:10:55,237] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:10:55] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:11:00,768] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:11:00,768] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:00] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:11:00,799] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:00] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:11:07,786] DEBUG in api: email='ionut.roma10@gmail.com', password='3123'
-[2026-02-10 09:11:08,169] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3838s)
-[2026-02-10 09:11:08,170] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:08] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:11:08,203] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:11:08,204] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:08] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:11:08,242] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:08] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:11:16,306] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-10 09:11:16,306] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:16] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:11:16,333] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:16] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:11:21,149] DEBUG in api: email='ionut.roma92@gmail.com', password='312312'
-[2026-02-10 09:11:21,357] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.208s)
-[2026-02-10 09:11:21,357] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:11:21] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:20:17,730] DEBUG in api: email='ionut.roma92@gmail.com', password='312312'
-[2026-02-10 09:20:17,927] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.1976s)
-[2026-02-10 09:20:17,928] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:20:17] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:20:23,364] INFO in logger: [127.0.0.1] GET /login - 200 (0.0009s)
-[2026-02-10 09:20:23,364] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:20:23] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:20:23,386] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:20:23] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 09:20:25,988] DEBUG in api: email='ionut.roma92@gmail.com', password='312312'
-[2026-02-10 09:20:26,193] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2056s)
-[2026-02-10 09:20:26,194] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:20:26] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:20:41,169] DEBUG in api: email='ionut.roma92@gmail.com', password='312312'
-[2026-02-10 09:20:41,377] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2078s)
-[2026-02-10 09:20:41,377] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:20:41] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:26:13,524] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-10 09:26:13,525] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:13] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:26:13,554] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:13] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 09:26:15,931] DEBUG in api: email='ionut.roma9@gmail.com', password='312312'
-[2026-02-10 09:26:16,309] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.3782s)
-[2026-02-10 09:26:16,310] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:16] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:26:16,328] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-10 09:26:16,328] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:16] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:26:16,375] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:16] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:26:17,997] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:26:17,998] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0019s)
-[2026-02-10 09:26:17,999] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:17] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:26:22,810] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-10 09:26:22,810] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:22] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:26:22,847] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:22] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:26:27,119] DEBUG in api: email='ionut.roma92@gmail.com', password='312312'
-[2026-02-10 09:26:27,319] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2006s)
-[2026-02-10 09:26:27,320] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:26:27] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:37:47,181] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:37:47,283] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:37:47,542] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:37:47,543] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:37:53,584] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:37:53,671] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:37:53,937] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:37:53,938] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:38:29,142] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:38:29,214] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:38:29,490] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:38:29,492] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:38:44,572] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:38:44,679] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:38:44,932] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:38:44,934] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:39:00,028] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:39:00,113] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:39:00,375] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:39:00,377] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:39:11,446] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:39:11,521] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:39:11,789] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:39:11,790] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:39:15,952] INFO in logger: [127.0.0.1] GET /login - 200 (0.0024s)
-[2026-02-10 09:39:15,953] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:15] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:39:15,974] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:15] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 09:39:21,106] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 09:39:21,315] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.209s)
-[2026-02-10 09:39:21,315] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:21] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:39:21,333] INFO in logger: [127.0.0.1] GET / - 200 (0.0009s)
-[2026-02-10 09:39:21,333] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:21] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:39:21,384] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:21] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:39:26,679] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut2'
-[2026-02-10 09:39:26,893] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2142s)
-[2026-02-10 09:39:26,893] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:39:26] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:39:54,007] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 09:39:54,116] INFO in _internal:  * Restarting with stat
-[2026-02-10 09:39:54,378] WARNING in _internal:  * Debugger is active!
-[2026-02-10 09:39:54,380] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 09:46:35,636] INFO in logger: [127.0.0.1] GET /login - 200 (0.0029s)
-[2026-02-10 09:46:35,637] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:46:35] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:46:35,660] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:46:35] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 09:46:53,026] DEBUG in api: email='ionut.roma9@gmail.com', password='121312'
-[2026-02-10 09:46:53,248] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2227s)
-[2026-02-10 09:46:53,249] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:46:53] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 09:48:10,659] INFO in logger: [127.0.0.1] GET /login - 200 (0.0011s)
-[2026-02-10 09:48:10,659] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:10] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:48:10,678] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:10] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:48:19,894] INFO in logger: [127.0.0.1] GET /login - 200 (0.0016s)
-[2026-02-10 09:48:19,894] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:19] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:48:19,911] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:19] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:48:20,528] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:48:20,529] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:20] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:48:20,546] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:20] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:48:50,637] INFO in logger: [127.0.0.1] GET /login - 200 (0.0016s)
-[2026-02-10 09:48:50,638] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:50] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:48:50,658] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:48:50] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:49:03,914] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 09:49:04,123] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2094s)
-[2026-02-10 09:49:04,124] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:04] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:49:04,140] INFO in logger: [127.0.0.1] GET / - 200 (0.0013s)
-[2026-02-10 09:49:04,141] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:04] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:49:04,187] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:04] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:49:05,841] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0005s)
-[2026-02-10 09:49:05,842] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:05] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-10 09:49:48,417] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:49:48,417] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:48] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:49:48,439] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:48] "GET /static/js/index.js HTTP/1.1" 200 -
-[2026-02-10 09:49:49,522] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0017s)
-[2026-02-10 09:49:49,524] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:49] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-10 09:49:53,289] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-10 09:49:53,290] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:53] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:49:53,321] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:49:53] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:50:13,238] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:50:13,239] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:13] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:50:13,269] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:13] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:50:24,097] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 09:50:24,304] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2073s)
-[2026-02-10 09:50:24,305] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:24] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:50:24,320] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:50:24,320] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:24] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:50:24,366] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:24] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:50:25,497] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:50:25,498] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0005s)
-[2026-02-10 09:50:25,498] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:25] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:50:47,677] DEBUG in api: email='ionut.roma10@gmail.com', password='ionut'
-[2026-02-10 09:50:47,881] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2047s)
-[2026-02-10 09:50:47,882] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:47] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:50:47,898] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:50:47,898] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:47] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:50:47,939] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:47] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:50:49,605] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:50:49,605] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0003s)
-[2026-02-10 09:50:49,605] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:50:49] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:51:10,307] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:51:10,307] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:10] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:51:10,337] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:10] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:51:16,993] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 09:51:17,192] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.1983s)
-[2026-02-10 09:51:17,192] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:17] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:51:17,250] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:51:17,250] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:17] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:51:17,286] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:17] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:51:18,099] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:51:18,100] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0011s)
-[2026-02-10 09:51:18,100] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:18] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:51:29,507] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:51:29,507] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:29] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:51:29,547] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:29] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:51:36,979] DEBUG in api: email='ionut.roma10@gmail.com', password='ionut'
-[2026-02-10 09:51:37,186] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2074s)
-[2026-02-10 09:51:37,186] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:37] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:51:37,227] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:51:37,228] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:37] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:51:37,280] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:37] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:51:38,669] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:51:38,669] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.001s)
-[2026-02-10 09:51:38,670] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:51:38] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:55:05,195] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:55:05,195] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:05] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:55:05,232] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:05] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 09:55:10,358] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 09:55:10,548] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.19s)
-[2026-02-10 09:55:10,548] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:10] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:55:10,582] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-10 09:55:10,582] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:10] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:55:10,616] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:10] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:55:12,036] DEBUG in api: {"id": 1, "role": "bidder", "email": "ionut.roma9@gmail.com"}
-[2026-02-10 09:55:12,036] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0005s)
-[2026-02-10 09:55:12,036] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:12] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 09:55:16,308] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 09:55:16,309] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:16] "GET /login HTTP/1.1" 200 -
-[2026-02-10 09:55:16,346] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:16] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:55:22,838] DEBUG in api: email='ionut.roma10@gmail.com', password='ionut'
-[2026-02-10 09:55:23,036] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.1987s)
-[2026-02-10 09:55:23,037] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:23] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 09:55:23,072] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 09:55:23,072] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:23] "GET / HTTP/1.1" 200 -
-[2026-02-10 09:55:23,103] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:23] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 09:55:23,984] DEBUG in api: {"id": 2, "role": "bidder", "email": "ionut.roma10@gmail.com"}
-[2026-02-10 09:55:23,985] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0008s)
-[2026-02-10 09:55:23,985] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 09:55:23] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 10:01:44,704] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:01:44,784] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:01:45,075] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:01:45,076] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:03:45,750] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:03:45,841] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:03:46,123] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:03:46,124] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:06:25,086] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:06:25,191] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:06:25,474] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:06:25,475] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:07:05,705] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:07:05,827] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:07:06,116] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:07:06,117] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:09:51,084] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:09:51,175] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:09:51,474] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:09:51,475] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:09:53,486] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:09:53,581] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:09:53,863] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:09:53,865] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:10:03,948] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:10:04,043] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:10:04,320] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:10:04,321] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:12:46,261] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:12:46,357] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:12:46,645] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:12:46,646] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:12:47,913] INFO in logger: [127.0.0.1] GET / - 200 (0.0023s)
-[2026-02-10 10:12:47,913] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:47] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:12:47,943] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:47] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:12:50,479] INFO in logger: [127.0.0.1] GET /login - 200 (0.0009s)
-[2026-02-10 10:12:50,479] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:50] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:12:50,521] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:50] "GET /static/js/login.js HTTP/1.1" 200 -
-[2026-02-10 10:12:54,298] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 10:12:54,532] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2347s)
-[2026-02-10 10:12:54,532] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:54] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 10:12:54,549] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:12:54,550] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:54] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:12:54,604] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:54] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:12:57,970] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 10:12:57,971] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:57] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:12:58,004] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:12:58] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:13:01,975] DEBUG in api: email='ionut.roma9@gmail.com', password='3131231'
-[2026-02-10 10:13:02,178] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.2035s)
-[2026-02-10 10:13:02,179] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:13:02] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 10:13:08,718] DEBUG in api: email='ionut.roma29@gmail.com', password='3131231'
-[2026-02-10 10:13:09,112] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.3945s)
-[2026-02-10 10:13:09,113] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:13:09] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 10:14:58,387] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:14:58,475] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:14:58,769] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:14:58,770] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:15:28,927] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:15:29,023] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:15:29,307] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:15:29,309] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:16:38,692] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:16:38,785] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:16:39,068] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:16:39,069] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:17:14,291] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:17:14,386] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:17:14,688] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:17:14,690] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:17:25,759] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:17:25,854] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:17:26,120] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:17:26,121] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:17:36,184] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:17:36,268] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:17:36,531] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:17:36,532] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:19:49,179] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:19:49,257] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:19:49,528] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:19:49,529] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:24:28,673] INFO in logger: [127.0.0.1] GET /login - 200 (0.0027s)
-[2026-02-10 10:24:28,674] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:24:28] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:24:28,705] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:24:28] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:24:55,578] INFO in logger: [127.0.0.1] GET /login - 200 (0.0016s)
-[2026-02-10 10:24:55,579] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:24:55] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:24:55,602] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:24:55] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:24:59,946] DEBUG in api: email='ionut.roma9@gmail.com', password='23112'
-[2026-02-10 10:25:00,150] WARNING in logger: [127.0.0.1] POST /api/v1/auth/login - 401 (0.208s)
-[2026-02-10 10:25:00,150] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:25:00] "[31m[1mPOST /api/v1/auth/login HTTP/1.1[0m" 401 -
-[2026-02-10 10:26:05,934] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0017s)
-[2026-02-10 10:26:05,934] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:05] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:26:05,971] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:05] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-10 10:26:50,655] DEBUG in api: name='franco', surname='salvucci', email='franco.s@gmail.com', birthday='2026-02-11' cellularNumber='23132131312', password='dasasda'
-[2026-02-10 10:26:50,861] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.206s)
-[2026-02-10 10:26:50,862] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:50] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-10 10:26:50,883] INFO in logger: [127.0.0.1] GET / - 200 (0.0008s)
-[2026-02-10 10:26:50,883] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:50] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:26:50,927] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:50] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:26:53,890] DEBUG in api: {"id": 3, "role": "bidder", "email": "franco.s@gmail.com"}
-[2026-02-10 10:26:53,890] INFO in logger: [127.0.0.1] GET /api/v1/auth/test - 200 (0.0027s)
-[2026-02-10 10:26:53,891] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:26:53] "GET /api/v1/auth/test HTTP/1.1" 200 -
-[2026-02-10 10:28:07,031] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-10 10:28:07,031] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:28:07] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:28:07,070] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:28:07] "GET /static/js/signin.js HTTP/1.1" 200 -
-[2026-02-10 10:28:09,719] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-10 10:28:09,719] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:28:09] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:28:09,746] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:28:09] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:30:02,942] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0016s)
-[2026-02-10 10:30:02,943] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:30:02] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:30:02,976] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:30:02] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:31:13,978] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0018s)
-[2026-02-10 10:31:13,978] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:31:13] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:31:14,016] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:31:14] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:32:19,564] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='ddasdas', password='addasdas'
-[2026-02-10 10:32:19,565] WARNING in logger: [127.0.0.1] POST /api/v1/auth/signin - 400 (0.0012s)
-[2026-02-10 10:32:19,565] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:32:19] "[31m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 400 -
-[2026-02-10 10:32:27,192] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='ddasdas', password='addasdas'
-[2026-02-10 10:32:27,195] WARNING in logger: [127.0.0.1] POST /api/v1/auth/signin - 400 (0.0036s)
-[2026-02-10 10:32:27,197] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:32:27] "[31m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 400 -
-[2026-02-10 10:32:27,739] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='ddasdas', password='addasdas'
-[2026-02-10 10:32:27,740] WARNING in logger: [127.0.0.1] POST /api/v1/auth/signin - 400 (0.0009s)
-[2026-02-10 10:32:27,740] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:32:27] "[31m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 400 -
-[2026-02-10 10:33:04,921] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='ddasdas', password='addasdas'
-[2026-02-10 10:33:04,924] WARNING in logger: [127.0.0.1] POST /api/v1/auth/signin - 400 (0.0031s)
-[2026-02-10 10:33:04,926] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:33:04] "[31m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 400 -
-[2026-02-10 10:33:08,145] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='31231232', password='addasdas'
-[2026-02-10 10:33:08,147] WARNING in logger: [127.0.0.1] POST /api/v1/auth/signin - 400 (0.0025s)
-[2026-02-10 10:33:08,148] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:33:08] "[31m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 400 -
-[2026-02-10 10:33:20,326] DEBUG in api: name='dasadas', surname='dasdasd', email='dasddad@gmail.com', birthday='2026-02-03' cellularNumber='3299224170', password='addasdas'
-[2026-02-10 10:33:20,539] INFO in logger: [127.0.0.1] POST /api/v1/auth/signin - 200 (0.2133s)
-[2026-02-10 10:33:20,539] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:33:20] "POST /api/v1/auth/signin HTTP/1.1" 200 -
-[2026-02-10 10:33:20,553] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:33:20,554] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:33:20] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:33:20,594] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:33:20] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:35:06,331] INFO in logger: [127.0.0.1] GET / - 200 (0.0011s)
-[2026-02-10 10:35:06,331] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:35:06] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:35:06,365] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:35:06] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:02,776] INFO in logger: [127.0.0.1] GET / - 200 (0.0011s)
-[2026-02-10 10:36:02,776] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:02] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:36:02,802] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:02] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:04,656] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 10:36:04,657] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:04] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:36:04,695] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:04] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:05,417] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0002s)
-[2026-02-10 10:36:05,417] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:05] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:36:05,446] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:05] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:06,209] INFO in logger: [127.0.0.1] GET /login - 200 (0.0002s)
-[2026-02-10 10:36:06,209] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:06] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:36:06,241] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:06] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:06,766] INFO in logger: [127.0.0.1] GET / - 200 (0.0001s)
-[2026-02-10 10:36:06,766] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:06] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:36:06,795] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:06] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:07,285] INFO in logger: [127.0.0.1] GET /login - 200 (0.0001s)
-[2026-02-10 10:36:07,285] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:07] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:36:07,315] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:07] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:08,082] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:36:08,083] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:08] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:36:08,111] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:08] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:36:09,072] WARNING in logger: [127.0.0.1] GET /api/v1/auth/test - 401 (0.0002s)
-[2026-02-10 10:36:09,072] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:36:09] "[31m[1mGET /api/v1/auth/test HTTP/1.1[0m" 401 -
-[2026-02-10 10:41:26,929] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/frontend/routes.py', reloading
-[2026-02-10 10:41:27,062] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:41:27,348] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:41:27,349] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:41:28,985] INFO in logger: [127.0.0.1] GET / - 200 (0.0024s)
-[2026-02-10 10:41:28,985] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:41:28] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:41:29,008] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:41:29] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:42:03,439] INFO in logger: [127.0.0.1] GET / - 200 (0.0014s)
-[2026-02-10 10:42:03,440] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:03] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:42:03,476] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:03] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:42:07,069] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:42:07,070] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:07] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:42:07,097] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:07] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:42:30,476] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:42:30,476] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:30] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:42:30,506] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:30] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:42:43,896] INFO in logger: [127.0.0.1] GET / - 200 (0.0013s)
-[2026-02-10 10:42:43,897] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:43] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:42:43,933] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:42:43] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:44:45,493] INFO in logger: [127.0.0.1] GET / - 200 (0.0013s)
-[2026-02-10 10:44:45,494] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:45] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:44:45,529] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:45] "GET /static/js/nav.js HTTP/1.1" 200 -
-[2026-02-10 10:44:45,529] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:45] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:44:53,280] INFO in logger: [127.0.0.1] GET /login - 200 (0.0011s)
-[2026-02-10 10:44:53,280] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:53] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:44:53,320] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:53] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:44:53,320] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:53] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:44:57,788] DEBUG in api: email='ionut.roma9@gmail.com', password='ionut'
-[2026-02-10 10:44:58,016] INFO in logger: [127.0.0.1] POST /api/v1/auth/login - 200 (0.2338s)
-[2026-02-10 10:44:58,016] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:58] "POST /api/v1/auth/login HTTP/1.1" 200 -
-[2026-02-10 10:44:58,033] INFO in logger: [127.0.0.1] GET / - 200 (0.0002s)
-[2026-02-10 10:44:58,033] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:58] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:44:58,078] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:58] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:44:58,079] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:44:58] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:45:06,261] INFO in logger: [127.0.0.1] GET /login - 200 (0.001s)
-[2026-02-10 10:45:06,261] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:45:06] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:45:06,322] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:45:06] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:45:06,322] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:45:06] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:46:47,169] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 10:46:47,261] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:46:47,548] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:46:47,549] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:48:49,460] INFO in logger: [127.0.0.1] GET /signin - 200 (0.0029s)
-[2026-02-10 10:48:49,460] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:49] "GET /signin HTTP/1.1" 200 -
-[2026-02-10 10:48:49,526] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:49] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:48:49,526] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:49] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:48:51,510] INFO in logger: [127.0.0.1] GET /login - 200 (0.001s)
-[2026-02-10 10:48:51,510] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "GET /login HTTP/1.1" 200 -
-[2026-02-10 10:48:51,556] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:48:51,557] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:48:51,935] INFO in logger: [127.0.0.1] GET / - 200 (0.0009s)
-[2026-02-10 10:48:51,935] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "GET / HTTP/1.1" 200 -
-[2026-02-10 10:48:51,968] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:48:51,968] INFO in _internal: 127.0.0.1 - - [10/Feb/2026 10:48:51] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-10 10:54:59,169] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:54:59,274] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:54:59,548] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:54:59,550] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:55:21,662] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:55:21,767] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:55:22,047] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:55:22,049] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:57:25,758] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:57:25,851] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:57:26,127] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:57:26,128] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:57:55,289] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:57:55,367] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:57:55,642] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:57:55,644] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:58:39,921] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:58:40,005] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:58:40,276] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:58:40,278] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:58:44,313] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:58:44,400] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:58:44,671] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:58:44,673] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:59:26,935] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:59:27,021] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:59:27,283] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:59:27,285] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 10:59:30,308] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 10:59:30,393] INFO in _internal:  * Restarting with stat
-[2026-02-10 10:59:30,684] WARNING in _internal:  * Debugger is active!
-[2026-02-10 10:59:30,686] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:00:25,993] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:00:26,092] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:00:26,375] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:00:26,377] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:00:34,444] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:00:34,533] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:00:34,811] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:00:34,812] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:06:03,686] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:06:03,772] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:06:04,058] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:06:04,060] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:07:11,478] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:07:11,574] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:07:11,845] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:07:11,847] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:07:23,930] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:07:24,020] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:07:24,288] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:07:24,289] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:08:23,645] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:08:23,733] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:08:24,002] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:08:24,003] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:08:56,197] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:08:56,282] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:08:56,550] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:08:56,552] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:11:39,488] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:11:39,609] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:11:39,885] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:11:39,886] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:13:06,368] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:13:06,459] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:13:06,751] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:13:06,752] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:13:20,835] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:13:20,920] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:13:21,190] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:13:21,191] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:13:57,409] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:13:57,483] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:13:57,748] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:13:57,749] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:14:42,012] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:14:42,093] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:14:42,363] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:14:42,364] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:14:47,402] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:14:47,492] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:14:47,755] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:14:47,756] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:15:10,892] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:15:10,974] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:15:11,246] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:15:11,247] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:15:38,393] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:15:38,483] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:15:38,748] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:15:38,749] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:15:47,791] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:15:47,872] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:15:48,161] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:15:48,162] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:16:32,405] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:16:32,488] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:16:32,759] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:16:32,761] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:16:42,826] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:16:42,914] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:16:43,185] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:16:43,186] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:22:37,811] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:22:37,905] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:22:38,176] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:22:38,178] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:23:36,573] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:23:36,661] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:23:36,930] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:23:36,932] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:26:38,888] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:26:38,979] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:26:39,251] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:26:39,252] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:27:15,409] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:27:15,517] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:27:15,787] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:27:15,788] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:27:32,881] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:27:32,972] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:27:33,238] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:27:33,239] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:27:35,266] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:27:35,365] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:27:35,682] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:27:35,683] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:28:38,025] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:28:38,105] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:28:38,363] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:28:38,365] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:39:59,909] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:39:59,987] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:40:00,278] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:40:00,280] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:40:59,583] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:40:59,671] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:40:59,939] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:40:59,941] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 11:41:20,059] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/data/dataset.py', reloading
-[2026-02-10 11:41:20,146] INFO in _internal:  * Restarting with stat
-[2026-02-10 11:41:20,421] WARNING in _internal:  * Debugger is active!
-[2026-02-10 11:41:20,422] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 12:35:15,924] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 12:35:16,007] INFO in _internal:  * Restarting with stat
-[2026-02-10 12:35:16,291] WARNING in _internal:  * Debugger is active!
-[2026-02-10 12:35:16,293] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 12:35:20,326] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 12:35:20,406] INFO in _internal:  * Restarting with stat
-[2026-02-10 12:35:20,673] WARNING in _internal:  * Debugger is active!
-[2026-02-10 12:35:20,674] INFO in _internal:  * Debugger PIN: 101-392-389
-[2026-02-10 12:35:25,703] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/auth/api.py', reloading
-[2026-02-10 12:35:25,778] INFO in _internal:  * Restarting with stat
-[2026-02-10 12:35:26,034] WARNING in _internal:  * Debugger is active!
-[2026-02-10 12:35:26,036] INFO in _internal:  * Debugger PIN: 101-392-389
+[2026-02-12 10:21:30,365] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-02-12 10:21:30,365] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:21:30,657] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:21:30,658] INFO in _internal:  * Debugger PIN: 115-002-494
+[2026-02-12 10:21:34,261] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:21:34,274] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:21:34] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:24:29,090] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:24:29,102] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:24:29] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:25:43,403] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:25:43,421] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:25:43] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:25:52,931] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:25:52,964] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:25:52] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:26:46,412] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
+[2026-02-12 10:26:46,441] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:26:46] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:28:57,556] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:28:57,650] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:28:57,911] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:28:57,912] INFO in _internal:  * Debugger PIN: 218-543-124
+[2026-02-12 10:29:08,749] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:29:08] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
+[2026-02-12 10:29:25,101] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:29:25,203] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:29:25,457] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:29:25,459] INFO in _internal:  * Debugger PIN: 218-543-124
+[2026-02-12 10:29:32,496] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:29:32,579] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:29:32,843] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:29:32,845] INFO in _internal:  * Debugger PIN: 218-543-124
+[2026-02-12 10:29:55,985] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:29:56,067] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:29:56,363] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:29:56,364] INFO in _internal:  * Debugger PIN: 115-002-494
+[2026-02-12 10:30:04,428] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:30:04,522] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:30:04,818] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:30:04,820] INFO in _internal:  * Debugger PIN: 115-002-494
+[2026-02-12 10:34:50,535] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:34:50,618] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:34:50,914] ERROR in __init__: Errore durante l'upgrade del database: 'migrate'
+[2026-02-12 10:34:50,919] WARNING in _internal:  * Debugger is active!
+[2026-02-12 10:34:50,921] INFO in _internal:  * Debugger PIN: 115-002-494
+[2026-02-12 10:35:18,094] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-12 10:35:18,180] INFO in _internal:  * Restarting with stat
+[2026-02-12 10:40:28,351] INFO in _internal:  * Restarting with stat
+[2026-02-12 13:02:57,369] WARNING in _internal:  * Debugger is active!
+[2026-02-12 13:02:57,370] INFO in _internal:  * Debugger PIN: 989-220-158
+[2026-02-12 13:03:39,587] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/frontend/routes.py', reloading

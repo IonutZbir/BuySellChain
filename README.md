@@ -26,7 +26,9 @@ Per la prima volta, eseguire `flask db init`, poi:
 1. `flask db migrate -m 'desc'`
 2. `flask db upgrade`
 
-**Per eseguire l'app, eseguire** `flask run --debug` (per il debug), oppure `python3 run.py`
+**Per eseguire l'app** `flask run --debug` (per il debug), oppure `python3 run.py`
+
+**Per eseguire l'app in `https`** `flask run --devy`
 
 ## Docker PSQL
 
@@ -46,7 +48,7 @@ Per essere venditore, l utente si deve registrare come venditore (ad esempio agg
 piu avanti, inviare email all admin per accettazione
 
 
-ionut: documento - .yaml psql - generazione chiave segreta - dati di test - pulire requiments.txt
+ionut: documento - generazione chiave segreta - dati di test
 franco: api
 
 

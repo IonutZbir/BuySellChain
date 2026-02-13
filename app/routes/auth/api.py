@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request, current_app, session
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import create_access_token
@@ -104,11 +104,17 @@ def login():
     if not bcrypt.check_password_hash(user.passwordHash, password):
         return jsonify({"status": "fail", "data": {"message": "Credenziali errate!"}}), 401
 
+    session.clear()
+
     if remember:
         # l'utente ha selezionata "Remember me", viene creato un token con durata maggiore
         expires = timedelta(days=30)
+        current_app.permanent_session_lifetime = timedelta(days=30)
     else:
         expires = timedelta(hours=2)
+    
+    session['user_id'] = user.id
+    session['role'] = user.role.value
 
     additional_info = {
         "name": user.name,
@@ -122,6 +128,13 @@ def login():
         identity=user_data, additional_claims=additional_info, expires_delta=expires
     )
     return jsonify({"status": "success", "data": {"authorization": access_token}}), 200
+
+@api_auth.route("/logout", methods=["POST", "GET"])
+@jwt_required()
+def logout():
+    session.clear()
+    
+    return jsonify({"status": "success", "data": {"message": "Log out correttamente!"}}), 200
 
 @api_auth.route("/test", methods=["GET"])
 @jwt_required()

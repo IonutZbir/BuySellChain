@@ -5,7 +5,7 @@ Signin - BuySellChain
 {% endblock %}
 
 {% block scripts %}
-<script defer src="static/js/signin.js"></script>
+<script defer src="{{ url_for('static', filename='js/signin.js') }}"></script>
 {% endblock %} {%block content %}
 
 <article class="grid">

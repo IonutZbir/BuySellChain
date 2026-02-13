@@ -1,11 +1,128 @@
-{% extends "base.html" %} {% block title %} BuySellChain {% endblock %}
+{% extends "base.html" %} {% block title %} Home - BuySellChain {% endblock %}
 {% block scripts %}
-<script defer src="static/js/index.js"></script>
-{% endblock %} {%block content %}
+<script defer src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %} {% block hero %}
+<header class="hero-landing" x-data="navHandler">
+	<div class="hero-overlay">
+		<div class="container hero-content">
+			<div class="hero-text-wrapper">
+				<h1>
+					Rivoluziona le tue Aste con la
+					<span class="primary-color">Blockchain</span>
+				</h1>
+				<p>
+					Trasparenza, sicurezza e velocità. Partecipa ad aste
+					immobiliari certificate e immutabili direttamente dal tuo
+					wallet.
+				</p>
 
-<h1>Still Working...</h1>
+				<div class="hero-buttons">
+					<template x-if="!isLoggedIn">
+						<div style="display: flex; gap: 1rem">
+							<a href="/signin" role="button" class="contrast"
+								>Inizia ora</a
+							>
+							<a
+								href="/login"
+								role="button"
+								class="outline hero-btn-outline"
+								>Accedi</a
+							>
+						</div>
+					</template>
 
-<div x-data>
-    <button @click="await sendGetRequest()" class="contrast">Click me</button>
-</div>
+					<template x-if="isLoggedIn">
+						<a
+							href="#auctions-container"
+							role="button"
+							class="contrast"
+							>Esplora le Aste</a
+						>
+					</template>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+{% endblock %} {% block content %}
+
+<section
+	id="auctions-container"
+	x-data="auctionList()"
+	x-init="fetchAuctions()"
+>
+	<div class="section-header">
+		<h2>Aste Disponibili</h2>
+		<button
+			@click="fetchAuctions()"
+			class="outline secondary"
+			:class="loading && 'loading'"
+		>
+			Aggiorna lista
+		</button>
+	</div>
+
+	<div x-show="loading" class="text-center">
+		<p aria-busy="true">Caricamento aste in corso...</p>
+	</div>
+
+	<template x-if="!loading && auctions.length === 0">
+		<article class="empty-state">
+			<div class="empty-content">
+				<i class="fas fa-home empty-icon"></i>
+				<h3>Nessuna asta attiva</h3>
+				<p>
+					Al momento non ci sono immobili all'asta. Torna a trovarci
+					presto o crea la tua prima inserzione!
+				</p>
+				<a
+					href="{{ url_for('frontend.click_create_auction') }}"
+					role="button"
+					class="secondary"
+					>Crea Asta</a
+				>
+			</div>
+		</article>
+	</template>
+
+	<div class="grid auction-grid" x-show="!loading && auctions.length > 0">
+		<template x-for="auction in auctions" :key="auction.id">
+			<article class="auction-card">
+				<header class="card-image-container">
+					<img
+						:src="auction.image_url || 'https://via.placeholder.com/400x250?text=No+Image'"
+						:alt="auction.title"
+					/>
+					<div
+						class="badge"
+						:class="auction.active ? 'badge-active' : 'badge-closed'"
+						x-text="auction.active ? 'Attiva' : 'Chiusa'"
+					></div>
+				</header>
+
+				<div class="card-body">
+					<h4 x-text="auction.title"></h4>
+					<p
+						class="description"
+						x-text="auction.short_description"
+					></p>
+					<div class="price-info">
+						<small>Offerta attuale:</small>
+						<strong x-text="auction.current_price + ' €'"></strong>
+					</div>
+				</div>
+
+				<footer>
+					<a
+						:href="'/auctions/' + auction.id"
+						role="button"
+						class="outline full-width"
+						>Partecipa</a
+					>
+				</footer>
+			</article>
+		</template>
+	</div>
+</section>
 {% endblock %}

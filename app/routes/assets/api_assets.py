@@ -45,9 +45,12 @@ def list_assets():
 
 
 @api_assets.route("/assets", methods=["POST"])
+# @jwt_required()
 def create_asset():
     data = request.json
+    # desc = data.description
     ###
+    # ownerId = get_jwt_identity()["id"]
     # Metadati da Frontend:
     # {ownerId,title, descr, typr, size, price, locat, }
     #currentAuctionId èrima volta NULL, ppi modifica dopo la creazione dell'asta, quando si sa a quale asta è associato l'asset
