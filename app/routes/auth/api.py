@@ -71,7 +71,7 @@ def signin():
 
     additional_info = {"name": name, "surname": surname, "email": email, "role": user.role.value}
 
-    user_data = {"id": user.id, "role": user.role.value, "email": user.email}
+    user_data = {"id": user.blockChainId, "role": user.role.value, "email": user.email}
 
     access_token = create_access_token(identity=user_data, additional_claims=additional_info)
 
@@ -113,7 +113,7 @@ def login():
     else:
         expires = timedelta(hours=2)
     
-    session['user_id'] = user.id
+    session['user_id'] = user.blockChainId
     session['role'] = user.role.value
 
     additional_info = {
@@ -122,7 +122,7 @@ def login():
         "email": user.email,
         "role": user.role.value,
     }
-    user_data = {"id": user.id, "role": user.role.value, "email": user.email}
+    user_data = {"id": user.blockChainId, "role": user.role.value, "email": user.email}
 
     access_token = create_access_token(
         identity=user_data, additional_claims=additional_info, expires_delta=expires

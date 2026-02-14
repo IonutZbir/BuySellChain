@@ -64,7 +64,6 @@ def create_auction_page():
     
     return render_template('create_auction.html')
 
-
 # @frontend_bp.route('/auction/{auction_id}')
 # def show_asta():
 #     data = list_auctions_by_status(id)

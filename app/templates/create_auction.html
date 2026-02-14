@@ -1,101 +1,93 @@
-{% extends "base.html" %} {% block title %} Login - BuySellChain {% endblock %}
+{% extends "base.html" %} 
+
+{% block title %} Login - BuySellChain {% endblock %}
+
 {% block scripts %}
-<script defer src="{{ url_for('static', filename='js/auctions.js') }}"></script>
-<script defer src="{{ url_for('static', filename='js/assets.js') }}"></script>
-{% endblock %} {% block content %}
+<script defer src="{{ url_for('static', filename='js/create_auction.js') }}"></script>
+{% endblock %} 
 
+{% block content %}
 <article class="grid">
-	<div x-data="auctionForm">
-		<hgroup>
-			<h1>Crea Asta</h1>
-			<h2>Compila i dettagli dell'asta</h2>
-		</hgroup>
+    <div x-data="auctionManager">
+        
+        <div x-show="loading" aria-busy="true">Caricamento in corso...</div>
 
-		<form @submit.prevent="create_auction()">
-			<label for="startTime">
-				Data Inizio Asta
-				<input
-					type="datetime-local"
-					id="startTime"
-					name="startTime"
-					required
-					x-model="startTime"
-					@input="message = ''"
-				/>
-			</label>
+        <div x-show="hasAssets && !loading" x-transition>
+            <hgroup>
+                <h1>Crea Asta</h1>
+                <h2>Inserisci i dettagli per iniziare la vendita</h2>
+            </hgroup>
 
-			<label for="endTime">
-				Data Fine Asta
-				<input
-					type="datetime-local"
-					id="endTime"
-					name="endTime"
-					required
-					x-model="endTime"
-					@input="message = ''"
-				/>
-			</label>
+            <form @submit.prevent="create_auction()">
+                <div class="grid">
+                    <label>
+                        Inizio Asta
+                        <input type="datetime-local" required x-model="startTime" @input="message = ''" />
+                    </label>
+                    <label>
+                        Fine Asta
+                        <input type="datetime-local" required x-model="endTime" @input="message = ''" />
+                    </label>
+                </div>
 
-			<label for="startPrice">
-				Prezzo di Partenza
-				<input
-					type="number"
-					id="startPrice"
-					name="startPrice"
-					placeholder="0.00"
-					step="0.01"
-					required
-					x-model="startPrice"
-					@input="message = ''"
-				/>
-			</label>
+                <div class="grid">
+                    <label>
+                        Prezzo Base (€)
+                        <input type="number" step="0.01" required x-model="startPrice" placeholder="0.00" />
+                    </label>
+                    <label>
+                        Rilancio Minimo (€)
+                        <input type="number" step="0.01" required x-model="minIncrement" placeholder="0.00" />
+                    </label>
+                </div>
 
-			<label for="minIncrement">
-				Incremento Minimo
-				<input
-					type="number"
-					id="minIncrement"
-					name="minIncrement"
-					placeholder="0.00"
-					step="0.01"
-					required
-					x-model="minIncrement"
-					@input="message = ''"
-				/>
-			</label>
+                <label for="assetId">
+                    Seleziona l'Asset da mettere all'asta
+                    <select id="assetId" x-model="assetId" required>
+                        <option value="" disabled selected>Scegli un asset...</option>
+                        <template x-for="asset in assets" :key="asset.id">
+                            <option :value="asset.id" x-text="asset.data.title + ' (' + asset.data.locat + ')'"></option>
+                        </template>
+                    </select>
+                </label>
 
-			<label for="assetId">
-				Asset
-				<select
-					id="assetId"
-					name="assetId"
-					required
-					x-model="assetId"
-					@input="message = ''"
-				>
-					<option value="">Seleziona un asset</option>
-				</select>
-			</label>
+                <template x-if="message">
+                    <div class="pico-color-red-600" style="margin-bottom: 1rem;">
+                        <small x-text="message"></small>
+                    </div>
+                </template>
 
-			<div
-				x-show="message"
-				x-transition.opacity
-				role="alert"
-				class="pico-background-red-100 pico-color-red-600"
-				style="
-					padding: 1rem;
-					margin-bottom: 1rem;
-					border-radius: var(--pico-border-radius);
-					border: 1px solid currentColor;
-				"
-			>
-				<strong x-text="message"></strong>
-			</div>
+                <button type="submit" class="contrast">Pubblica Asta</button>
+            </form>
+        </div>
 
-			<button type="submit" class="contrast">Crea Asta</button>
-		</form>
-	</div>
-	<div></div>
+        <div x-show="!hasAssets && !loading" x-transition>
+            <article>
+                <hgroup>
+                    <h2>Nessun Asset trovato</h2>
+                    <h3>Crea il tuo primo asset per poter creare un'asta</h3>
+                </hgroup>
+                
+                <form @submit.prevent="create_assets()">
+                    <div class="grid">
+                        <label>Titolo <input type="text" required x-model="title" /></label>
+                        <label>Tipo <input type="text" required x-model="type" /></label>
+                    </div>
+
+                    <label>Descrizione <input type="text" required x-model="descr" /></label>
+
+                    <div class="grid">
+                        <label>Ubicazione <input type="text" required x-model="locat" /></label>
+                        <label>Dimensione <input type="text" required x-model="size" /></label>
+                        <label>Prezzo Stimato <input type="text" required x-model="price" /></label>
+                    </div>
+
+                    <button type="submit" class="contrast">Crea Asset e Continua</button>
+                </form>
+            </article>
+        </div>
+    </div>
+
+    <div></div>
 </article>
-
 {% endblock %}
