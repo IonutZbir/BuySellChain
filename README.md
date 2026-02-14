@@ -26,6 +26,9 @@ Per la prima volta, eseguire `flask db init`, poi:
 1. `flask db migrate -m 'desc'`
 2. `flask db upgrade`
 
+Comando per entrare nel docker (per DB) `docker exec -it postgres_db psql -U user_bsc -d buysellchain`
+
+
 **Per eseguire l'app** `flask run --debug` (per il debug), oppure `python3 run.py`
 
 **Per eseguire l'app in `https`** `flask run --devy`
@@ -57,3 +60,10 @@ franco: api
 /profile dati personali - ci si pensa piu in la
 /auction -> Form... Non ci sono immobili da vendere? -> pop up con form per registrare immobile
 /auction/id_asta/ da questa pagina, l utente puo fare offerte (se l utente che accede è l utente che l ha creata, vede le statistiche)
+
+## Modifiche fatte oggi - 14/02/2026
+
+- Aggiunta BLockChainID (email+uuid) in JWT
+- Creata route asset/user -> ritorna tutti gli asset dell'utente `user` trovato tramite JWT in request
+- sistemazione form crea asta e crea asset con popup (modifca queindi dei file .js associati)
+- fetch aste su index.html

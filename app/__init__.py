@@ -74,7 +74,7 @@ def create_app():
     # .env PSQLURL
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config["JWT_SECRET_KEY"] = "super-secret" # da modificare
+    app.config["JWT_SECRET_KEY"] = "super-secret" # da modificare -> os.getenv('JWT_SECRET_KEY')
     
     app.config["JWT_ALGORITHM"] = "HS256"
     

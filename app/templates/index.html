@@ -102,7 +102,7 @@
 				</header>
 
 				<div class="card-body">
-					<h4 x-text="auction.title"></h4>
+					<h4 x-text="auction.id"></h4>
 					<p
 						class="description"
 						x-text="auction.short_description"
@@ -115,7 +115,7 @@
 
 				<footer>
 					<a
-						:href="'/auctions/' + auction.id"
+						:href="'/api/v1/auctions/' + auction.id"
 						role="button"
 						class="outline full-width"
 						>Partecipa</a

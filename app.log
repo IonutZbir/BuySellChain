@@ -220,3 +220,9 @@ sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to serve
 [2026-02-12 13:02:57,369] WARNING in _internal:  * Debugger is active!
 [2026-02-12 13:02:57,370] INFO in _internal:  * Debugger PIN: 989-220-158
 [2026-02-12 13:03:39,587] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/frontend/routes.py', reloading
+[2026-02-14 13:29:18,538] WARNING in _internal:  * Debugger is active!
+[2026-02-14 13:29:18,539] INFO in _internal:  * Debugger PIN: 118-935-010
+[2026-02-14 13:29:26,409] INFO in _internal:  * Detected change in '/home/acronimo/Progetto_BuySellChain/app/routes/auctions/api_auctions.py', reloading
+[2026-02-14 16:16:40,345] WARNING in _internal:  * Debugger is active!
+[2026-02-14 16:16:40,345] INFO in _internal:  * Debugger PIN: 973-974-665
+[2026-02-14 16:16:41,620] INFO in _internal:  * Detected change in '/home/acronimo/Progetto_BuySellChain/app/routes/auctions/api_auctions.py', reloading
