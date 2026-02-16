@@ -50,11 +50,6 @@ post registrazione, email di conferma
 Per essere venditore, l utente si deve registrare come venditore (ad esempio aggiunge il codice fiscale)
 piu avanti, inviare email all admin per accettazione
 
-
-ionut: documento - generazione chiave segreta - dati di test
-franco: api
-
-
 ## frontend
 / - una lista delle aste (layout GRID) con la foto in primo piano, cliccando sopra, accede alla pagina dell'asta, dove puo decidere se partecipare o meno
 /profile dati personali - ci si pensa piu in la

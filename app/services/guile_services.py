@@ -13,7 +13,7 @@ import os
 load_dotenv()
 class GuileService:
     @staticmethod
-    def AddKV(Class,key, value=None):
+    def AddKV(Class, key, value=None):
         payload = {
             "cmd": "AddKV",
             "class": Class,
@@ -30,7 +30,7 @@ class GuileService:
             return {"error": str(e), "status": "failed"}
     
     @staticmethod
-    def GetKV(key, Class):
+    def GetKV(Class, key):
         payload = {
             "cmd": "GetKV",
             "class": Class,
@@ -53,9 +53,6 @@ class GuileService:
             "key": []
         }
         try:
-            print("Payload for GetKeys:", payload)  # Debug print
-            # L'URL di Guile è definito nel file config.py
-            #response = requests.post(current_app.config['GUILE_BRIDGE_URL'], json=payload)
             response = requests.post(os.getenv("GUILE_BRIDGE_URL"), json=payload)
             response.raise_for_status()
             return response.json()
@@ -93,3 +90,18 @@ class GuileService:
             return response.json()
         except requests.exceptions.RequestException as e:
             return {"error": str(e), "status": "failed"}
+
+if __name__ == "__main__":
+    key = ["asset_key_5"]
+    # value = {
+    #     "id": "asset_key_5",
+    #     "name": "Nome Asset 5"
+    # }
+    # res = GuileService.AddKV("Assets", key, value)
+    res = GuileService.GetKV("Assets", key)
+    print(res)
+    # res = GuileService.GetKeys("Assets")
+    # print(res)
+    # keys_list = [key for key in res["answer"].get("keys", [])]
+    # print(keys_list)
+    
