@@ -62,3 +62,15 @@ piu avanti, inviare email all admin per accettazione
 - Creata route asset/user -> ritorna tutti gli asset dell'utente `user` trovato tramite JWT in request
 - sistemazione form crea asta e crea asset con popup (modifca queindi dei file .js associati)
 - fetch aste su index.html
+
+## Modifiche fatte oggi - 17/02/2026 - Franco
+- Aggiunta model per Auction e Bid
+- modifica api_asset,auction e bid
+- creati i services (vedi che cazzo è uscito fuori per le funzioni, sopratutto le bid che sono ancora da sistemare)
+- creati i bck passati delle api (nse sa mai)
+- Problemi (avendo cambiato la forma delle richieste/risposte in jsend, andrebbe riaddattato tutto)
+    - index.js recuperare le aste da frontend
+    - create auctions.js recupero asset
+
+Mancano la validazione delle aste con asset, cioò bloccare la creazione dell'asta se un'asset è stato già usato. (da capire come);
+lavorare ancora su bid, anche con jwt

@@ -90,18 +90,4 @@ class GuileService:
             return response.json()
         except requests.exceptions.RequestException as e:
             return {"error": str(e), "status": "failed"}
-
-if __name__ == "__main__":
-    key = ["asset_key_5"]
-    # value = {
-    #     "id": "asset_key_5",
-    #     "name": "Nome Asset 5"
-    # }
-    # res = GuileService.AddKV("Assets", key, value)
-    res = GuileService.GetKV("Assets", key)
-    print(res)
-    # res = GuileService.GetKeys("Assets")
-    # print(res)
-    # keys_list = [key for key in res["answer"].get("keys", [])]
-    # print(keys_list)
     

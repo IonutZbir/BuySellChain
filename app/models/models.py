@@ -14,6 +14,11 @@ class UserRoles(enum.Enum):
     SELLER = "seller"
     BIDDER = "bidder"
 
+class AuctionStatus(enum.Enum):
+    LOCKED = "locked" #per validazione delle offerte, quando è LOCKED non si possono più fare offerte, e si aspetta che venga aggiornata a CLOSED o CANCELLED
+    ACTIVE = "active"
+    CLOSED = "closed"
+    CANCELLED = "cancelled" #asta cancellata, non più attiva, ma non conclusa (es: venditore ritira l'asta prima della scadenza, oppure asta chiusa senza vincitori, ecc)
 
 class AssetType(enum.Enum):
     VILLA = "villa"
@@ -28,7 +33,9 @@ class AssetType(enum.Enum):
     def from_value(cls, value: str):
         """Create enum from string value"""
         for member in cls:
+            print(f"Checking {member.value} against {value}")  # Debug print
             if member.value == value:
+                print(f"Matched {member} for value '{value}'")  # Debug print
                 return member
         raise ValueError(f"No AssetType with value '{value}'")
 
@@ -86,8 +93,130 @@ class User(db.Model):
         self.blockChainId = sha256(unique_string.encode()).hexdigest()
 
 
-# class Auction:
-# class Bid:
+class Auction:
+    """Classe che rappresenta un'asta memorizzata nella blockchain"""
+    """
+    value = {
+        "assetId": assetId,
+        "sellerId": sellerId,
+        "startTime": data.get("startTime"),
+        "endTime": data.get("endTime"),
+        "startingPrice": data.get("startingPrice"),
+        "minIncr": data.get("minIncr"),
+        "highBidId": highBidId,
+        "highBidAmount": highBidAmount,
+        "bidCount": bidCount,
+        "status": status,
+    }
+    """
+    def __init__(
+        self,
+        asset_id: str,
+        seller_id: str,
+        start_time: datetime,
+        end_time: datetime,
+        starting_price: float,
+        min_incr: float
+
+    ):
+        self.id = self._generate_id(asset_id, seller_id, start_time, end_time, starting_price, min_incr)
+        self.asset_id = asset_id
+        self.seller_id = seller_id
+        self.start_time = start_time
+        self.end_time = end_time
+        self.starting_price = starting_price
+        self.min_incr = min_incr
+        self.high_bid_id = None
+        self.high_bid_amount = None
+        self.bid_count = 0
+        self.status = AuctionStatus.ACTIVE
+
+    def _generate_id(
+        self,
+        asset_id: str,
+        seller_id: str,
+        start_time: datetime,
+        end_time: datetime,
+        starting_price: float,
+        min_incr: float,
+    ) -> str:
+        combined_string = f"{asset_id}-{seller_id}-{start_time.isoformat()}-{end_time.isoformat()}-{starting_price}-{min_incr}-{uuid4()}"
+        print(f"Generating auction ID with combined string: {combined_string}")  # Debug print
+        return sha256(combined_string.encode()).hexdigest()
+
+    def get_id(self) -> str:
+        return self.id
+    
+    def __repr__(self) -> str:
+        return f"Auction(id={self.id}, asset_id={self.asset_id}, seller_id={self.seller_id}, status={self.status.value})"
+
+    def to_json(self) -> dict:
+        return {
+            "id": self.id,
+            "asset_id": self.asset_id,
+            "seller_id": self.seller_id,
+            "start_time": self.start_time.isoformat(),
+            "end_time": self.end_time.isoformat(),
+            "starting_price": self.starting_price,
+            "min_incr": self.min_incr,
+            "high_bid_id": self.high_bid_id,
+            "high_bid_amount": self.high_bid_amount,
+            "bid_count": self.bid_count,
+            "status": self.status.value,
+        }
+class Bid:
+    """Classe che rappresenta un'offerta (bid) memorizzata nella blockchain"""
+
+    """
+    value = {
+        "auctionId": auctionId,
+        "bidderId": bidderId,
+        "amount": amount,
+        "timestamp": timestamp,
+        "status": status,
+        "reason": reason
+    }
+    """
+    def __init__(
+        self,
+        auction_id: str,
+        bidder_id: str,
+        bid_amount: float
+    ):
+        self.id = self._generate_id(auction_id, bidder_id, bid_amount)
+        self.auction_id = auction_id
+        self.bidder_id = bidder_id
+        self.bid_amount = bid_amount
+        self.timestamp = datetime.now()
+        self.status = "pending"  # pending, accepted, rejected
+        self.reason = None  # reason for rejection, if applicable
+
+    def _generate_id(
+        self,
+        auction_id: str,
+        bidder_id: str,
+        bid_amount: float,
+    ) -> str:
+        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{uuid4()}"
+        print(f"Generating bid ID with combined string: {combined_string}")  # Debug print
+        return sha256(combined_string.encode()).hexdigest()
+
+    def get_id(self) -> str:
+        return self.id
+    
+    def __repr__(self) -> str:
+        return f"Bid(id={self.id}, auction_id={self.auction_id}, bidder_id={self.bidder_id}, bid_amount={self.bid_amount})"
+
+    def to_json(self) -> dict:
+        return {
+            "id": self.id,
+            "auction_id": self.auction_id,
+            "bidder_id": self.bidder_id,
+            "bid_amount": self.bid_amount,
+            "timestamp": self.timestamp.isoformat(),
+            "status": self.status,
+            "reason": self.reason,
+        }
 class Asset:
     """Classe che rappresenta un asset memorizzato nella blockchain"""
 
@@ -105,7 +234,7 @@ class Asset:
         self.owner_id = owner_id
         self.title = title
         self.description = description
-        self.asset_type = asset_type
+        self.asset_type = asset_type.value
         self.size = size
         self.price = price
         self.location = location
@@ -124,10 +253,11 @@ class Asset:
         location: str,
     ) -> str:
         combined_string = f"{owner_id}-{title}-{description}-{asset_type.value}-{size}-{price}-{location}-{uuid4()}"
+        print(f"Generating asset ID with combined string: {combined_string}")  # Debug print
         return sha256(combined_string.encode()).hexdigest()
 
     def get_id(self) -> str:
-        return self.id;
+        return self.id
 
     def __repr__(self) -> str:
         return f"Asset(id={self.id}, title={self.title}, owner_id={self.owner_id}, status={self.status.value})"
@@ -138,7 +268,7 @@ class Asset:
             "owner_id": self.owner_id,
             "title": self.title,
             "description": self.description,
-            "asset_type": self.asset_type.value,
+            "asset_type": self.asset_type,
             "size": self.size,
             "price": self.price,
             "location": self.location,

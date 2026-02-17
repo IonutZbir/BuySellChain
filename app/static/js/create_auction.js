@@ -40,8 +40,10 @@ document.addEventListener("alpine:init", () => {
 
                 const data = await response.json();
                 console.log("Assets recuperati:", data);
-                if (response.ok) {
-                    this.assets = data.assets;
+                console.log("Response status:", response.status);
+                if (response.status === 200 && data.status === "success") {
+                    this.assets = data.data.assets;
+                    
                     console.log("Assets aggiornati nello stato:", this.assets);
                 }
             } catch (error) {

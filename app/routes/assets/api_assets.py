@@ -22,14 +22,16 @@ def post_assets():
     size = data.get("size")
     price = data.get("price")
     locat = data.get("locat")
-
+    current_app.logger.info(f"Received data for new asset: {data}")  # Debug print)
+    current_app.logger.info(f"Parsed asset type: {asset_type}")  # Debug print
     
     # Validate required fields
     if not all([title, descr, asset_type, size, price, locat]):
         return jsonify({"error": "Missing required fields"}), 400
     
     try:
-        asset_type = AssetType.from_value(type)
+        asset_type = AssetType.from_value(asset_type)
+        current_app.logger.info(f"Validate asset type: {asset_type}")  # Debug print
     except (ValueError):
         return jsonify({"error": "Invalid asset type"}), 400
     
@@ -43,8 +45,8 @@ def post_assets():
         return jsonify({"error": "Size and price must be numeric"}), 400
     
     result = AssetService.create_asset(owner_id, title, descr, asset_type, size, price, locat)
-    
-    return jsend_response("success", code=200), 200 if result else jsend_response("fail", code=400)
+    current_app.logger.info(f"Result from AssetService.create_asset: {result}")  # Debug print
+    return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
 
 @api_assets.route("/assets", methods=["GET"])
@@ -72,7 +74,7 @@ def get_asset(asset_id):
         return jsend_response("fail", data={"error": result.get("error")}, code=404)
     
     asset_data = result.get("data", {})
-    return jsend_response("success", data={"id": asset_id, "data": asset_data})
+    return jsend_response("success", data={"asset_data_from_id": asset_data})
 
 
 @api_assets.route("/assets/user", methods=["GET"])
@@ -81,11 +83,12 @@ def get_assets_by_user():
     user_id = get_current_user()["id"]
     
     result = AssetService.get_assets_by_user(user_id)
-    
+    current_app.logger.info(f"Result from AssetService.get_assets_by_user: {result}")  # Debug print
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     
     if not result.get("success"):
+        current_app.logger.error("Error: {}".format(result.get('error')))  # Debug print
         return jsend_response("fail", data={"error": result.get("error")}, code=404)
     
     return jsend_response("success", data={"assets": result.get("assets")})

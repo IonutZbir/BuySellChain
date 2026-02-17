@@ -31,12 +31,14 @@ class AssetService:
         """
         
         asset = Asset(owner_id, title, description, asset_type, size, price, location)
-        
+        current_app.logger.info(f"Created asset: {asset}")  # Debug print
         # Salva l'asset sulla blockchain via Guile
+        current_app.logger.info(f"Saving asset to blockchain with ID: {asset.get_id()}")  # Debug print
+        current_app.logger.info(f"Asset data to save: {asset.to_json()}")  # Debug print
         result = GuileService.AddKV(Class=AssetService.ASSETS_CLASS, key=asset.get_id(), value=asset.to_json())
-        
+        current_app.logger.info(f"Result from Guile AddKV: {result}")  # Debug print
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
 
         return True
@@ -55,12 +57,12 @@ class AssetService:
         result = GuileService.GetKV(Class=AssetService.ASSETS_CLASS, key=str(asset_id))
         
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
         
         if result.get("answer") is not False and result.get("answer"):
             asset_data = result.get("answer", {})
-            return {"success": True, "id": asset_id, "data": asset_data}
+            return {"success": True, "data": asset_data}
         else:
             return {"success": False, "error": "Asset not found"}
 
@@ -78,21 +80,22 @@ class AssetService:
         """
             # Recupera tutti gli ID dei asset
         result = GuileService.GetKeys(Class=AssetService.ASSETS_CLASS)
-        
+        current_app.logger.info(f"Result from Guile GetKeys: {result}")
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
         
         answer = result.get("answer", {})
-        
+        current_app.logger.info(f"Answer from GetKeys: {answer}")
         keys_list = [key[0] if isinstance(key, list) else key for key in answer.get("keys", [])]
         
         user_assets = []
         for key in keys_list:
+            current_app.logger.info(f"Checking asset key: {key} for user {user_id}")  # Debug print
             result_asset = GuileService.GetKV(Class=AssetService.ASSETS_CLASS, key=str(key))
-            asset_data = result_asset.get("answer", {})
-            
-            if asset_data and asset_data.get("ownerId") == user_id:
+            asset_data = result_asset.get("answer", {}).get("value", {}).get("owner_id", "")
+            current_app.logger.info(f"Asset data for key {key}: {asset_data}")  # Debug print
+            if asset_data == user_id:
                 user_assets.append({"id": key, "data": asset_data})
         
         if len(user_assets) > 0:
@@ -112,7 +115,7 @@ class AssetService:
         result = GuileService.GetKeys(Class=AssetService.ASSETS_CLASS)
         
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
         
         answer = result.get("answer", {})
@@ -124,7 +127,7 @@ class AssetService:
             asset_data = result_asset.get("answer", {})
             
             if asset_data:
-                assets.append({"id": key, "data": asset_data})
+                assets.append({"asset_data": asset_data})
         
         if len(assets) > 0:
             return {"success": True, "assets": assets}
@@ -182,7 +185,7 @@ class AssetService:
         result = GuileService.AddKV(Class=AssetService.ASSETS_CLASS, key=asset_id, value=asset_data)
         
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
         
         return {"success": True, "asset_id": asset_id, "new_status": new_status}
@@ -217,7 +220,7 @@ class AssetService:
         result = GuileService.AddKV(Class=AssetService.ASSETS_CLASS, key=asset_id, value=asset_data)
         
         if "error" in result:
-            current_app.logger.error(f"Error: {result.get("error")}")
+            current_app.logger.error("Error: {}".format(result.get('error')))
             return False
         
         return {"success": True, "asset_id": asset_id, "auction_id": auction_id}

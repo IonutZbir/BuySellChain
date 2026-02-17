@@ -1,9 +1,12 @@
-from flask import Blueprint, jsonify, request
+from unittest import result
+from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 from uuid import uuid4
 from datetime import datetime
 from app.services.guile_services import GuileService
 from hashlib import sha256
+from app.services.auction_services import AuctionService
+from app.services.jsend import jsend_response
 api_auctions = Blueprint("api_auctions", __name__)
 
 
@@ -20,108 +23,91 @@ api_auctions = Blueprint("api_auctions", __name__)
 
 @api_auctions.route("/auctions/status/<string:status>", methods=["GET"])
 def list_auctions_by_status(status):
-    result = GuileService.GetKeys(Class="Auctions")
-    print("Result from GetKeys:", result)  # Debug print
-
-    answer = result.get("answer", {})
-    keys_list = [
-        key[0] if isinstance(key, list) else key for key in answer.get("keys", [])
-    ]
-    print("Extracted keys list:", keys_list)  # Debug print
-    status_list = []
-    for key in keys_list:
-        print(f"Auction key: {key}")  # Debug print
-
-        result_auction = GuileService.GetKV(Class="Auctions", key=str(key))
-
-        if (
-            result_auction.get("answer", {})
-            .get("value", {})
-            .get("status", "")
-            .lower()
-            .strip()
-            == status
-        ):
-            status_list.append(result_auction)
-
-        print(f"Auction data for key {key}:", result_auction)  # Debug print
-    return jsonify({"auctions": status_list}), 200 if "error" not in result else 400
+    result = AuctionService.get_auction_by_status(status)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    return jsend_response("success", data=result.get("auction_by_status"))
 
 #aggiunge get /auctions/{id}
 
 @api_auctions.route("/auctions/<string:auction_id>", methods=["GET"])
 def get_auction_by_id(auction_id):
-    result = GuileService.GetKV(Class="Auctions", key=auction_id)
-    return jsonify(result), 200 if "error" not in result else 400
-
+    result = AuctionService.get_auction(auction_id)
+    
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    
+    asset_data = result.get("auction_data", {})
+    return jsend_response("success", data={"auction_data_from_id": asset_data})
 
 @api_auctions.route("/auctions", methods=["GET"])
 def list_auctions():
-    result = GuileService.GetKeys(Class="Auctions")
-    print("Result from GetKeys:", result)  # Debug print
-
-    answer = result.get("answer", {})
-    keys_list = [
-        key[0] if isinstance(key, list) else key for key in answer.get("keys", [])
-    ]
-    print("Extracted keys list:", keys_list)  # Debug print
+    result = AuctionService.list_all_auctions()
     
-    for key in keys_list:
-        print(f"Auction key: {key}")  # Debug print
-
-        result_auction = GuileService.GetKV(Class="Auctions", key=str(key))
-
-        print(f"Auction data for key {key}:", result_auction)  # Debug print
-        #to_return_auctions.append(result_auction)
-    return jsonify(result), 200 if "error" not in result else 400
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    
+    return jsend_response("success", data=result.get("auctions"))
 
 @api_auctions.route("/auctions", methods=["POST"])
 @jwt_required()
 def create_auction():
-    ## valdiare dati in  con function apposita, esempio validare che endTime sia dopo startTime, che startingPrice e minIncr siano positivi, etc..
     data = request.json
-    data_from_jwt = get_current_user()
-    print(f"Data from JWT: {data_from_jwt}")  # Debug print
-    print(type(data_from_jwt))  # Debug print
-    sellerId = data_from_jwt.get("id")
-    #sellerId = 1 # da rimuovere, serve solo per testare senza autenticazione
-    highBidId = None
-    highBidAmount = None
-    bidCount = 0
-    status = "active"
-    #assetId = data.get("assetId")
-    assetId = data.get("assetId") # da rimuovere, serve solo per testare senza autenticazione
-    value = {
-        "assetId": assetId,
-        "sellerId": sellerId,
-        "startTime": data.get("startTime"),
-        "endTime": data.get("endTime"),
-        "startingPrice": data.get("startingPrice"),
-        "minIncr": data.get("minIncr"),
-        "highBidId": highBidId,
-        "highBidAmount": highBidAmount,
-        "bidCount": bidCount,
-        "status": status,
-    }
-    key = sha256(str(value).encode() + str(uuid4()).encode()).hexdigest()  # Genera un hash unico per l'asta
-    print(f"Creata Asta da Frontend: {key}")
-    ### Metadati da Frontend:
-    # {assetId, sellerI d,startTime, endTime, startingPrice, minIncr, 
-    #highBidId inizio Null, poi ricalcolato - stessa cosa higBidAmount (sarebbe offerta vincetnte)
-    #bidCount inizio NUll, poi aggiunrato alla fine di ogni asta, quando si sa a quale asta è associato l'asset
-    #status inizio "active", poi "closed" alla fine dell'asta, quando si sa a quale asta è associato l'asset
-    #key = hash value + Nonce (true random generator)/UUID (mo vediamo)
-    ###
+    user = get_current_user()
+    sellerId = user.get("id")
+    # highBidId = None
+    # highBidAmount = None
+    # bidCount = 0
+    # status = "active"
+    assetId = data.get("assetId")
+    startTime = data.get("startTime")
+    endTime = data.get("endTime")
+    startingPrice = data.get("startingPrice")
+    minIncr = data.get("minIncr")
     
-    # Chiamata al servizio che parla con il cli
-    result = GuileService.AddKV(
-        Class="Auctions", key=key, value=value
-    )
-    # func che modifica asset su blockchain, aggiungendo currentAuctionId = key dell'asta appena creata, e status = "locked"
-    return jsonify(result), 200 if "error" not in result else 400
+    # Validate required fields
+    if not all([startTime, endTime, startingPrice, minIncr]):
+        return jsonify({"error": "Missing required fields"}), 400
+    
+    # Validate data types and values
+    try:
+        startTime = datetime.fromisoformat(startTime)
+        endTime = datetime.fromisoformat(endTime)
+        startingPrice = float(startingPrice)
+        minIncr = float(minIncr)
+        if startingPrice <= 0 or minIncr <= 0:
+            return jsonify({"error": "Starting price and minimum increment must be positive numbers"}), 400
+        # facciamo che min_incr sia almeno il 10% del prezzo di partenza, per evitare aste con incrementi troppo bassi
+        if minIncr < 0.1 * startingPrice:
+            return jsonify({"error": "Minimum increment must be at least 10% of the starting price"}), 400
+        if endTime <= startTime:
+            return jsonify({"error": "End time must be after start time"}), 400
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid data types for auction fields"}), 400
+    
+    result = AuctionService.create_auction(assetId, sellerId, startTime, endTime, startingPrice, minIncr)
+    current_app.logger.info(f"Result from AssetService.create_asset: {result}")  # Debug print
 
+    print("[INFO] Auction creation result:", result)  # Debug print
+    return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
+
+@api_auctions.route("/auctions/delete/<string:auction_id>", methods=["POST"])
+#@jwt_required()
+def delete_auction(auction_id):
+    #user = get_current_user()
+    #sellerId = user.get("id")
+    sellerId = "23e83c13c39ac78c4aee0ae0a3381d3656a95258d1efc44e0c9e9126fdb80f0d"  # Placeholder, replace with actual seller ID from JWT
+    result = AuctionService.cancel_auction(auction_id)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore durante l'eliminazione dell'asta"}, code=500)
+    return jsend_response("success", code=200)
 
 #fare funzione che prende immagini da cartelle su webserver, con nome corrispondente all'id dell'asta, e le aggiunge agli oggetti delle aste
-
-
-#@api_auctions.route("/auctions/update", methods=["PUT"])
