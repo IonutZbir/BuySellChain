@@ -41,6 +41,7 @@ document.addEventListener('alpine:init', () => {
                 }
                 if (result.data.authorization) {
                     sessionStorage.setItem('Authorization', `Bearer ${result.data.authorization}`);
+                    localStorage.setItem('Authorization', `Bearer ${result.data.authorization}`);
                 }
 
                 window.location.href = '/';

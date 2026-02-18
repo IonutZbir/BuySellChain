@@ -1,228 +1,134 @@
-[2026-02-12 10:13:14,370] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-[2026-02-12 10:13:14,370] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-12 10:13:14,370] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:13:14,678] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:13:14,682] INFO in _internal:  * Debugger PIN: 115-002-494
-[2026-02-12 10:13:17,205] INFO in logger: [127.0.0.1] GET / - 200 (0.0044s)
-[2026-02-12 10:13:17,206] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "GET / HTTP/1.1" 200 -
-[2026-02-12 10:13:17,225] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-12 10:13:17,226] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:17] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
-[2026-02-12 10:13:23,189] INFO in logger: [127.0.0.1] GET /signin - 200 (0.002s)
-[2026-02-12 10:13:23,190] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "GET /signin HTTP/1.1" 200 -
-[2026-02-12 10:13:23,208] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "[36mGET /static/js/nav.js HTTP/1.1[0m" 304 -
-[2026-02-12 10:13:23,209] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:23] "[36mGET /static/js/signin.js HTTP/1.1[0m" 304 -
-[2026-02-12 10:13:51,794] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:13:51,816] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:13:51] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:18:46,866] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-[2026-02-12 10:18:46,866] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-12 10:18:50,113] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:18:50,122] ERROR in app: Exception on /api/v1/auth/signin [POST]
-Traceback (most recent call last):
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
-    self._dbapi_connection = engine.raw_connection()
-                             ~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3309, in raw_connection
-    return self.pool.connect()
-           ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 447, in connect
-    return _ConnectionFairy._checkout(self)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
-    fairy = _ConnectionRecord.checkout(pool)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
-    rec = pool._do_get()
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
-    return self._create_connection()
-           ~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
-    return _ConnectionRecord(self)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
-    self.__connect()
-    ~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
-    self.dbapi_connection = connection = pool._invoke_creator(self)
-                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/create.py", line 661, in connect
-    return dialect.connect(*cargs, **cparams)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 630, in connect
-    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
-    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
-psycopg2.OperationalError: connection to server at "localhost" (::1), port 5432 failed: FATAL:  role "user_bsc" does not exist
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask_cors/extension.py", line 176, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-                                                ~^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/app/routes/auth/api.py", line 45, in signin
-    existing_user = db.session.execute(select(User).where(User.email == email)).scalar_one_or_none()
-                    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/scoping.py", line 765, in execute
-    return self._proxied.execute(
-           ~~~~~~~~~~~~~~~~~~~~~^
-        statement,
-        ^^^^^^^^^^
-    ...<4 lines>...
-        _add_event=_add_event,
-        ^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
-    return self._execute_internal(
-           ~~~~~~~~~~~~~~~~~~~~~~^
-        statement,
-        ^^^^^^^^^^
-    ...<4 lines>...
-        _add_event=_add_event,
-        ^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
-    conn = self._connection_for_bind(bind)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
-    return trans._connection_for_bind(engine, execution_options)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<string>", line 2, in _connection_for_bind
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
-    ret_value = fn(self, *arg, **kw)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
-    conn = bind.connect()
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3285, in connect
-    return self._connection_cls(self)
-           ~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 145, in __init__
-    Connection._handle_dbapi_exception_noconnection(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        err, dialect, engine
-        ^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 2448, in _handle_dbapi_exception_noconnection
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
-    self._dbapi_connection = engine.raw_connection()
-                             ~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 3309, in raw_connection
-    return self.pool.connect()
-           ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 447, in connect
-    return _ConnectionFairy._checkout(self)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
-    fairy = _ConnectionRecord.checkout(pool)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
-    rec = pool._do_get()
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
-    return self._create_connection()
-           ~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
-    return _ConnectionRecord(self)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
-    self.__connect()
-    ~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
-    with util.safe_reraise():
-         ~~~~~~~~~~~~~~~~~^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
-    raise exc_value.with_traceback(exc_tb)
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
-    self.dbapi_connection = connection = pool._invoke_creator(self)
-                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/create.py", line 661, in connect
-    return dialect.connect(*cargs, **cparams)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 630, in connect
-    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
-           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/home/ionut/Github/BuySellChain/.venv/lib/python3.14/site-packages/psycopg2/__init__.py", line 122, in connect
-    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
-sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) connection to server at "localhost" (::1), port 5432 failed: FATAL:  role "user_bsc" does not exist
-
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-[2026-02-12 10:18:50,130] ERROR in logger: [127.0.0.1] POST /api/v1/auth/signin - 500 (0.018s)
-[2026-02-12 10:18:50,131] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:18:50] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:21:30,364] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-[2026-02-12 10:21:30,365] INFO in _internal: [33mPress CTRL+C to quit[0m
-[2026-02-12 10:21:30,365] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:21:30,657] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:21:30,658] INFO in _internal:  * Debugger PIN: 115-002-494
-[2026-02-12 10:21:34,261] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:21:34,274] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:21:34] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:24:29,090] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:24:29,102] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:24:29] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:25:43,403] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:25:43,421] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:25:43] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:25:52,931] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:25:52,964] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:25:52] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:26:46,412] DEBUG in api: name='ionut', surname='zbi', email='ionut.roma9@gmail.com', birthday='2026-02-12' cellularNumber='3299224170', password='ionut'
-[2026-02-12 10:26:46,441] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:26:46] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:28:57,556] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:28:57,650] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:28:57,911] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:28:57,912] INFO in _internal:  * Debugger PIN: 218-543-124
-[2026-02-12 10:29:08,749] INFO in _internal: 127.0.0.1 - - [12/Feb/2026 10:29:08] "[35m[1mPOST /api/v1/auth/signin HTTP/1.1[0m" 500 -
-[2026-02-12 10:29:25,101] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:29:25,203] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:29:25,457] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:29:25,459] INFO in _internal:  * Debugger PIN: 218-543-124
-[2026-02-12 10:29:32,496] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:29:32,579] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:29:32,843] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:29:32,845] INFO in _internal:  * Debugger PIN: 218-543-124
-[2026-02-12 10:29:55,985] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:29:56,067] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:29:56,363] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:29:56,364] INFO in _internal:  * Debugger PIN: 115-002-494
-[2026-02-12 10:30:04,428] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:30:04,522] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:30:04,818] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:30:04,820] INFO in _internal:  * Debugger PIN: 115-002-494
-[2026-02-12 10:34:50,535] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:34:50,618] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:34:50,914] ERROR in __init__: Errore durante l'upgrade del database: 'migrate'
-[2026-02-12 10:34:50,919] WARNING in _internal:  * Debugger is active!
-[2026-02-12 10:34:50,921] INFO in _internal:  * Debugger PIN: 115-002-494
-[2026-02-12 10:35:18,094] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
-[2026-02-12 10:35:18,180] INFO in _internal:  * Restarting with stat
-[2026-02-12 10:40:28,351] INFO in _internal:  * Restarting with stat
-[2026-02-12 13:02:57,369] WARNING in _internal:  * Debugger is active!
-[2026-02-12 13:02:57,370] INFO in _internal:  * Debugger PIN: 989-220-158
-[2026-02-12 13:03:39,587] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/frontend/routes.py', reloading
-[2026-02-14 13:29:18,538] WARNING in _internal:  * Debugger is active!
-[2026-02-14 13:29:18,539] INFO in _internal:  * Debugger PIN: 118-935-010
-[2026-02-14 13:29:26,409] INFO in _internal:  * Detected change in '/home/acronimo/Progetto_BuySellChain/app/routes/auctions/api_auctions.py', reloading
-[2026-02-14 16:16:40,345] WARNING in _internal:  * Debugger is active!
-[2026-02-14 16:16:40,345] INFO in _internal:  * Debugger PIN: 973-974-665
-[2026-02-14 16:16:41,620] INFO in _internal:  * Detected change in '/home/acronimo/Progetto_BuySellChain/app/routes/auctions/api_auctions.py', reloading
+[2026-02-18 09:58:07,367] WARNING in _internal:  * Debugger is active!
+[2026-02-18 09:58:07,368] INFO in _internal:  * Debugger PIN: 489-213-094
+[2026-02-18 09:58:09,322] INFO in _internal: 127.0.0.1 - - [18/Feb/2026 09:58:09] "[35m[1mGET /auctions/create HTTP/1.1[0m" 500 -
+[2026-02-18 09:58:09,346] INFO in _internal: 127.0.0.1 - - [18/Feb/2026 09:58:09] "[36mGET /auctions/create?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+[2026-02-18 09:58:09,348] INFO in _internal: 127.0.0.1 - - [18/Feb/2026 09:58:09] "[36mGET /auctions/create?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+[2026-02-18 09:58:09,358] INFO in _internal: 127.0.0.1 - - [18/Feb/2026 09:58:09] "GET /auctions/create?__debugger__=yes&cmd=resource&f=console.png&s=xU9yU9ykoZS6VWhAlWCA HTTP/1.1" 200 -
+[2026-02-18 09:58:30,543] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/__init__.py', reloading
+[2026-02-18 10:08:47,100] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:08:47,100] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:08:47,100] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:08:47,100] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:08:59,622] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:08:59,622] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:08:59,622] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:08:59,622] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:09:25,244] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:09:25,244] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:09:25,244] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:09:25,244] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:10:55,307] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:10:55,307] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:10:55,307] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:10:55,307] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:11:13,883] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:11:13,883] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:11:13,883] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:11:13,883] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:11:37,513] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:11:37,513] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:11:37,513] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:11:37,513] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:12:31,370] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:12:31,370] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:12:31,370] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:12:31,370] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:13:17,057] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:13:17,057] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:13:17,057] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:13:17,057] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:13:38,621] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:13:38,621] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:13:38,621] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:13:38,621] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:13:38,651] WARNING in _internal:  * Debugger is active!
+[2026-02-18 10:13:38,652] INFO in _internal:  * Debugger PIN: 489-213-094
+[2026-02-18 10:13:39,661] INFO in _internal:  * Detected change in '/home/ionut/Github/BuySellChain/app/routes/assets/api_assets.py', reloading
+[2026-02-18 10:13:39,981] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:13:39,981] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:13:39,981] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:13:39,981] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:15:29,275] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:15:29,275] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:15:29,275] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:15:29,275] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:15:41,798] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:15:41,798] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:15:41,798] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:15:41,798] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:16:05,401] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:16:05,401] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:16:05,401] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:16:05,401] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:16:39,741] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:16:39,742] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:16:39,742] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:16:39,742] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:17:29,099] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:17:29,099] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:17:29,099] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:17:29,099] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:17:51,643] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:17:51,643] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:17:51,643] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:17:51,644] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:18:39,265] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:18:39,265] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:18:39,265] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:18:39,265] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:19:05,253] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:19:05,253] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:19:05,253] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:19:05,253] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:19:18,222] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:19:18,222] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:19:18,222] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:19:18,222] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:19:18,528] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:19:18,528] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:19:18,529] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:19:18,529] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:20:18,429] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:20:18,429] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:20:18,429] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:20:18,429] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:21:36,436] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:21:36,436] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:22:44,414] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:22:44,415] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:22:58,917] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:22:58,917] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:23:42,723] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:23:42,723] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:24:48,609] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:24:48,609] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:24:48,610] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:24:48,610] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:25:27,369] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:25:27,369] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:25:27,369] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:25:27,369] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:25:27,670] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:25:27,670] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:25:27,671] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:25:27,671] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:25:37,178] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:25:37,179] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:25:37,179] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:25:37,179] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:26:42,497] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:26:42,497] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:26:42,497] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:26:42,497] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:26:42,851] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:26:42,851] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:26:42,851] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:26:42,851] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:27:19,922] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:27:19,922] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:27:19,922] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:27:19,922] ERROR in __init__: Questo deve essere ROSSO
+[2026-02-18 10:27:20,224] DEBUG in __init__: Questo deve essere BLU
+[2026-02-18 10:27:20,224] INFO in __init__: Questo deve essere VERDE
+[2026-02-18 10:27:20,224] WARNING in __init__: Questo deve essere GIALLO
+[2026-02-18 10:27:20,224] ERROR in __init__: Questo deve essere ROSSO

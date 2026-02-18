@@ -91,25 +91,25 @@
 			<article class="auction-card">
 				<header class="card-image-container">
 					<img
-						:src="auction.image_url || 'https://via.placeholder.com/400x250?text=No+Image'"
-						:alt="auction.title"
+						:src="auction.value.image_url || 'https://picsum.photos/400/250'"
+						:alt="auction.value.title"
 					/>
 					<div
 						class="badge"
-						:class="auction.active ? 'badge-active' : 'badge-closed'"
-						x-text="auction.active ? 'Attiva' : 'Chiusa'"
+						:class="auction.value.status ? 'badge-active' : 'badge-closed'"
+						x-text="auction.value.status ? 'Attiva' : 'Chiusa'" 
 					></div>
 				</header>
 
 				<div class="card-body">
-					<h4 x-text="auction.id"></h4>
+					<h4 x-text="auction.value.title"></h4>
 					<p
 						class="description"
-						x-text="auction.short_description"
+						x-text="auction.value.description"
 					></p>
 					<div class="price-info">
 						<small>Offerta attuale:</small>
-						<strong x-text="auction.current_price + ' €'"></strong>
+						<strong x-text="auction.value.starting_price + ' €'"></strong>
 					</div>
 				</div>
 

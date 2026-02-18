@@ -19,44 +19,6 @@ api_auctions = Blueprint("api_auctions", __name__)
 # y=kx, con y=asta e x=tempo, con k coefficiente da definire (esempio 0.1, 0.2, etc) - da vedere se è meglio fare così o imporre un incremento minimo fisso (esempio 10 euro)
 ###
 
-
-
-@api_auctions.route("/auctions/status/<string:status>", methods=["GET"])
-def list_auctions_by_status(status):
-    result = AuctionService.get_auction_by_status(status)
-    if not result:
-        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
-    if not result.get("success"):
-        return jsend_response("fail", data={"error": result.get("error")}, code=404)
-    return jsend_response("success", data=result.get("auction_by_status"))
-
-#aggiunge get /auctions/{id}
-
-@api_auctions.route("/auctions/<string:auction_id>", methods=["GET"])
-def get_auction_by_id(auction_id):
-    result = AuctionService.get_auction(auction_id)
-    
-    if not result:
-        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
-    
-    if not result.get("success"):
-        return jsend_response("fail", data={"error": result.get("error")}, code=404)
-    
-    asset_data = result.get("auction_data", {})
-    return jsend_response("success", data={"auction_data_from_id": asset_data})
-
-@api_auctions.route("/auctions", methods=["GET"])
-def list_auctions():
-    result = AuctionService.list_all_auctions()
-    
-    if not result:
-        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
-    
-    if not result.get("success"):
-        return jsend_response("fail", data={"error": result.get("error")}, code=404)
-    
-    return jsend_response("success", data=result.get("auctions"))
-
 @api_auctions.route("/auctions", methods=["POST"])
 @jwt_required()
 def create_auction():
@@ -99,7 +61,52 @@ def create_auction():
     print("[INFO] Auction creation result:", result)  # Debug print
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
-@api_auctions.route("/auctions/delete/<string:auction_id>", methods=["POST"])
+
+@api_auctions.route("/auctions", methods=["GET"])
+def list_auctions():
+    result = AuctionService.list_all_auctions()
+    
+    # se asta attiva, inviare al frontend anche il nome dell owner e il nome dell'asset, descrzione asset
+    
+    
+    current_app.logger.debug(f"Result from AuctionService.get_assets_by_user: {result}")  # Debug print
+
+    
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    
+    return jsend_response("success", data={"auctions": result.get("auctions")})
+
+
+@api_auctions.route("/auctions/status/<string:status>", methods=["GET"])
+def list_auctions_by_status(status):
+    result = AuctionService.get_auction_by_status(status)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    return jsend_response("success", data={"auctions": result.get("auctions")})
+
+# /auctions/user/{id}/status/{id}
+
+@api_auctions.route("/auctions/<string:auction_id>", methods=["GET"])
+def get_auction_by_id(auction_id):
+    result = AuctionService.get_auction(auction_id)
+    
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    
+    asset_data = result.get("auction_data", {})
+    return jsend_response("success", data=asset_data)
+
+
+@api_auctions.route("/auctions/<string:auction_id>", methods=["DELETE"])
 #@jwt_required()
 def delete_auction(auction_id):
     #user = get_current_user()

@@ -69,6 +69,9 @@ def signin():
     db.session.add(user)
     db.session.commit()
 
+    session['user_id'] = user.blockChainId
+    session['role'] = user.role.value
+
     additional_info = {"name": name, "surname": surname, "email": email, "role": user.role.value}
 
     user_data = {"id": user.blockChainId, "role": user.role.value, "email": user.email}
@@ -89,6 +92,7 @@ def login():
         return jsonify({"status": "fail", "data": {"message": "Credenziali errate!"}}), 401
 
     current_app.logger.debug(f"{email=}, {password=}")
+    current_app.logger.info(f"LOGIN")
 
     query = select(User).where(User.email == email)
     user = db.session.execute(query).scalar_one_or_none()

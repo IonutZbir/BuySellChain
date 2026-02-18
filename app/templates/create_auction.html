@@ -69,7 +69,7 @@
 						<template x-for="asset in assets" :key="asset.id">
 							<option
 								:value="asset.id"
-								x-text="asset.data.title + ' (' + asset.data.locat + ')'"
+								x-text="asset.value.title + ' (' + asset.value.location + ')'"
 							></option>
 						</template>
 					</select>

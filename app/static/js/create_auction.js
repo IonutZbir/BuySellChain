@@ -38,13 +38,12 @@ document.addEventListener("alpine:init", () => {
                     }
                 });
 
-                const data = await response.json();
-                console.log("Assets recuperati:", data);
-                console.log("Response status:", response.status);
-                if (response.status === 200 && data.status === "success") {
-                    this.assets = data.data.assets;
-                    
-                    console.log("Assets aggiornati nello stato:", this.assets);
+                const res_data = await response.json();
+                // console.log(res_data);
+                // console.log("Assets recuperati:", res_data.data.assets);
+                // console.log("Response status:", response.status);
+                if (response.status === 200 && res_data.status === "success") {
+                    this.assets = res_data.data.assets;
                 }
             } catch (error) {
                 console.error("Errore nel recupero asset:", error);

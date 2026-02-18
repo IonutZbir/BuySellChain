@@ -1,5 +1,7 @@
 from datetime import datetime
-from flask import Blueprint, jsonify, request,current_app
+from flask import Blueprint, jsonify, request, current_app
+
+import logging
 
 from app.models.models import AssetType
 from app.services.asset_services import AssetService
@@ -53,7 +55,8 @@ def post_assets():
 # @jwt_required()
 def get_assets():
     result = AssetService.list_all_assets()
-    
+    # print(result)
+    current_app.logger.debug(result)
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     
@@ -74,7 +77,7 @@ def get_asset(asset_id):
         return jsend_response("fail", data={"error": result.get("error")}, code=404)
     
     asset_data = result.get("data", {})
-    return jsend_response("success", data={"asset_data_from_id": asset_data})
+    return jsend_response("success", data= asset_data)
 
 
 @api_assets.route("/assets/user", methods=["GET"])
@@ -83,7 +86,7 @@ def get_assets_by_user():
     user_id = get_current_user()["id"]
     
     result = AssetService.get_assets_by_user(user_id)
-    current_app.logger.info(f"Result from AssetService.get_assets_by_user: {result}")  # Debug print
+    current_app.logger.debug(f"Result from AssetService.get_assets_by_user: {result}")  # Debug print
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     
