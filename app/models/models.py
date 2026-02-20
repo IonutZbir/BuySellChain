@@ -229,6 +229,7 @@ class Asset:
         size: float,
         price: float,
         location: str,
+        picture=None
     ):
         self.id = self._generate_id(owner_id, title, description, asset_type, size, price, location)
         self.owner_id = owner_id
@@ -241,7 +242,7 @@ class Asset:
         self.created_at = datetime.now()
         self.status = AssetStatus.ACTIVE
         self.current_auction_id = None
-
+        self.picture = picture
     def _generate_id(
         self,
         owner_id: str,
@@ -275,4 +276,5 @@ class Asset:
             "created_at": self.created_at.isoformat(),
             "status": self.status.value,
             "current_auction_id": self.current_auction_id,
+            "picture": self.picture.filename if self.picture else None,
         }

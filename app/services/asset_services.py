@@ -1,6 +1,11 @@
 import logging
+import uuid
+
+from flask import current_app
 from app.models.models import Asset, AssetStatus, AssetType
 from app.services.guile_services import GuileService
+import os
+from werkzeug.utils import secure_filename
 
 logger = logging.getLogger()
 
@@ -12,7 +17,7 @@ class AssetService:
 
     @staticmethod
     def create_asset(owner_id: str, title: str, description: str, asset_type: AssetType, 
-                    size: float, price: float, location: str) -> dict:
+                    size: float, price: float, location: str, picture=None) -> dict:
         """
         Crea un nuovo asset e lo salva sulla blockchain
         
@@ -29,7 +34,8 @@ class AssetService:
             True: se l'asset è creato correttamente. False altrimenti.
         """
         
-        asset = Asset(owner_id, title, description, asset_type, size, price, location)
+        asset = Asset(owner_id, title, description, asset_type, size, price, location, picture)
+        
         logger.info(f"Created asset: {asset}")  # Debug print
         # Salva l'asset sulla blockchain via Guile
         logger.info(f"Saving asset to blockchain with ID: {asset.get_id()}")  # Debug print
@@ -40,6 +46,11 @@ class AssetService:
             logger.error("Error: {}".format(result.get('error')))
             return False
 
+        if not AssetService._upload_picture(owner_id, asset.get_id(), asset.picture):
+            logger.info(f"Failed to upload picture for asset ID: {asset.get_id()}")
+            return False
+
+        logger.info(f"Asset created and picture uploaded successfully for asset ID: {asset.get_id()}")
         return True
             
     @staticmethod
@@ -226,3 +237,44 @@ class AssetService:
         
         return {"success": True, "asset_id": asset_id, "auction_id": auction_id}
 
+
+    def _upload_picture(owner_id: str, asset_id: str, picture) -> str:
+        # 1. Definiamo la cartella base
+        # static/uploads
+        base_upload_dir = os.path.join(current_app.root_path, 'static', 'uploads')
+        
+        # assets/1/101/primary-uuid().jpg
+        ext = os.path.splitext(secure_filename(picture.filename))[1] # Prende l'estensione (.jpg, .png)
+        unique_filename = f"{uuid.uuid4().hex}{ext}"
+        
+        relative_path = os.path.join('assets', str(owner_id), str(asset_id), f"primary-{unique_filename}")
+        
+        # 3. Percorso assoluto per il sistema operativo
+        absolute_filepath = os.path.join(base_upload_dir, relative_path)
+        
+        try:
+            # Crea le cartelle (static/uploads/assets/owner/asset/)
+            os.makedirs(os.path.dirname(absolute_filepath), exist_ok=True)
+            
+            # Salva il file
+            picture.save(absolute_filepath)
+            
+            # Restituisci il percorso relativo (in futoro potremmo voler salvare questo percorso sulla blockchain)
+            return relative_path
+            
+        except Exception as e:
+            current_app.logger.error(f"Errore upload: {e}")
+            return False
+    
+    def base_upload_dir_absolute():
+        return os.path.join(current_app.root_path, 'static', 'uploads', 'assets')
+    
+    def base_upload_dir_relative():
+        return os.path.join('static', 'uploads', 'assets')
+
+if __name__ == "__main__":
+    # Esempio di utilizz
+    app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    print(app_dir)
+    absolute_filepath = os.path.join(app_dir, "static/images/villa1.jpg")
+    print(absolute_filepath)

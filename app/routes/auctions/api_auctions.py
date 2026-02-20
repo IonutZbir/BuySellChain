@@ -1,14 +1,19 @@
+import os
 from unittest import result
 from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 from uuid import uuid4
 from datetime import datetime
+from app.models.models import AuctionStatus
+from app.services.asset_services import AssetService
 from app.services.guile_services import GuileService
 from hashlib import sha256
 from app.services.auction_services import AuctionService
 from app.services.jsend import jsend_response
-api_auctions = Blueprint("api_auctions", __name__)
+import glob
 
+
+api_auctions = Blueprint("api_auctions", __name__)
 
 ###
 # offerte per utente
@@ -64,21 +69,66 @@ def create_auction():
 
 @api_auctions.route("/auctions", methods=["GET"])
 def list_auctions():
-    result = AuctionService.list_all_auctions()
+    # Per le aste attive, recupera e includi nel payload di risposta i dettagli aggiuntivi:
+    # - nome e descrizione dell'asset messo all'asta
+    # - informazioni del venditore (proprietario dell'asta)
+    # Questi dati sono necessari al frontend per visualizzare correttamente i dettagli dell'asta
     
-    # se asta attiva, inviare al frontend anche il nome dell owner e il nome dell'asset, descrzione asset
+    auctions = AuctionService.list_all_auctions()
+    
+    if not auctions.get("success"):
+        return jsend_response("fail", data={"error": auctions.get("error")}, code=404)
     
     
-    current_app.logger.debug(f"Result from AuctionService.get_assets_by_user: {result}")  # Debug print
+    response_data = []
+    
+    for auction in auctions.get("auctions", []):
+        auction = auction.get("value", [])
+        auction_data = {
+            "auction_id": auction.get("id"),
+            "asset_id": auction.get("asset_id"),
+            "seller_id": auction.get("seller_id"),
+            "start_time": auction.get("start_time"),
+            "end_time": auction.get("end_time"),
+            "starting_price": auction.get("starting_price"),
+            "min_incr": auction.get("min_incr"),
+            "status": auction.get("status"),
+            "high_bid_amount": auction.get("high_bid_amount"),
+            "high_bid_id": auction.get("high_bid_id"),
+            "bid_count": auction.get("bid_count")
+        }
+        
+        if auction_data["status"] == AuctionStatus.ACTIVE.value:
+            # Ottieni i dettagli dell'asset
+            asset = AssetService.get_asset(auction.get("asset_id"))
+            asset_data = asset.get("data", {}).get("value", {})
+            
+            if asset and asset.get("success"):
+                auction_data["asset_title"] = asset_data.get("title")
+                auction_data["asset_description"] = asset_data.get("description")
+            else:
+                auction_data["asset_title"] = "Unknown Asset"
+                auction_data["asset_description"] = "Asset details not available"
+        
+            
+            image_paths = glob.glob(os.path.join(AssetService.base_upload_dir_absolute(), asset_data.get("owner_id", ""), asset_data.get("id", ""), "primary-*.*"))
+            
+            if image_paths:
+                filename = os.path.basename(image_paths[0])
+                
+                auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), asset_data.get("owner_id", ""), asset_data.get("id", ""), filename).replace("\\", "/")
+            else:
+                auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), 'default.png').replace("\\", "/") 
+                # Fallback a un'immagine di default se non ne troviamo una specifica
+        
+        response_data.append(auction_data)
+    
+    current_app.logger.debug(f"Response data: {response_data}")
 
-    
-    if not result:
+    if not response_data:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     
-    if not result.get("success"):
-        return jsend_response("fail", data={"error": result.get("error")}, code=404)
-    
-    return jsend_response("success", data={"auctions": result.get("auctions")})
+    return jsend_response("success", data={"auctions": response_data})
 
 
 @api_auctions.route("/auctions/status/<string:status>", methods=["GET"])

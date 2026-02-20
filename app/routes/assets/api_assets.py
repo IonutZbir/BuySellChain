@@ -16,20 +16,32 @@ api_assets = Blueprint("api_assets", __name__)
 @api_assets.route("/assets", methods=["POST"])
 @jwt_required()
 def post_assets():
-    data = request.json
-    owner_id = get_current_user()["id"]
-    title = data.get("title")
-    descr = data.get("descr")
-    asset_type = data.get("type")
-    size = data.get("size")
-    price = data.get("price")
-    locat = data.get("locat")
-    current_app.logger.info(f"Received data for new asset: {data}")  # Debug print)
-    current_app.logger.info(f"Parsed asset type: {asset_type}")  # Debug print
+    # 1. Recupera l'utente corrente (presumo tu abbia già questa logica)
+    user = get_current_user()
+    owner_id = user["id"]
+
+    # 2. IMPORTANTE: Usa request.form invece di request.json
+    # Perché i dati arrivano come multipart/form-data
+    title = request.form.get("title")
+    descr = request.form.get("descr")
+    asset_type = request.form.get("type")
+    size = request.form.get("size")
+    price = request.form.get("price")
+    locat = request.form.get("locat")
     
-    # Validate required fields
+    current_app.logger.info(f"Received form data: {request.form}")
+    
+    # 3. Validation of text fields and file presence
     if not all([title, descr, asset_type, size, price, locat]):
-        return jsonify({"error": "Missing required fields"}), 400
+        return jsonify({"error": "Missing required text fields"}), 400
+
+    if 'picture' not in request.files:
+        return jsonify({"error": "Missing asset image"}), 400
+    
+    picture = request.files['picture']
+    
+    if picture.filename == '':
+        return jsonify({"error": "No file selected"}), 400
     
     try:
         asset_type = AssetType.from_value(asset_type)
@@ -46,7 +58,7 @@ def post_assets():
     except (ValueError, TypeError):
         return jsonify({"error": "Size and price must be numeric"}), 400
     
-    result = AssetService.create_asset(owner_id, title, descr, asset_type, size, price, locat)
+    result = AssetService.create_asset(owner_id, title, descr, asset_type, size, price, locat, picture)
     current_app.logger.info(f"Result from AssetService.create_asset: {result}")  # Debug print
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 

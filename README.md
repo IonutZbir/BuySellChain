@@ -74,3 +74,21 @@ piu avanti, inviare email all admin per accettazione
 
 Mancano la validazione delle aste con asset, cioò bloccare la creazione dell'asta se un'asset è stato già usato. (da capire come);
 lavorare ancora su bid, anche con jwt
+
+## Modifiche fatte oggi 18/02/2026 - Ionut/Franco
+- Sistemato registrazione, ora non va piu al login quando "crea asta"
+- Definito formato dei dati per le risposte (jsend.py)
+- Presentazione aste su index.html
+
+## Modifiche fatte oggi 20/02/2026 - Ionut
+
+- Frontend: nella pagina auctions/create, aggiunta di un bottone per creare asset + aggiunta upload immagine
+- Backend: gestione upload immagine. Le immagini vengono caricate in: `static/assets/{owner_id}/{asset_id}/`. L'immagine principale è salvata come `primary-uuid().ext`, mentre le altre come verranno salvate come `uuid().ext`
+
+- Modificato `list_auctions().py` (`/routs/auctions`). Nella risposta, definiamo da 0 il dizionario `response_data`, nel quale includere i dati richiesti. Modficato adeguatamente anche il frontend.
+
+
+- Sistemare e centrallizzare le api (Franco)
+- Implementare singole pagine per ciascuna asta (Ionut)
+- Modificare i JSON delle rispsote pe semplificando il formato (anche centralizzare il sistema di creazione delle risposte) (Ionut/Franco)
+- Implemetnare sistema registrazione seller + ruoli (Ionut)

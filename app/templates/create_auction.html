@@ -81,14 +81,28 @@
 					</div>
 				</template>
 
-				<button type="submit" class="contrast">Pubblica Asta</button>
+				<div
+					style="display: flex; gap: 1rem; justify-content: flex-end"
+				>
+					<button
+						type="button"
+						class="outline"
+						@click="showAssetForm = true"
+					>
+						Crea Asset
+					</button>
+					<button type="submit" class="contrast">
+						Pubblica Asta
+					</button>
+				</div>
 			</form>
 		</div>
 
-		<div x-show="!hasAssets && !loading" x-transition>
+		<div x-show="!hasAssets && !loading || showAssetForm" x-transition>
 			<article>
 				<hgroup>
-					<h2>Nessun Asset trovato</h2>
+					<h2 x-show="showAssetForm">Crea un nuovo Asset</h2>
+					<h2 x-show="!showAssetForm">Nessun Asset trovato</h2>
 					<h3>Crea il tuo primo asset per poter creare un'asta</h3>
 				</hgroup>
 
@@ -136,9 +150,31 @@
 						/></label>
 					</div>
 
+					<label for="picture"
+						>Immagine dell'Asset
+						<input
+							type="file"
+							x-ref="picture"
+							accept="image/png, image/jpeg, image/jpg"
+							required
+						/>
+					</label>
+
 					<button type="submit" class="contrast">
 						Crea Asset e Continua
 					</button>
+					<div
+						x-show="showModal"
+						@click.away="showModal = false"
+						style="display: none"
+					>
+						<div class="modal-content">
+							<p x-text="message"></p>
+							<button @click="showAssetForm = false">
+								Close
+							</button>
+						</div>
+					</div>
 				</form>
 			</article>
 		</div>

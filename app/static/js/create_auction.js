@@ -5,6 +5,8 @@ document.addEventListener("alpine:init", () => {
         loading: false,
         message: '',
         assetId: '',
+        showAssetForm: false,
+        showModal: false,
 
         // Campi Form Asset
         title: '', type: '', locat: '', descr: '', size: '', price: '',
@@ -55,24 +57,37 @@ document.addEventListener("alpine:init", () => {
         async create_assets() {
             try {
                 const token = localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization');
+
+                const fileInput = this.$refs.picture;
+                const formData = new FormData();
+                if (fileInput.files[0]) {
+                    formData.append('picture', fileInput.files[0]);
+                }
+                formData.append('title', this.title);
+                formData.append('type', this.type);
+                formData.append('locat', this.locat);
+                formData.append('descr', this.descr);
+                formData.append('size', this.size);
+                formData.append('price', this.price);
+
                 const response = await fetch("/api/v1/assets", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": token
                     },
-                    body: JSON.stringify({
-                        title: this.title,
-                        type: this.type,
-                        locat: this.locat,
-                        descr: this.descr,
-                        size: this.size,
-                        price: this.price
-                    })
+                    body: formData
                 });
 
+                
                 if (response.ok) {
-                    this.message = '';
+                    this.message = "Asset creato con successo! Ora puoi procedere a creare l'asta.";
+                    this.showModal = true;
+                    this.title = '';
+                    this.type = '';
+                    this.locat = '';
+                    this.descr = '';
+                    this.size = '';
+                    this.price = '';
                     await this.fetchAssetsByUserID(); // Ricarica la lista e switcha il form
                 } else {
                     this.message = "Errore nella creazione dell'asset";
