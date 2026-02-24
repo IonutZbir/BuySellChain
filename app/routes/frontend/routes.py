@@ -6,11 +6,17 @@ Contiene i percorsi per:
 - Creazione di nuove aste con controllo d'accesso protetto
 """
 
+from glob import glob
+import os
+
 from flask import Blueprint, abort, flash, redirect, render_template, session, url_for
 
 from flask_jwt_extended import jwt_required
 
+from app.models.models import AuctionStatus
 from app.routes.auctions.api_auctions import list_auctions_by_status
+from app.services.asset_services import AssetService
+from app.services.auction_services import AuctionService
 
 frontend_bp = Blueprint('frontend', __name__)
 
@@ -64,7 +70,49 @@ def create_auction_page():
     
     return render_template('create_auction.html')
 
-# @frontend_bp.route('/auction/{auction_id}')
-# def show_asta():
-#     data = list_auctions_by_status(id)
-#     render_template('auction.html', params=data)
+@frontend_bp.route('/auction/<auction_id>')
+def show_asta(auction_id):
+    data = AuctionService.get_auction(auction_id)
+    auction = data.get("auction_data", {})
+    
+    high_bid_amount = auction.get("high_bid_amount", 0)
+    if high_bid_amount is None:
+        high_bid_amount = 0
+    auction_data = {
+        "auction_id": auction.get("id"),
+        "asset_id": auction.get("asset_id"),
+        "seller_id": auction.get("seller_id"),
+        "start_time": auction.get("start_time"),
+        "end_time": auction.get("end_time"),
+        "starting_price": int(auction.get("starting_price", 0)),
+        "min_incr": int(auction.get("min_incr", 0)),
+        "status": auction.get("status"),
+        "high_bid_amount": int(high_bid_amount),
+        "bid_count": int(auction.get("bid_count", 0))
+    }
+        
+    # CARICHIAMO L'ASSET SEMPRE (indipendentemente dallo status)
+    asset_response = AssetService.get_asset(auction.get("asset_id"))
+    if asset_response and asset_response.get("success"):
+        asset_data = asset_response.get("data", {}).get("value", {})
+        auction_data["asset_title"] = asset_data.get("title", "Titolo non disponibile")
+        auction_data["asset_description"] = asset_data.get("description", "")
+        
+        # Gestione Immagine
+        asset_id = asset_data.get("id", "")
+        owner_id = asset_data.get("owner_id", "")
+        image_paths = glob(os.path.join(AssetService.base_upload_dir_absolute(), owner_id, asset_id, "primary-*.*"))
+        
+        if image_paths:
+            filename = os.path.basename(image_paths[0])
+            
+            auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), asset_data.get("owner_id", ""), asset_data.get("id", ""), filename).replace("\\", "/")
+        else:
+            auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), 'default.png').replace("\\", "/")
+    else:
+        auction_data["asset_title"] = "Asset non trovato"
+        auction_data["asset_description"] = "Dettagli non disponibili."
+
+    print(f"DEBUG: image_url: {auction_data['image_url']}")
+
+    return render_template('auction.html', auction_data=auction_data)

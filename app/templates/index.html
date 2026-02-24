@@ -88,40 +88,50 @@
 
 	<div class="grid auction-grid" x-show="!loading && auctions.length > 0">
 		<template x-for="auction in auctions" :key="auction.auction_id">
-			<article class="auction-card">
-				<header class="card-image-container">
+			<div class="custom-card" x-data="{ joined: false }">
+				<div class="card-header">
 					<img
-						:src="auction.image_url || 'https://picsum.photos/400/250'"
-						:alt="auction.asset_title"
+						:src="auction.image_url || 'https://via.placeholder.com/500x300?text=No+Image'"
+						:alt="auction.title"
+						class="card-img"
 					/>
-					<div
-						class="badge"
-						:class="auction.status ? 'badge-active' : 'badge-closed'"
-						x-text="auction.status ? 'Attiva' : 'Chiusa'" 
-					></div>
-				</header>
 
-				<div class="card-body">
-					<h4 x-text="auction.asset_title"></h4>
-					<p
-						class="description"
-						x-text="auction.asset_description"
-					></p>
-					<div class="price-info">
-						<small>Offerta attuale:</small>
-						<strong x-text="auction.starting_price + ' €'"></strong>
+					<div class="badge-wrapper">
+						<span
+							x-show="auction.status === 'active'"
+							class="badge badge-active"
+							>Attiva</span
+						>
+						<span
+							x-show="auction.status !== 'active'"
+							class="badge badge-inactive"
+							>Chiusa</span
+						>
 					</div>
 				</div>
 
-				<footer>
+				<div class="card-body">
+					<h2 class="card-title" x-text="auction.title"></h2>
+
+					<div class="card-price">
+						<span>Prezzo di Partenza:</span>
+						<strong x-text="'€' + auction.starting_price"></strong>
+					</div>
+
+					<p
+						class="card-description"
+						x-text="auction.asset_description.length > 100 ? auction.asset_description.substring(0, 100) + '...' : auction.asset_description"
+					></p>
+
 					<a
-						:href="'/api/v1/auctions/' + auction.id"
+						:href="`/auction/${auction.auction_id}`"
 						role="button"
-						class="outline full-width"
-						>Partecipa</a
+						class="btn-participate"
 					>
-				</footer>
-			</article>
+						Partecipa all'asta
+					</a>
+				</div>
+			</div>
 		</template>
 	</div>
 </section>

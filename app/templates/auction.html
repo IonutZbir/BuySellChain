@@ -1,0 +1,119 @@
+{% extends "base.html" %} {% block title %} {{ auction_data.asset_title }} {%
+endblock %} {% block content %}
+<section
+	x-data="{ 
+    newBid: {{ auction_data.high_bid_amount + (auction_data.min_incr or 1) }},
+    minBid: {{ auction_data.high_bid_amount + (auction_data.min_incr or 1) }}
+}"
+>
+	<article class="auction-detail">
+		<div class="grid">
+			<div>
+				<img
+					src="{{ auction_data.image_url }}"
+					alt="{{ auction_data.asset_title }}"
+					style="
+						width: 100%;
+						border-radius: 0.5rem;
+						border: 1px solid var(--muted-border-color);
+					"
+				/>
+			</div>
+
+			<div>
+				<div style="margin-bottom: 1rem">
+					{% if auction_data.status == "active" %}
+					<span class="badge badge-active">Attiva</span>
+					{% else %}
+					<span class="badge badge-inactive">Chiusa</span>
+					{% endif %}
+				</div>
+
+				<hgroup>
+					<h1>{{ auction_data.asset_title }}</h1>
+					<p>Codice Asta: #{{ auction_data.auction_id }}</p>
+				</hgroup>
+
+				<div
+					class="card-price-box"
+					style="
+						background: var(--card-sectionning-background);
+						padding: 1rem;
+						border-radius: 0.5rem;
+						margin: 1rem 0;
+					"
+				>
+					<p>
+						<strong>Offerta Attuale:</strong>
+						<mark
+							style="
+								font-size: 1.5rem;
+								font-weight: bold;
+								background: transparent;
+								color: var(--primary);
+							"
+						>
+							€{{ "{:,.2f}".format(auction_data.high_bid_amount)
+							}}
+						</mark>
+					</p>
+					<small
+						>Prezzo partenza: €{{
+						"{:,.2f}".format(auction_data.starting_price) }} |
+						Offerte: {{ auction_data.bid_count }}</small
+					>
+				</div>
+
+				<div class="grid">
+					<p>
+						<strong>Fine asta:</strong><br />{{
+						auction_data.end_time }}
+					</p>
+					<p>
+						<strong>Incremento min:</strong><br />€{{
+						auction_data.min_incr }}
+					</p>
+				</div>
+
+				<hr />
+
+				{% if auction_data.status == 'active' %}
+				<label for="bid_amount"
+					>La tua offerta (Minimo €<span x-text="minBid"></span
+					>)</label
+				>
+				<fieldset role="group">
+					<input
+						type="number"
+						id="bid_amount"
+						name="bid_amount"
+						x-model="newBid"
+						:min="minBid"
+						step="0.01"
+						required
+					/>
+					<button type="submit">Invia Offerta</button>
+				</fieldset>
+				{% else %}
+				<p
+					style="
+						padding: 1rem;
+						background: var(--del-color);
+						color: white;
+						border-radius: var(--border-radius);
+						text-align: center;
+					"
+				>
+					L'asta è conclusa. Non sono accettate nuove offerte.
+				</p>
+				{% endif %}
+			</div>
+		</div>
+
+		<footer>
+			<h3>Descrizione Immobile</h3>
+			<p>{{ auction_data.asset_description }}</p>
+		</footer>
+	</article>
+</section>
+{% endblock %}

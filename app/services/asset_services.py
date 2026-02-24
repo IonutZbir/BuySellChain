@@ -270,11 +270,4 @@ class AssetService:
         return os.path.join(current_app.root_path, 'static', 'uploads', 'assets')
     
     def base_upload_dir_relative():
-        return os.path.join('static', 'uploads', 'assets')
-
-if __name__ == "__main__":
-    # Esempio di utilizz
-    app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    print(app_dir)
-    absolute_filepath = os.path.join(app_dir, "static/images/villa1.jpg")
-    print(absolute_filepath)
+        return os.path.join("/", 'static', 'uploads', 'assets')

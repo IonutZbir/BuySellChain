@@ -87,7 +87,7 @@
 					<button
 						type="button"
 						class="outline"
-						@click="showAssetForm = true"
+						@click="showAssetForm = !showAssetForm"
 					>
 						Crea Asset
 					</button>
@@ -102,7 +102,6 @@
 			<article>
 				<hgroup>
 					<h2 x-show="showAssetForm">Crea un nuovo Asset</h2>
-					<h2 x-show="!showAssetForm">Nessun Asset trovato</h2>
 					<h3>Crea il tuo primo asset per poter creare un'asta</h3>
 				</hgroup>
 
