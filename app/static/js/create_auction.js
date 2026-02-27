@@ -5,7 +5,7 @@ document.addEventListener("alpine:init", () => {
         loading: false,
         message: '',
         assetId: '',
-        showAssetForm: false,
+        showAssetForm: true,
         showModal: false,
 
         // Campi Form Asset
@@ -46,6 +46,7 @@ document.addEventListener("alpine:init", () => {
                 // console.log("Response status:", response.status);
                 if (response.status === 200 && res_data.status === "success") {
                     this.assets = res_data.data.assets;
+                    this.showAssetForm = this.assets.length === 0; // Mostra il form se non ci sono asset
                 }
             } catch (error) {
                 console.error("Errore nel recupero asset:", error);
@@ -88,9 +89,15 @@ document.addEventListener("alpine:init", () => {
                     this.descr = '';
                     this.size = '';
                     this.price = '';
+                    this.$refs.picture.value = ''; // Resetta il campo file
                     await this.fetchAssetsByUserID(); // Ricarica la lista e switcha il form
                 } else {
                     this.message = "Errore nella creazione dell'asset";
+                }
+
+                if (response.status === 401) {
+                    this.message = "Sessione scaduta. Effettua nuovamente il login.";
+                    window.location.href = "/login";
                 }
             } catch (error) {
                 this.message = "Errore: " + error.message;
@@ -100,6 +107,27 @@ document.addEventListener("alpine:init", () => {
         async create_auction() {
             const token = sessionStorage.getItem("Authorization") || localStorage.getItem("Authorization");
             
+            const now = new Date();
+            const start = new Date(this.startTime);
+            const end = new Date(this.endTime);
+
+            if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+                this.message = "Formato data non valido. Usa il formato YYYY-MM-DDTHH:MM.";
+                return;
+            }
+
+            // devono essere >= adesso (giorno corrente incluso)
+            if (start < now || end < now) {
+                this.message = "Le date di inizio e fine devono essere nel futuro.";
+                return;
+            }
+
+            // asta valida: start < end
+            if (start >= end) {
+                this.message = "La data di inizio deve essere precedente alla data di fine.";
+                return;
+            }
+
             if (!this.assetId || !this.startTime || !this.endTime) {
                 this.message = "Compila tutti i campi obbligatori";
                 return;

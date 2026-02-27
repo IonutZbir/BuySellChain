@@ -1,133 +1,196 @@
-{% extends "base.html" %}
-
-{% block title %}
-Signin - BuySellChain
-{% endblock %}
-
+{% extends "base.html" %} {% block title %} Signin - BuySellChain {% endblock %}
 {% block scripts %}
 <script defer src="{{ url_for('static', filename='js/signin.js') }}"></script>
 {% endblock %} {%block content %}
 
 <article class="grid">
-    <div x-data="signinForm">
-        <hgroup>
-            <h1>Sign in</h1>
-            <h2>Create a new account</h2>
-        </hgroup>
-        <form @submit.prevent="signin_request()">
-            <label for="name">
-                Nome
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Nome"
-                    aria-label="Nome"
-                    autocomplete="given-name"
-                    required
-                    x-model="name"
-                />
-            </label>
+	<div x-data="signinForm">
+		<hgroup>
+			<h1>Sign in</h1>
+			<h2>Create a new account</h2>
+		</hgroup>
+		<form @submit.prevent="signin_request()">
+			<fieldset>
+				<label for="isVendor">
+					<input
+						type="checkbox"
+						role="switch"
+						id="isVendor"
+						name="isVendor"
+						x-model="isVendor"
+					/>
+					Voglio registrarmi come <strong>Venditore</strong>
+				</label>
+				<p>Stato venditore: <span x-text="isVendor"></span></p>
+				<small
+					>I venditori richiedono l'approvazione degli
+					amministratori.</small
+				>
+			</fieldset>
 
-            <label for="surname">
-                Cognome
-                <input
-                    type="text"
-                    id="surname"
-                    name="surname"
-                    placeholder="Cognome"
-                    aria-label="Cognome"
-                    autocomplete="family-name"
-                    required
-                    x-model="surname"
-                />
-            </label>
+			<div x-show="isVendor" x-transition.duration.300ms>
+				<label for="taxCode">
+					Codice Fiscale
+					<input
+						type="text"
+						id="taxCode"
+						name="taxCode"
+						placeholder="Inserisci il tuo Codice Fiscale"
+						aria-label="Codice Fiscale"
+						autocomplete="off"
+						x-model="taxCode"
+						@input="taxCode = taxCode.toUpperCase(); message = ''"
+						:required="isVendor"
+						:aria-invalid="taxCode !== '' && !isTaxCodeValid ? 'true' : null"
+					/>
+					<small
+						x-show="taxCode !== '' && !isTaxCodeValid"
+						class="pico-color-red-500"
+					>
+						Formato non valido (es: RSSMRA80A01H501U)
+					</small>
+				</label>
+			</div>
+			<label for="name">
+				Nome
+				<input
+					type="text"
+					id="name"
+					name="name"
+					placeholder="Nome"
+					aria-label="Nome"
+					autocomplete="given-name"
+					required
+					x-model="name"
+				/>
+			</label>
 
-            <label for="email">
-                Email
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email"
-                    aria-label="Email"
-                    autocomplete="email"
-                    required
-                    x-model="email"
-                    :aria-invalid="emailError ? 'true' : null"
+			<label for="surname">
+				Cognome
+				<input
+					type="text"
+					id="surname"
+					name="surname"
+					placeholder="Cognome"
+					aria-label="Cognome"
+					autocomplete="family-name"
+					required
+					x-model="surname"
+				/>
+			</label>
+
+			<label for="email">
+				Email
+				<input
+					type="email"
+					id="email"
+					name="email"
+					placeholder="Email"
+					aria-label="Email"
+					autocomplete="email"
+					required
+					x-model="email"
+					:aria-invalid="emailError ? 'true' : null"
 					@input="message = ''"
-                />
-				<small x-show="emailError" x-text="emailError" class="pico-color-red-500"></small>
-            </label>
+				/>
+				<small
+					x-show="emailError"
+					x-text="emailError"
+					class="pico-color-red-500"
+				></small>
+			</label>
 
-            <label for="birthday">
-                Data di Nascita
-                <input
-                    type="date"
-                    id="birthday"
-                    name="birthday"
-                    placeholder="Data di Nascita"
-                    aria-label="Data di Nascita"
-                    autocomplete="bday"
-                    required
-                    x-model="birthday"
-                />
-            </label>
+			<label for="birthday">
+				Data di Nascita
+				<input
+					type="date"
+					id="birthday"
+					name="birthday"
+					x-model="birthday"
+					:max="maxBirthday"
+					:aria-invalid="birthday && !isAgeValid ? 'true' : null"
+					required
+				/>
+				<small
+					x-show="birthday && !isAgeValid"
+					class="pico-color-red-500"
+				>
+					Devi avere almeno 18 anni per registrarti.
+				</small>
+			</label>
 
-            <label for="cellularNumber">
-                Numero di Cellulare
-                <input
-                    type="tel"
-                    id="cellularNumber"
-                    name="cellularNumber"
-                    placeholder="Numero di Cellulare"
-                    aria-label="Numero di Cellulare"
-                    autocomplete="tel"
-                    required
-                    x-model="cellularNumber"
-                />
-            </label>
+			<label for="cellularNumber">
+				Numero di Cellulare
+				<input
+					type="tel"
+					id="cellularNumber"
+					name="cellularNumber"
+					placeholder="Esempio: 3331234567"
+					aria-label="Numero di Cellulare"
+					autocomplete="tel"
+					required
+					x-model="cellularNumber"
+					:aria-invalid="cellularNumber && !isPhoneValid ? 'true' : null"
+				/>
+				<small
+					x-show="cellularNumber && !isPhoneValid"
+					class="pico-color-red-500"
+				>
+					Inserisci un numero di telefono valido (solo cifre).
+				</small>
+			</label>
 
-            <label for="password">
-                Password
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    aria-label="Password"
-                    autocomplete="new-password"
-                    required
-                    x-model="password"
-                />
-            </label>
+			<label for="password">
+				Password
+				<input
+					type="password"
+					id="password"
+					name="password"
+					placeholder="Password"
+					aria-label="Password"
+					autocomplete="new-password"
+					required
+					x-model="password"
+				/>
+			</label>
 
-            <fieldset>
-                <label for="terms">
-                    <input
-                        type="checkbox"
-                        role="switch"
-                        id="terms"
-                        name="terms"
-                        x-model="terms"
-                    />
-                    I agree to the Terms and Conditions
-                </label>
-            </fieldset>
+			<fieldset>
+				<label for="terms">
+					<input
+						type="checkbox"
+						role="switch"
+						id="terms"
+						name="terms"
+						x-model="terms"
+					/>
+					I agree to the Terms and Conditions
+				</label>
+			</fieldset>
 
-            <div
-                x-show="message"
-                x-transition.opacity
-                role="alert"
-                class="pico-background-red-100 pico-color-red-600"
-                style="padding: 1rem; margin-bottom: 1rem; border-radius: var(--pico-border-radius); border: 1px solid currentColor;"
-            >
-                <strong x-text="message"></strong>
-            </div>
+			<div
+				x-show="message"
+				x-transition.opacity
+				role="alert"
+				class="pico-background-red-100 pico-color-red-600"
+				style="
+					padding: 1rem;
+					margin-bottom: 1rem;
+					border-radius: var(--pico-border-radius);
+					border: 1px solid currentColor;
+				"
+			>
+				<strong x-text="message"></strong>
+			</div>
 
-            <button type="submit" :disabled="!terms" class="contrast">Sign in</button>
-        </form>
-    </div>
-    <div></div>
+			<button
+				type="submit"
+				:disabled="!terms || !isAgeValid || !isPhoneValid || (isVendor && !isTaxCodeValid)"
+				class="contrast"
+			>
+				Sign in
+			</button>
+		</form>
+	</div>
+	<div></div>
 </article>
 {% endblock %}

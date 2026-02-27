@@ -87,6 +87,11 @@ lavorare ancora su bid, anche con jwt
 
 - Modificato `list_auctions().py` (`/routs/auctions`). Nella risposta, definiamo da 0 il dizionario `response_data`, nel quale includere i dati richiesti. Modficato adeguatamente anche il frontend.
 
+## Modifiche fatte oggi 27/02/2026 - Ionut
+
+- Frontend: aggiunta pagina `/faq` nella quale andremo a spiegare come funziona la piattaforma. Modificato anche il footer. Validazione dati creazione asta. Aggiunta la possibilità di creare un account `Venditore`. Modificata pagina di creazione aste/asset
+- Backend: Modificato /auth/api.py implementando la registrazione di un utente `Seller`.
+- Databse: Modificata la tabella user. Eseguire il "flask db upgrade" dopo aver riavviato il container.
 
 - Sistemare e centrallizzare le api (Franco)
 - Implementare singole pagine per ciascuna asta (Ionut)

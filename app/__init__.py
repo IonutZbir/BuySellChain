@@ -1,4 +1,8 @@
-from flask import Flask
+from datetime import datetime
+from email.utils import format_datetime
+
+from flask import Flask, app
+import flask
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -38,6 +42,19 @@ def user_lookup_callback(_jwt_header, jwt_data):
 
 from .middleware.logger import register_logger_middleware
 
+def format_datetime(value, format="%d/%m/%Y %H:%M"):
+    if value is None:
+        return ""
+    
+    if isinstance(value, str):
+        try:
+            # .fromisoformat() is the cleanest way to handle your specific string
+            value = datetime.fromisoformat(value)
+        except ValueError:
+            # Fallback for older Python versions or non-ISO strings
+            return value
+            
+    return value.strftime(format)
 
 def create_app():
 
@@ -52,6 +69,8 @@ def create_app():
     app.config["JWT_ALGORITHM"] = "HS256"
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "una_chiave_molto_segreta")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+
+    app.jinja_env.filters['datetimeformat'] = format_datetime
 
     # Inizializzazione estensioni
     db.init_app(app)

@@ -71,6 +71,7 @@ class User(db.Model):
     __tablename__ = "user"
 
     # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    codiceFiscale: Mapped[str] = mapped_column(String(16), unique=True, nullable=True)
     blockChainId: Mapped[str] = mapped_column(
         String(64), primary_key=True, unique=True, nullable=False
     )

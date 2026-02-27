@@ -29,6 +29,9 @@ def login():
 def signin():
     return render_template('signin.html')
 
+@frontend_bp.route('/faq')
+def faq():
+    return render_template('faq.html')
 
 @frontend_bp.route('/')
 def index():
@@ -116,3 +119,4 @@ def show_asta(auction_id):
     print(f"DEBUG: image_url: {auction_data['image_url']}")
 
     return render_template('auction.html', auction_data=auction_data)
+

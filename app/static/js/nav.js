@@ -27,6 +27,7 @@ document.addEventListener("alpine:init", () => {
 				sessionStorage.removeItem("Authorization");
 				this.isLoggedIn = false;
 				window.location.href = "/login";
+				
 			}
 		},
 	}));

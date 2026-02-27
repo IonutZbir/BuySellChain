@@ -67,10 +67,10 @@ endblock %} {% block content %}
 				<div class="grid">
 					<p>
 						<strong>Fine asta:</strong><br />{{
-						auction_data.end_time }}
+						auction_data.end_time | datetimeformat}}
 					</p>
 					<p>
-						<strong>Incremento min:</strong><br />€{{
+						<strong>Offerta minima:</strong><br />€{{
 						auction_data.min_incr }}
 					</p>
 				</div>
@@ -79,8 +79,7 @@ endblock %} {% block content %}
 
 				{% if auction_data.status == 'active' %}
 				<label for="bid_amount"
-					>La tua offerta (Minimo €<span x-text="minBid"></span
-					>)</label
+					>La tua offerta</span></label
 				>
 				<fieldset role="group">
 					<input

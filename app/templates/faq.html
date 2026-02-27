@@ -1,0 +1,145 @@
+{% extends "base.html" %} 
+{% block title %} FAQ - BuySellChain {% endblock %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div class="faq-header">
+            <h1>Domande Frequenti (FAQ)</h1>
+            <p>Tutto quello che devi sapere sul funzionamento di BuySellChain</p>
+        </div>
+
+        <div class="faq-container">
+            <details class="faq-card">
+                <summary>
+                    <h3>Cos'è BuySellChain?</h3>
+                </summary>
+                <div class="faq-answer">
+                    <p>BuySellChain è un ecosistema che decentralizza il mercato immobiliare tramite aste online basate su <strong>Blockchain</strong>. A differenza del modello tradizionale, l'agente immobiliare non è più un intermediario nelle trattative, ma si limita alla registrazione dell'asta. La sicurezza, la trasparenza e la validazione delle offerte sono garantite tecnologicamente dalla Blockchain, riducendo costi e tempi operativi.</p>
+                </div>
+            </details>
+
+            <details class="faq-card">
+                <summary>
+                    <h3>Come posso diventare un Venditore?</h3>
+                </summary>
+                <div class="faq-answer">
+                    <p>Per vendere su BuySellChain è necessaria una <strong>registrazione qualificata</strong>. Oltre ai dati anagrafici, dovrai fornire il tuo Codice Fiscale per garantire l'identificazione univoca a norma di legge. Ogni richiesta viene verificata e approvata manualmente dagli amministratori di sistema per garantire la massima sicurezza agli acquirenti.</p>
+                </div>
+            </details>
+
+            <details class="faq-card">
+                <summary>
+                    <h3>Come funzionano le finestre temporali delle aste?</h3>
+                </summary>
+                <div class="faq-answer">
+                    <p>Le aste non sono un flusso continuo, ma sono divise in "finestre temporali" discrete. Questo meccanismo serve a prevenire il <em>front-running</em> (pratiche speculative) e garantisce equità. La durata di ogni singola finestra è calcolata come:</p>
+                    <pre><code>window_duration = (endTime - startTime) / n</code></pre>
+                    <p>Dove <strong>n</strong> è il numero di finestre totali impostate dal venditore.</p>
+                </div>
+            </details>
+
+            <details class="faq-card">
+                <summary>
+                    <h3>Quali sono i vincoli per le offerte?</h3>
+                </summary>
+                <div class="faq-answer">
+                    <ul>
+                        <li><strong>Limite offerta:</strong> Puoi inviare massimo una sola offerta per ogni finestra temporale.</li>
+                        <li><strong>Anonimato:</strong> Le offerte rimangono nascoste fino al termine della finestra in corso per garantire un bidding imparziale.</li>
+                        <li><strong>Stato LOCKED:</strong> Al termine di ogni finestra, l'asta entra in uno stato di "LOCKED" per permettere al sistema di consolidare i dati.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="faq-card">
+                <summary>
+                    <h3>Cosa succede durante l'aggiornamento dello stato?</h3>
+                </summary>
+                <div class="faq-answer">
+                    <p>Dopo ogni finestra temporale, il sistema:</p>
+                    <ol>
+                        <li>Valuta tutte le offerte ricevute.</li>
+                        <li>Aggiorna l'offerta più alta (<code>highestBidAmount</code>).</li>
+                        <li>Permette al venditore di modificare il rilancio minimo per adattarsi all'andamento dell'asta.</li>
+                    </ol>
+                    <p>Una volta completato, l'asta torna in stato <strong>ACTIVE</strong> per la finestra successiva.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<style>
+    .faq-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .faq-container {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+
+    .faq-card {
+        background: var(--card-background-color);
+        border: 1px solid var(--muted-border-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+    }
+
+    .faq-card summary {
+        padding: var(--spacing);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color var(--transition-speed);
+        user-select: none;
+    }
+
+    .faq-card summary:hover {
+        background-color: var(--form-element-valid-border-color);
+    }
+
+    .faq-card summary h3 {
+        margin: 0;
+        color: var(--h3-color);
+    }
+
+    .faq-card summary::after {
+        content: "+";
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: transform var(--transition-speed);
+    }
+
+    .faq-card[open] summary::after {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        padding: var(--spacing);
+        border-top: 1px solid var(--muted-border-color);
+        color: var(--color);
+        line-height: 1.6;
+    }
+
+    .faq-answer p,
+    .faq-answer ul,
+    .faq-answer ol {
+        margin-bottom: 1rem;
+    }
+
+    .faq-answer pre {
+        background: var(--form-element-disabled-background-color);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}
