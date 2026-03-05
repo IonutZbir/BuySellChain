@@ -1,11 +1,11 @@
 {% extends "base.html" %} {% block title %} {{ auction_data.asset_title }} {%
-endblock %} {% block content %}
-<section
-	x-data="{ 
-    newBid: {{ auction_data.high_bid_amount + (auction_data.min_incr or 1) }},
-    minBid: {{ auction_data.high_bid_amount + (auction_data.min_incr or 1) }}
-}"
->
+endblock %} 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/auction.js') }}"></script>
+{% endblock %} 
+{% block content %}
+
+<section x-data="bidForm('{{ auction_data.auction_id }}')">
 	<article class="auction-detail">
 		<div class="grid">
 			<div>
@@ -31,7 +31,7 @@ endblock %} {% block content %}
 
 				<hgroup>
 					<h1>{{ auction_data.asset_title }}</h1>
-					<p>Codice Asta: #{{ auction_data.auction_id }}</p>
+					<!-- <p>Codice Asta: #{{ auction_data.auction_id }}</p> -->
 				</hgroup>
 
 				<div
@@ -53,8 +53,8 @@ endblock %} {% block content %}
 								color: var(--primary);
 							"
 						>
-							€{{ "{:,.2f}".format(auction_data.high_bid_amount)
-							}}
+							€<span x-model="latestBid" x-text="Number(latestBid).toFixed(2)"></span>
+							
 						</mark>
 					</p>
 					<small
@@ -76,36 +76,38 @@ endblock %} {% block content %}
 				</div>
 
 				<hr />
-
-				{% if auction_data.status == 'active' %}
-				<label for="bid_amount"
-					>La tua offerta</span></label
-				>
-				<fieldset role="group">
-					<input
-						type="number"
-						id="bid_amount"
-						name="bid_amount"
-						x-model="newBid"
-						:min="minBid"
-						step="0.01"
-						required
-					/>
-					<button type="submit">Invia Offerta</button>
-				</fieldset>
-				{% else %}
-				<p
-					style="
-						padding: 1rem;
-						background: var(--del-color);
-						color: white;
-						border-radius: var(--border-radius);
-						text-align: center;
-					"
-				>
-					L'asta è conclusa. Non sono accettate nuove offerte.
-				</p>
+				<form @submit.prevent="make_bid()">
+					{% if auction_data.status == 'active' %}
+					<label for="bid_amount"
+						>La tua offerta</label
+					>
+					<fieldset role="group">
+						<input
+							type="number"
+							id="bid_amount"
+							name="bid_amount"
+							x-model="bidAmount"
+							step="0.01"
+							required
+						/>
+					
+						<button type="submit">Invia Offerta</button>
+					</fieldset>
+					{% else %}
+					<p
+						style="
+							padding: 1rem;
+							background: var(--del-color);
+							color: white;
+							border-radius: var(--border-radius);
+							text-align: center;
+						"
+					>
+						L'asta è conclusa. Non sono accettate nuove offerte.
+					</p>
 				{% endif %}
+				</form>
+				<div x-show="message" class="message" x-text="message"></div>
 			</div>
 		</div>
 

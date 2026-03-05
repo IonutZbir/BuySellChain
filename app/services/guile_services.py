@@ -21,8 +21,7 @@ class GuileService:
             "value": value
         }
         try:
-            # L'URL di Guile è definito nel file config.py
-            #response = requests.post(current_app.config['GUILE_BRIDGE_URL'], json=payload)
+            
             response = requests.post(os.getenv("GUILE_BRIDGE_URL"), json=payload)
             response.raise_for_status()
             return response.json()
@@ -37,8 +36,7 @@ class GuileService:
             "key": key
         }
         try:
-            # L'URL di Guile è definito nel file config.py
-            #response = requests.post(current_app.config['GUILE_BRIDGE_URL'], json=payload)
+            
             response = requests.post(os.getenv("GUILE_BRIDGE_URL"), json=payload)
             response.raise_for_status()
             return response.json()
@@ -67,8 +65,7 @@ class GuileService:
             "key": key
         }
         try:
-            # L'URL di Guile è definito nel file config.py
-            #response = requests.post(current_app.config['GUILE_BRIDGE_URL'], json=payload)
+            
             response = requests.post(os.getenv("GUILE_BRIDGE_URL"), json=payload)
             response.raise_for_status()
             return response.json()
@@ -83,8 +80,7 @@ class GuileService:
             "key":[]
         }
         try:
-            # L'URL di Guile è definito nel file config.py
-            #response = requests.post(current_app.config['GUILE_BRIDGE_URL'], json=payload)
+            
             response = requests.post(os.getenv("GUILE_BRIDGE_URL"), json=payload)
             response.raise_for_status()
             return response.json()

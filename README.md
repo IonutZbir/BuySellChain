@@ -97,3 +97,16 @@ lavorare ancora su bid, anche con jwt
 - Implementare singole pagine per ciascuna asta (Ionut)
 - Modificare i JSON delle rispsote pe semplificando il formato (anche centralizzare il sistema di creazione delle risposte) (Ionut/Franco)
 - Implemetnare sistema registrazione seller + ruoli (Ionut)
+
+## Modifiche fatte il giorno 4/03/2026 - Franco
+
+- Backend:
+* aggiunta invio offerte a BC correttamente
+* aggiunta validazione offere con status e reason
+* aggiunta recupero ultima offerta valida con relativo amount
+* TODO : Modificare generazione id per Modelli da sha256 a HMAC, ragionare su short url (idea: ripemod di HMAC di asta)
+* TODO : Refactor di commenti e print di debug (da fare alla fine)
+- Frontend:
+* modifica pagina "partecipa ad asta"
+
+TODO prossimo aggiornamento, fare asta attica per un tot di ore (es: 8.00 - 20.00), poi da fine a inizio asta in stato locked -> stato lock = blocco invio offerte e calcolo e visualiazzione high_bid_amount (parziale)

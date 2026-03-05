@@ -88,7 +88,7 @@ def signin():
                 jsonify({"status": "fail", "data": {"message": "Codice fiscale non valido"}}),
                 400,
             )
-
+    
     password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     if is_vendor:

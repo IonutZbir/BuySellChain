@@ -91,6 +91,7 @@ class AssetService:
             # Recupera tutti gli ID dei asset
         result = GuileService.GetKeys(Class=AssetService.ASSETS_CLASS)
         logger.debug(f"Result from Guile GetKeys: {result}")
+        print("Result from Guile GetKeys:", result)  # Debug print
         if "error" in result:
             logger.error("Error: {}".format(result.get('error')))
             return False

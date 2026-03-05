@@ -90,7 +90,7 @@ class User(db.Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Genera un blockChainId unico per l'utente, usando email + uuid4
-        unique_string = f"{self.email}-{uuid4()}"
+        unique_string = f"{self.email}-{uuid4()}" # cambia con HMAC!!!
         self.blockChainId = sha256(unique_string.encode()).hexdigest()
 
 
@@ -141,7 +141,7 @@ class Auction:
         starting_price: float,
         min_incr: float,
     ) -> str:
-        combined_string = f"{asset_id}-{seller_id}-{start_time.isoformat()}-{end_time.isoformat()}-{starting_price}-{min_incr}-{uuid4()}"
+        combined_string = f"{asset_id}-{seller_id}-{start_time.isoformat()}-{end_time.isoformat()}-{starting_price}-{min_incr}-{uuid4()}" #HMAC!!!
         print(f"Generating auction ID with combined string: {combined_string}")  # Debug print
         return sha256(combined_string.encode()).hexdigest()
 
@@ -182,23 +182,27 @@ class Bid:
         self,
         auction_id: str,
         bidder_id: str,
-        bid_amount: float
+        bid_amount: float,
+        status: str = "pending",
+        reason: str = None
     ):
-        self.id = self._generate_id(auction_id, bidder_id, bid_amount)
+        self.id = self._generate_id(auction_id, bidder_id, bid_amount,status,reason)
         self.auction_id = auction_id
         self.bidder_id = bidder_id
         self.bid_amount = bid_amount
         self.timestamp = datetime.now()
-        self.status = "pending"  # pending, accepted, rejected
-        self.reason = None  # reason for rejection, if applicable
+        self.status = status  # pending, accepted, rejected
+        self.reason = reason  # reason for rejection, if applicable
 
     def _generate_id(
         self,
         auction_id: str,
         bidder_id: str,
         bid_amount: float,
+        status: str,
+        reason: str = None
     ) -> str:
-        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{uuid4()}"
+        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{status}-{reason if reason else 'None'}-{uuid4()}" # HMAC!!!
         print(f"Generating bid ID with combined string: {combined_string}")  # Debug print
         return sha256(combined_string.encode()).hexdigest()
 
@@ -254,7 +258,7 @@ class Asset:
         price: float,
         location: str,
     ) -> str:
-        combined_string = f"{owner_id}-{title}-{description}-{asset_type.value}-{size}-{price}-{location}-{uuid4()}"
+        combined_string = f"{owner_id}-{title}-{description}-{asset_type.value}-{size}-{price}-{location}-{uuid4()}" # HMAC!!!
         print(f"Generating asset ID with combined string: {combined_string}")  # Debug print
         return sha256(combined_string.encode()).hexdigest()
 
