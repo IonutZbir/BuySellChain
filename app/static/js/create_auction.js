@@ -41,9 +41,9 @@ document.addEventListener("alpine:init", () => {
                 });
 
                 const res_data = await response.json();
-                // console.log(res_data);
-                // console.log("Assets recuperati:", res_data.data.assets);
-                // console.log("Response status:", response.status);
+                console.log(res_data);
+                console.log("Assets recuperati:", res_data.data.assets);
+                console.log("Response status:", response.status);
                 if (response.status === 200 && res_data.status === "success") {
                     this.assets = res_data.data.assets;
                     this.showAssetForm = this.assets.length === 0; // Mostra il form se non ci sono asset
@@ -115,18 +115,22 @@ document.addEventListener("alpine:init", () => {
                 this.message = "Formato data non valido. Usa il formato YYYY-MM-DDTHH:MM.";
                 return;
             }
-
+            console.log(start, end, now);
+            console.log(start < now, end < now);
             // devono essere >= adesso (giorno corrente incluso)
             if (start < now || end < now) {
                 this.message = "Le date di inizio e fine devono essere nel futuro.";
+                
                 return;
-            }
-
-            // asta valida: start < end
-            if (start >= end) {
+            }else if (start>=end){
                 this.message = "La data di inizio deve essere precedente alla data di fine.";
                 return;
             }
+
+            // // asta valida: start < end
+            // if (start >= end) {
+                
+            // }
 
             if (!this.assetId || !this.startTime || !this.endTime) {
                 this.message = "Compila tutti i campi obbligatori";

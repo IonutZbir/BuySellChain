@@ -6,6 +6,7 @@ from uuid import uuid4
 from datetime import datetime
 from app.models.models import AuctionStatus
 from app.services.asset_services import AssetService
+from app.services.bid_services import BidService
 from app.services.guile_services import GuileService
 from hashlib import sha256
 from app.services.auction_services import AuctionService
@@ -30,10 +31,6 @@ def create_auction():
     data = request.json
     user = get_current_user()
     sellerId = user.get("id")
-    # highBidId = None
-    # highBidAmount = None
-    # bidCount = 0
-    # status = "active"
     assetId = data.get("assetId")
     startTime = data.get("startTime")
     endTime = data.get("endTime")
@@ -167,4 +164,18 @@ def delete_auction(auction_id):
         return jsend_response("fail", data={"error": "Errore durante l'eliminazione dell'asta"}, code=500)
     return jsend_response("success", code=200)
 
-#fare funzione che prende immagini da cartelle su webserver, con nome corrispondente all'id dell'asta, e le aggiunge agli oggetti delle aste
+@api_auctions.route("/auctions/bids/<string:auction_id>", methods=["GET"])
+def get_bids_for_auction(auction_id):
+    result = BidService.get_all_bids_of_auction(auction_id)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    if not result.get("success"):
+        return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    return jsend_response("success", data={"bids": result.get("bids")})
+
+@api_auctions.route("/auctions/lock/<string:auction_id>", methods=["POST"])
+def lock_auction(auction_id):
+    result = AuctionService.set_locked(auction_id)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    return jsend_response("success", code=200)

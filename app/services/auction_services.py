@@ -80,9 +80,24 @@ class AuctionService:
         
         return {"success": False, "error": "No auctions found"}
 
-    def get_bids(self, auction_id: str) -> List[Dict[str, Any]]:
-        """Get all bids for an auction"""
-        pass
+    def end_auction_get_winner(auction_id: str, bids_list: dict) -> Dict[str, Any]: # DA MODIFICARE SECONDO AGGIORNAMENTO SU README
+        """End an auction and determine winner"""
+        # aggiornanre los tato a locekd, calcolare vincitore, aggiornare a closed, e basta
+        result = AuctionService.get_auction(auction_id)
+        if "error" in result:
+            current_app.logger.error("Error: {}".format(result.get("error")))
+            return {"success": False, "error": result.get("error")}
+        if result.get("answer") is not False and result.get("answer"):
+            auction_data = result.get("answer", {}).get("value", {})
+            auction_data["status"] = "closed"
+            for bid in bids_list:
+                # prendere max bid_amount e relativo bidder_id di tutte le bids per quell'asta guardando solo le bids. il campo high_bid_amount va popolato dopo
+                if bid.get("bid_data", {}).get("auction_id") == auction_id:
+                    if bid.get("bid_data", {}).get("bid_amount", 0) > auction_data.get("high_bid_amount", 0):
+                        auction_data["high_bid_amount"] = bid.get("bid_data", {}).get("bid_amount", 0)
+                        auction_data["high_bid_id"] = bid.get("id")
+                
+        return {"success": False, "error": "Auction not found"}
 
     def set_locked(auction_id: str) -> bool:
         """Set auction status to locked"""
@@ -102,28 +117,7 @@ class AuctionService:
             return True
         return False
 
-    def end_auction(auction_id: str) -> Dict[str, Any]:
-        """End an auction and determine winner"""
-        # aggiornanre los tato a locekd, calcolare vincitore, aggiornare a closed, e basta
-        result = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(auction_id))
-        if "error" in result:
-            current_app.logger.error("Error: {}".format(result.get("error")))
-            return {"success": False, "error": result.get("error")}
-        if result.get("answer") is not False and result.get("answer"):
-            auction_data = result.get("answer", {}).get("value", {})
-            auction_data["status"] = "closed"
-            for bid in auction_data.get("bids", []):
-                if bid.get("amount", 0) > auction_data.get("highBidAmount", 0):
-                    auction_data["highBidId"] = bid.get("bidderId")
-                    auction_data["highBidAmount"] = bid.get("amount")
-            auction_data["bidCount"] = len(auction_data.get("bids", []))
-            result_update = GuileService.AddKV(
-                Class=AuctionService.AUCTION_CLASS, key=str(auction_id), value=auction_data
-            )
-            if "error" in result_update:
-                current_app.logger.error("Error: {}".format(result_update.get("error")))
-                return {"success": False, "error": result_update.get("error")}
-            return {"success": True, "message": f"Auction {auction_id} closed successfully"}
+    
 
     def get_winner(auction_id: str) -> Dict[str, Any]:
         """Get winner of an auction"""
