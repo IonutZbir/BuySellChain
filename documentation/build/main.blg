@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2026/dev/Arch Linux)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: introduction.aux
+A level-1 auxiliary file: system_arch.aux
+The style file: ieeetr.bst
+Database file #1: refs.bib
+Warning--entry type for "pallets_flask" isn't style-file defined
+--line 33 of file refs.bib
+You've used 9 entries,
+            1876 wiz_defined-function locations,
+            530 strings with 4755 characters,
+and the built_in function-call counts, 1251 in all, are:
+= -- 125
+> -- 43
+< -- 0
++ -- 20
+- -- 11
+* -- 50
+:= -- 193
+add.period$ -- 18
+call.type$ -- 9
+change.case$ -- 7
+chr.to.int$ -- 0
+cite$ -- 9
+duplicate$ -- 42
+empty$ -- 157
+format.name$ -- 11
+if$ -- 312
+int.to.chr$ -- 0
+int.to.str$ -- 9
+missing$ -- 0
+newline$ -- 39
+num.names$ -- 9
+pop$ -- 50
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 25
+stack$ -- 0
+substring$ -- 0
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 9
+width$ -- 10
+write$ -- 88
+(There was 1 warning)

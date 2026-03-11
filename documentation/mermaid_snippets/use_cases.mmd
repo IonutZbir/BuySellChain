@@ -1,0 +1,57 @@
+---
+config:
+  theme: mc
+  look: neo
+---
+flowchart LR
+    classDef actorStyle fill:#f9f9f9,stroke:#333,stroke-width:0px,font-size:14px;
+    classDef usecaseStyle fill:#fff,stroke:#333,stroke-width:1px,stroke-dasharray: 0;
+    Admin[<i class='fa fa-user-secret fa-2x'></i><br>Admin]:::actorStyle
+    Guest[<i class='fa fa-user fa-2x'></i><br>Guest]:::actorStyle
+    Venditore[<i class='fa fa-user fa-2x'></i><br>Venditore]:::actorStyle
+    Offerente[<i class='fa fa-user-tag fa-2x'></i><br>Offerente]:::actorStyle
+    subgraph System_Boundary_Offerente ["Casi d'Uso Utente 'Offerente'"]
+        direction TB
+        UC_Bid([Invio Offerta<br>Firmata]):::usecaseStyle
+        UC_Check([Verifica Stato<br>Asta]):::usecaseStyle
+        UC_ViewAste([Visualizza Aste Disponibili]):::usecaseStyle
+        UC_LoginO([Login]):::usecaseStyle
+        
+    end
+
+    subgraph System_Boundary_Venditore["Casi d'Uso Utente 'Venditore'"]
+        UC_CreaAsta([Creazione Asta]):::usecaseStyle
+        UC_ViewAsta([Visualizza Stato Aste &<br>Offerte]):::usecaseStyle
+        UC_LoginV([Login]):::usecaseStyle
+    end
+    
+    subgraph System_Boundary_Guest["Casi d'Uso Utente 'Guest'"]
+        UC_LoginG([Login]):::usecaseStyle
+        UC_Register([Registrazione]):::usecaseStyle
+    end
+
+    subgraph System_Boundary_Admin["Casi d'Uso Utente 'Admin'"]
+        UC_Monitor([Monitoraggio<br>Anomalie/Alert]):::usecaseStyle
+        UC_Nodes([Monitoraggio Log]):::usecaseStyle
+    end
+
+    
+    Venditore --> UC_LoginV
+    Venditore --> UC_CreaAsta
+    Venditore --> UC_ViewAsta
+    UC_CreaAsta -. include .-> UC_LoginV
+    UC_ViewAsta -. include .-> UC_LoginV
+    
+
+    Offerente --> UC_LoginO
+    Offerente --> UC_Bid
+    Offerente --> UC_Check
+    Offerente --> UC_ViewAste
+    UC_Bid -. include .-> UC_LoginO
+    UC_Check -. include .-> UC_LoginO
+    
+    Guest --> UC_LoginG
+    Guest --> UC_Register
+    
+    Admin --> UC_Monitor
+    Admin --> UC_Nodes

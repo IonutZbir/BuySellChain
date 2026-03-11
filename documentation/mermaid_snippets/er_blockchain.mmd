@@ -1,0 +1,52 @@
+---
+config:
+  layout: dagre
+---
+erDiagram
+	direction LR
+	ASSET {
+		string id PK ""  
+		string ownerId FK ""  
+		string title  ""  
+		string location  ""  
+		string cadastralId  ""  
+		string metadataHash  ""  
+		string currentAuctionId FK ""  
+		int createdAt  ""  
+		enum status  ""  
+	}
+
+	AUCTION {
+		string id PK ""  
+		string assetId FK ""  
+		string sellerId FK ""  
+		int startTime  ""  
+		int endTime  ""  
+		number startPrice  ""  
+		number minIncrement  ""  
+		string highestBidId FK ""  
+		number highestBidAmount  ""  
+		int bidsCount  ""  
+		enum status  ""  
+	}
+
+	USER {
+		string id PK ""  
+		string username  ""  
+	}
+
+	BID {
+		string id PK ""  
+		string auctionId FK ""  
+		string bidderId FK ""  
+		number amount  ""  
+		int timestamp  ""  
+		enum status  ""  
+		string rejectReason  ""  
+	}
+
+	ASSET||--o|AUCTION:"currentAuctionId"
+	USER||--o{ASSET:"owns"
+	USER||--o{AUCTION:"starts"
+	USER||--o{BID:"places"
+	AUCTION||--o{BID:"receives"

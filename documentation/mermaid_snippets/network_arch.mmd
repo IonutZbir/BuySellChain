@@ -1,0 +1,31 @@
+graph TD
+    %% Definizione degli Stili
+    classDef actor fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef component fill:#e1f5fe,stroke:#0277bd,stroke-width:2px;
+    classDef blockchain fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,stroke-dasharray:5 5;
+
+    subgraph "Client Layer (Frontend)"
+        User["<i class='fa fa-user'></i> Utente Registrato"]:::actor
+        Admin["<i class='fa fa-user-secret'></i> Admin MSP"]:::actor
+    end
+
+    subgraph "Application Layer"
+        Db["<i class='fa fa-database'></i> Off-Chain Database"]:::component
+        Web["<i class='fa fa-server'></i> Web Server / API"]:::component
+    end
+
+    subgraph "Hyperledger Fabric Network"
+        Orderer["<i class='fa fa-gavel'></i> Orderer Node"]:::blockchain
+        Peer["<i class='fa fa-cubes'></i> Peer Node"]:::blockchain
+        Ledger["<i class='fa fa-database'></i> Distributed Ledger"]:::blockchain
+        SC["<i class='fa fa-file-code'></i> Smart Contract<br/>(Chaincode)"]:::blockchain
+    end
+
+    %% Relazioni
+    User -- "Offerta / Login" --> Web
+    Admin -- "Gestione Nodi" --> Web
+    Web -- "Dati Utente" --> Db
+    Web -- "Invoke / Query" --> Peer
+    Peer -- "Esegue" --> SC
+    SC -- "Aggiorna Stato" --> Ledger
+    Orderer -- "Ordina Blocchi" --> Peer

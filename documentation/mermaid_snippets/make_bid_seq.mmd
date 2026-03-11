@@ -1,0 +1,34 @@
+sequenceDiagram
+    autonumber
+    actor Utente
+    participant Gateway as Server Gateway
+    participant Auth as Auth System (JWT)
+    box lightgray Blockchain System
+        participant API as API Blockchain (AddKV)
+        participant Core as Blockchain Core (Consensus)
+        participant Ledger as State DB (KV Store)
+    end
+
+    Utente->>Gateway: API Request (POST api/v1/bids)
+    
+    activate Gateway
+    Gateway->>Auth: Valida Token & Identità
+    Auth-->>Gateway: Autorizzato
+    
+    Note over Gateway: Traduzione:<br/>Bid(User, Price, Auction) ➔ KV(Key, Val)
+    
+    Gateway->>API: Richiama AddKV(Key, Value)
+    
+    activate API
+    API->>Core: Proposta Transazione
+    Note over Core: Validazione & Consenso<br/>tra i nodi
+    
+    Core->>Ledger: Scrittura Coppia KV
+    Note right of Ledger: Class: Bids<br/>Key: bid_id<br/>Value: {user, auction, price, timestamp}
+    
+    Ledger-->>API: Conferma Memorizzazione
+    deactivate API
+    
+    API-->>Gateway: Transaction Hash / Success
+    Gateway-->>Utente: Risposta Successo (Bid creata)
+    deactivate Gateway

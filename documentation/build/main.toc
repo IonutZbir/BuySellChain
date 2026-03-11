@@ -1,0 +1,20 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {chapter}{\numberline {1}Introduzione}{2}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Architettura del Sistema}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Gestione dell'Identità e Sicurezza}{4}{section.2.1}%
+\contentsline {section}{\numberline {2.2}User Requirements Definition}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Frontend}{7}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Backend (Security Gateway)}{8}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Authentication \& Authorization}{8}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Modello Dati \& Interfaccia RESTful API}{9}{subsection.2.4.2}%
+\contentsline {subsubsection}{Definizione Modello Dati}{10}{section*.7}%
+\contentsline {subsubsection}{Definizione Interfaccia RESTful API}{12}{section*.12}%
+\contentsline {subsection}{\numberline {2.4.3}Logica di Bussiness}{14}{subsection.2.4.3}%
+\contentsline {paragraph}{Registrazione e Verifica dei Venditori}{14}{section*.13}%
+\contentsline {paragraph}{Struttura Temporale delle Aste}{14}{section*.14}%
+\contentsline {paragraph}{Vincoli sulle Offerte}{14}{section*.15}%
+\contentsline {paragraph}{Aggiornamento dello Stato dell'Asta}{14}{section*.16}%
+\contentsline {section}{\numberline {2.5}Blockchain Layer}{16}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Database Off-Chain}{17}{section.2.6}%
+\contentsline {chapter}{Bibliografia}{18}{section*.19}%

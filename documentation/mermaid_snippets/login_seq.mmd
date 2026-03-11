@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as Utente
+    participant FE as Frontend
+    participant BE as Backend
+    participant DB as Database
+
+    Note over U, DB: --- Fase di Autenticazione ---
+    U->>FE: Inserisce Credenziali (Username/Password)
+    FE->>BE: POST /login {credentials}
+    BE->>DB: Verifica utente e password
+    DB-->>BE: Utente Valido
+    BE->>BE: Genera JWT (Firmato con Chiave Segreta)
+    BE-->>FE: Ritorna JWT (Access Token)
+    FE->>FE: Salva JWT (LocalStorage / HttpOnly Cookie)
+
+    Note over U, DB: --- Fase di Autorizzazione (Accesso a Risorsa Protetta) ---
+    U->>FE: Clicca su "Visualizza Aste"
+    FE->>BE: GET /auctions (Header: Authorization: Bearer <JWT>)
+    BE->>BE: Valida Firma JWT e Scadenza
+    alt JWT Valido
+        BE->>DB: Recupera dati per l'utente (dal payload del JWT)
+        DB-->>BE: Dati trovati
+        BE-->>FE: 200 OK {Dati Richiesti}
+        FE-->>U: Mostra i dati all'utente
+    else JWT Invalido/Scaduto
+        BE-->>FE: 401 Unauthorized
+        FE-->>U: Reindirizza al Login
+    end
