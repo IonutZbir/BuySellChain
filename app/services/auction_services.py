@@ -1,5 +1,6 @@
+
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import Dict, Any
 
 from flask import current_app
 
@@ -20,27 +21,45 @@ class AuctionService:
         starting_price: float,
         min_incr: float,
     ) -> Dict[str, Any]:
-        """Create a new auction"""
+        """
+
+        Args:
+            asset_id (str): id dell'asset messo all'asta
+            seller_id (str): id del venditore (utente che crea l'asta)
+            start_time (datetime): inzio dell'asta
+            end_time (datetime): fine dell'asta
+            starting_price (float): prezzo iniziale dell'asta
+            min_incr (float): incremento minimo per ogni offerta
+
+        Returns:
+            Dict[str, Any]: {"success": True} se l'asta è stata creata con successo, {"success": False, "error": "error message"} altrimenti
+        """
 
         auction = Auction(asset_id, seller_id, start_time, end_time, starting_price, min_incr)
-        current_app.logger.info(f"Created auction: {auction}")  # Debug print
-        # Salva l'asta sulla blockchain via Guile
-        current_app.logger.info(
-            f"Saving auction to blockchain with ID: {auction.get_id()}"
-        )  # Debug print
-        current_app.logger.info(f"Auction data to save: {auction.to_json()}")  # Debug print
+
         result = GuileService.AddKV(
             Class=AuctionService.AUCTION_CLASS, key=auction.get_id(), value=auction.to_json()
         )
-        current_app.logger.info(f"Result from Guile AddKV: {result}")  # Debug print
+
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
             return False
 
+        current_app.logger.info(f"Auction created with ID: {auction.get_id()}")
+
         return True
 
     def get_auction(auction_id: str) -> Dict[str, Any]:
-        """Retrieve auction details from id"""
+        """
+        Args:
+            auction_id (str): id dell'asta da recuperare
+
+        Returns:
+            Dict[str, Any]: {"success": True, "id": auction_id, "auction_data": auction_data} se l'asta è stata recuperata con successo, {"success": False, "error": "error message"} altrimenti
+        """
+
+        current_app.logger.info(f"Retrieving auction with ID: {auction_id}")
+
         result = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(auction_id))
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
@@ -50,39 +69,57 @@ class AuctionService:
             auction_data = result.get("answer", {}).get("value", {})
             return {"success": True, "id": auction_id, "auction_data": auction_data}
 
+        current_app.logger.warning(f"Auction with ID {auction_id} not found")
         return {"success": False, "error": "Auction not found"}
 
     def list_all_auctions() -> Dict[str, Any]:
-        """List all auctions"""
+        """
+
+        Returns:
+            Dict[str, Any]: {"success": True, "auctions": [{"id": auction_id, "value": auction_data}, ...]} se le aste sono state recuperate con successo, {"success": False, "error": "error message"} altrimenti
+        """
+
+        current_app.logger.info("Listing all auctions")
+
         result = GuileService.GetKeys(Class=AuctionService.AUCTION_CLASS)
-        print("Result from GetKeys:", result)  # Debug print
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
             return {"success": False, "error": result.get("error")}
 
         answer = result.get("answer", {})
         keys_list = [key[0] if isinstance(key, list) else key for key in answer.get("keys", [])]
-        print("Extracted keys list:", keys_list)  # Debug print
+
         auctions = []
         for key in keys_list:
-            print(f"Auction key: {key}")  # Debug print
+            current_app.logger.info(f"Retrieving auction with key: {key}")
 
             result_auction = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(key))
             auction_data = result_auction.get("answer", {}).get("value", {})
             if auction_data:
-                print(f"Auction data for key {key}:", auction_data)  # Debug print
                 auctions.append({"id": key, "value": auction_data})
         if len(auctions) > 0:
-            print(f"Auctions list: {auctions}")  # Debug print
+            current_app.logger.info(f"Found {len(auctions)} auctions")
             return {"success": True, "auctions": auctions}
-        
-        # prelevare anche il nome dell'owener (psql) e il titolo dell asset, appendere altri due campi nel dizionario auction_data
-        
+
+        current_app.logger.warning("No auctions found in blockchain")
         return {"success": False, "error": "No auctions found"}
 
-    def end_auction_get_winner(auction_id: str, bids_list: dict) -> Dict[str, Any]: # DA MODIFICARE SECONDO AGGIORNAMENTO SU README
-        """End an auction and determine winner"""
-        # aggiornanre los tato a locekd, calcolare vincitore, aggiornare a closed, e basta
+    def end_auction_get_winner(auction_id: str, bids_list: dict) -> Dict[str, Any]:
+        """
+
+        Args:
+            auction_id (str): id dell'asta da chiudere
+            bids_list (dict): lista di tutte le offerte presenti nella blockchain, da cui estrarre quelle relative all'asta in questione per determinare il vincitore (bidder_id con offerta più alta)
+
+        Returns:
+            Dict[str, Any]: {"success": True, "winner_id": winner_id, "winning_amount": winning_amount} se l'asta è stata chiusa con successo e il vincitore è stato determinato, {"success": False, "error": "error message"} altrimenti
+        """
+
+        # TODO: aggiornanre lo stato a locked, calcolare vincitore, aggiornare a closed. Da dare in output anche l'id del vincitore e l'importo vincente (highBidAmount). Poi trovare un modo per mostrarlo solo al vincitore (per ora basta che sia visibile a tutti, poi si può pensare a una soluzione più elegante)
+
+        # Per calcolare il vincitore, prendo tutte le offerte relative a quell'asta (guardando solo le bids che hanno auction_id uguale a quello dell'asta in questione), e prendo quella con bid_amount più alto. Il bidder_id di quella offerta sarà il vincitore, e l'importo sarà highBidAmount. Questi dati vanno poi salvati all'interno dell'asta (highBidId e highBidAmount) insieme allo stato closed.
+
+        current_app.logger.info(f"Ending auction with ID: {auction_id} and determining winner")
         result = AuctionService.get_auction(auction_id)
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
@@ -91,20 +128,36 @@ class AuctionService:
             auction_data = result.get("answer", {}).get("value", {})
             auction_data["status"] = "closed"
             for bid in bids_list:
-                # prendere max bid_amount e relativo bidder_id di tutte le bids per quell'asta guardando solo le bids. il campo high_bid_amount va popolato dopo
                 if bid.get("bid_data", {}).get("auction_id") == auction_id:
-                    if bid.get("bid_data", {}).get("bid_amount", 0) > auction_data.get("high_bid_amount", 0):
-                        auction_data["high_bid_amount"] = bid.get("bid_data", {}).get("bid_amount", 0)
+                    if bid.get("bid_data", {}).get("bid_amount", 0) > auction_data.get(
+                        "high_bid_amount", 0
+                    ):
+                        auction_data["high_bid_amount"] = bid.get("bid_data", {}).get(
+                            "bid_amount", 0
+                        )
                         auction_data["high_bid_id"] = bid.get("id")
-                
+
+        # current_app.logger.info(f"Auction with ID {auction_id} closed with winner ID: {auction_data.get('high_bid_id')} and winning amount: {auction_data.get('high_bid_amount')}")
         return {"success": False, "error": "Auction not found"}
 
     def set_locked(auction_id: str) -> bool:
-        """Set auction status to locked"""
+        """_summary_
+
+        Args:
+            auction_id (str): id dell'asta da mettere in stato locked
+
+        Returns:
+            bool: True se l'asta è stata aggiornata con successo, False altrimenti
+        """        
+        
+        current_app.logger.info(f"Setting auction with ID: {auction_id} to locked")
+        
         result = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(auction_id))
+        
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
             return False
+        
         if result.get("answer") is not False and result.get("answer"):
             auction_data = result.get("answer", {}).get("value", {})
             auction_data["status"] = "locked"
@@ -114,13 +167,24 @@ class AuctionService:
             if "error" in result_update:
                 current_app.logger.error("Error: {}".format(result_update.get("error")))
                 return False
+            
+            current_app.logger.info(f"Auction with ID {auction_id} set to locked")
+            
             return True
         return False
 
-    
-
     def get_winner(auction_id: str) -> Dict[str, Any]:
-        """Get winner of an auction"""
+        """_summary_
+
+        Args:
+            auction_id (str): id dell'asta di cui si vuole conoscere il vincitore
+
+        Returns:
+            Dict[str, Any]: {"success": True, "winner_id": winner_id, "winning_amount": winning_amount} se il vincitore è stato determinato con successo, {"success": False, "error": "error message"} altrimenti
+        """
+        
+        # TODO: prendere l'asta, verificare che sia closed, e restituire id del vincitore e importo vincente (highBidId e highBidAmount).
+    
         result = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(auction_id))
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
@@ -165,12 +229,13 @@ class AuctionService:
         for key in keys_list:
             print(f"Auction key: {key}")  # Debug print
 
-            result_auction = GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(key)).get("answer", {}).get("value", {})
+            result_auction = (
+                GuileService.GetKV(Class=AuctionService.AUCTION_CLASS, key=str(key))
+                .get("answer", {})
+                .get("value", {})
+            )
 
-            if (
-                result_auction.get("status", "").lower().strip()
-                == status
-            ):
+            if result_auction.get("status", "").lower().strip() == status:
                 status_list.append(result_auction)
 
             print(f"Auction data for key {key}:", result_auction)  # Debug print

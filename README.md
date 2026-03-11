@@ -104,9 +104,18 @@ lavorare ancora su bid, anche con jwt
 * aggiunta invio offerte a BC correttamente
 * aggiunta validazione offere con status e reason
 * aggiunta recupero ultima offerta valida con relativo amount
-* TODO : Modificare generazione id per Modelli da sha256 a HMAC, ragionare su short url (idea: ripemod di HMAC di asta)
+* TODO : Modificare generazione id per Modelli da sha256 a HMAC, ragionare su short url (idea: ripemod di HMAC id asta)
 * TODO : Refactor di commenti e print di debug (da fare alla fine)
 - Frontend:
 * modifica pagina "partecipa ad asta"
 
-TODO prossimo aggiornamento, fare asta attica per un tot di ore (es: 8.00 - 20.00), poi da fine a inizio asta in stato locked -> stato lock = blocco invio offerte e calcolo e visualiazzione high_bid_amount (parziale)
+TODO prossimo aggiornamento, fare asta attiva per un tot di ore (es: 8.00 - 20.00), poi da fine a inizio asta in stato locked -> stato lock = blocco invio offerte e calcolo e visualiazzione high_bid_amount (parziale)
+
+## Modifiche fatte il giorno 11/03/2026 - Ionut
+
+- Creazione di Id usando HMAC
+- Logger funzionante con colori per vari livelli piu scrittura su file
+
+TODO: Se il token jwt è expired gestire errore e rimandare al frontend.
+TODO: Generare le chiavi in modo sicuro.
+TODO: Finire le aste, aggiungere il lock temporale

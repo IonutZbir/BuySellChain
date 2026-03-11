@@ -11,3 +11,4 @@ app/routes/admin/admin_bids/__pycache__/
 app/routes/assets/__pycache__/
 app/routes/auctions/__pycache__/
 app/routes/bids/__pycache__/
+logs/

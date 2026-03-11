@@ -1,17 +1,16 @@
+from app.logging_config import setup_logging
+
+import os
+from dotenv import load_dotenv
 from datetime import datetime
 from email.utils import format_datetime
 
-from flask import Flask, app
-import flask
+from flask import Flask, session, url_for, redirect
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from logging.config import dictConfig
 from flask_jwt_extended import JWTManager
-import logging
-from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
@@ -19,6 +18,11 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 jwt = JWTManager()
 
+@jwt.expired_token_loader
+def my_expired_token_callback(jwt_header, jwt_payload):
+    # This function runs automatically when an expired token is detected
+    session.clear()
+    return redirect(url_for('frontend.login'))
 
 @jwt.user_identity_loader
 def user_identity_lookup(user_data):
@@ -40,8 +44,6 @@ def user_lookup_callback(_jwt_header, jwt_data):
         return identity_str
 
 
-from .middleware.logger import register_logger_middleware
-
 def format_datetime(value, format="%d/%m/%Y %H:%M"):
     if value is None:
         return ""
@@ -56,8 +58,10 @@ def format_datetime(value, format="%d/%m/%Y %H:%M"):
             
     return value.strftime(format)
 
+
 def create_app():
 
+    setup_logging(__name__)
     app = Flask(__name__)
     
     CORS(app)
@@ -77,9 +81,6 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
     Migrate(app, db)
-
-    # Middleware
-    register_logger_middleware(app)
 
     # Blueprints
     from app.routes.admin.admin_asset.api_admin_asset import api_admin_asset
@@ -102,13 +103,12 @@ def create_app():
 
     # Database Upgrade automatico
     from flask_migrate import upgrade
-
     with app.app_context():
         try:
             upgrade()
-            # Ora app.logger.info sarà VERDE
             app.logger.info("Database migrato/aggiornato con successo!")
         except Exception as e:
             app.logger.error(f"Errore durante l'upgrade del database: {e}")
+
 
     return app
