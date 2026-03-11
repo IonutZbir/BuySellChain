@@ -1,0 +1,41 @@
+\chapter{Superficie osservabile e Perimetro di Attacco}
+
+L'architettura di \texttt{BuySellChain} adotta un approccio ibrido che integra la flessibilità del Web 2.0 con la sicurezza decentralizzata del Web 3.0. Questa disaccoppiatura tra il Security Gateway, il database off-chain e il ledger distribuito su Hyperledger Fabric offre robuste garanzie architettoniche, ma espande parallelamente la superficie d'attacco. Un potenziale avversario potrebbe sfruttare vulnerabilità in diversi punti di contatto tra questi layer. Di seguito viene delineato in dettaglio il perimetro d'attacco, analizzando i possibili vettori di minaccia per ciascun livello dell'infrastruttura.
+
+\section{Livello Client (Frontend)}
+Il frontend, realizzato con i template Jinja2 e il framework Alpine.js, rappresenta il punto di interazione primario per gli utenti autenticati e non autenticati. Sebbene non contenga logica di business critica, è esposto a vulnerabilità tipiche delle applicazioni web lato client:
+
+\begin{itemize}
+    \item \textbf{Cross-Site Scripting (XSS):} Poiché il frontend genera pagine HTML dinamiche tramite Jinja2, un'inadeguata sanitizzazione degli input dell'utente (ad esempio nella descrizione di un immobile o nei parametri di registrazione) potrebbe permettere a un attaccante di iniettare script JavaScript malevoli. Se eseguiti nel browser di un'altra vittima, questi script potrebbero sottrarre informazioni sensibili.
+    \item \textbf{Furto del Token JWT e Session Hijacking:} A seguito dell'autenticazione, il token JWT viene salvato localmente nel client (LocalStorage o Cookie). Se un attacco XSS dovesse avere successo e il token fosse conservato nel LocalStorage (che non è protetto dal flag \texttt{HttpOnly}), l'attaccante potrebbe rubare il token ed effettuare un \textit{session hijacking}, impersonando l'utente per compiere azioni non autorizzate (es. piazzare offerte fraudolente).
+    \item \textbf{Manipolazione dell'Interfaccia e CSRF:} Un utente malintenzionato potrebbe alterare il DOM locale (ad esempio riattivando pulsanti disabilitati per aste chiuse) nel tentativo di inviare payload imprevisti al server. Inoltre, in assenza di header \texttt{Anti-CSRF}, richieste forgiate da domini terzi potrebbero ingannare il browser dell'utente portandolo a eseguire azioni non volute.
+\end{itemize}
+
+\section{Livello Application / Security Gateway (Backend)}
+Il server applicativo basato su Flask svolge il ruolo di middleware e Policy Enforcement Point. Essendo l'unico componente direttamente esposto alla rete pubblica per filtrare le richieste dirette al ledger, rappresenta il bersaglio primario:
+
+\begin{itemize}
+    \item \textbf{Intercettazione Man-in-the-Middle (MitM):} Nell'attuale configurazione di sviluppo, il server ascolta sulla porta locale 5000 utilizzando il protocollo HTTP non cifrato. Questo espone integralmente il traffico di rete: credenziali in chiaro durante la \texttt{POST /auth/login} e token JWT trasmessi nell'header \texttt{Authorization} sono facilmente intercettabili tramite \textit{packet sniffing}.
+    \item \textbf{Bypass dei Controlli di Autorizzazione (RBAC) e Vulnerabilità JWT:} Il sistema fa forte affidamento sui JWT per l'autorizzazione stateless. Se la chiave segreta (HMAC) utilizzata per firmare i token risultasse debole o venisse compromessa, un attaccante potrebbe forgiare token validi alterando il payload per elevare i propri privilegi (ad esempio, assegnandosi il ruolo \texttt{SELLER} o \texttt{ADMIN}). Inoltre, vulnerabilità nell'implementazione della libreria potrebbero permettere attacchi di tipo \textit{signature stripping} (es. forzare l'algoritmo \texttt{none}).
+    \item \textbf{Lisp Command Injection e Parameter Tampering:} Il backend traduce le richieste RESTful in primitive per il client Lisp (\texttt{AddKV}, \texttt{GetKV}, \texttt{DelKV}). Qualora la validazione dei JSON in ingresso da parte dell'API fosse carente, un attaccante potrebbe inviare payload malformati (es. chiavi contenenti caratteri di escape non previsti o strutture annidate anomale) tentando di manipolare la query destinata al chaincode o di causare un Denial of Service (DoS) nel parser Lisp.
+    \item \textbf{Abuso delle API e Denial of Service (DoS):} L'assenza esplicita di meccanismi di \textit{Rate Limiting} sugli endpoint pubblici (come \texttt{/api/v1/auth/login} o \texttt{/api/v1/bids}) permette ad attaccanti di sferrare attacchi di tipo Brute Force contro gli account degli utenti, o di inondare il sistema di offerte fasulle saturando le risorse di calcolo del Security Gateway e rallentando il consenso della blockchain.
+\end{itemize}
+
+\section{Livello Dati Off-Chain (Database PostgreSQL)}
+Il database PostgreSQL containerizzato gestisce dati anagrafici sensibili (GDPR) e credenziali:
+
+\begin{itemize}
+    \item \textbf{SQL Injection Avanzato:} L'uso dell'ORM SQLAlchemy mitiga gran parte dei rischi di SQL injection standard. Tuttavia, se gli sviluppatori avessero integrato frammenti di query raw per operazioni complesse o filtri dinamici (es. ricerca avanzata immobili), l'attaccante potrebbe sfruttare il vettore per esfiltrare l'intera anagrafica utenti o manipolare lo stato degli account.
+    \item \textbf{Cracking Off-Line delle Credenziali:} Le password sono protette da hashing \texttt{bcrypt} con salt unico. Se il parametro di costo adattivo (cost factor) fosse configurato su un valore troppo basso per favorire le performance, un attaccante che riuscisse a ottenere un dump del database potrebbe eseguire efficaci attacchi dizionario offline utilizzando hardware dedicato (GPU/ASIC).
+    \item \textbf{Vulnerabilità dell'Ambiente Docker (Container Escape):} Il database è distribuito tramite \texttt{docker-compose.yml}. Misconfigurazioni operative, come l'esecuzione del container in modalità \textit{privileged}, l'eccessiva esposizione delle porte (es. esporre la porta 5432 globalmente su \texttt{0.0.0.0} anziché solo al backend), o vulnerabilità non patchate nell'engine di Docker, potrebbero consentire a un aggressore di sfuggire all'isolamento del container e compromettere l'intero server host.
+\end{itemize}
+
+\section{Livello Blockchain e Smart Contract (Hyperledger Fabric)}
+
+Il cuore del sistema risiede in Hyperledger Fabric, accessibile solo tramite identità crittografiche verificate:
+
+\begin{itemize}
+    \item \textbf{Compromissione dell'Infrastruttura PKI (MSP/CA):} Il modello \textit{permissioned} di Fabric basa la fiducia sui certificati X.509 emessi dalle CA e validati dai Membership Service Providers (MSP). Se la chiave privata di una Certificate Authority dovesse essere esfiltrata (ad esempio tramite un attacco al server host), l'avversario potrebbe emettere certificati validi per nodi Peer fittizi o amministratori fittizi, compromettendo irreparabilmente l'integrità del ledger e bypassando completamente le difese del Security Gateway.
+    \item \textbf{Vulnerabilità Logiche e Race Conditions nello Smart Contract:} La compravendita è regolata da complesse transizioni di stato (da \texttt{ACTIVE} a \texttt{LOCKED} e poi di nuovo ad \texttt{ACTIVE} al termine di ogni finestra). Se le funzioni del chaincode non garantiscono l'atomicità assoluta o se l'aggiornamento simultaneo di \texttt{highestBidAmount} e dello stato dell'asta soffre di \textit{race conditions}, due offerte arrivate al medesimo istante potrebbero causare un'inconsistenza del \textit{world state}, sovrascrivendo l'offerta legittimamente vincente.
+    \item \textbf{Attacchi di Frontrunning e Manipolazione Temporale:} Il sistema suddivide le aste in finestre temporali definite dalla formula $window\_duration = \frac{endTime - startTime}{n}$ per mitigare i comportamenti speculativi. Ciononostante, un attaccante esperto potrebbe monitorare i tempi di propagazione della rete (latency) e sfruttare le lievi derive degli orologi di sistema (clock drift) dei vari nodi \textit{Orderer}. Sottomettendo un'offerta all'esatto limite temporale di chiusura della finestra, potrebbe tentare di includere la propria transazione nel blocco ignorando il vincolo della singola offerta per finestra o prevedendo lo stato invisibile degli altri partecipanti prima del consolidamento.
+\end{itemize}

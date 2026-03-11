@@ -117,6 +117,8 @@ Il frontend consiste delle seguenti route:
     
     \item[\texttt{/}] Pagina home nella quale vengono presentate tutte le aste disponibili in formato grid. Ogni card della griglia mostra la foto principale dell'immobile, il titolo dell'asta, il prezzo di partenza e lo stato. Gli utenti non autenticati possono consultare le aste ma non partecipare.
     
+    \item[\texttt{/faq}] Pagina statica con le domande frequenti e le informazioni di contatto per l'assistenza.
+
     \item[\texttt{/assets/register}] Pagina dedicata alla registrazione di un nuovo immobile. Un venditore deve fornire le informazioni necessarie quali titolo, ubicazione, descrizione, foto principale e ulteriori dettagli catastali prima di poter procedere alla creazione dell'asta.
     
     \item[\texttt{/auctions/create}] Pagina per la creazione di una nuova asta. Accessibile solo dai venditori che abbiano precedentemente registrato almeno un immobile. Consente di impostare i parametri temporali (data inizio e fine), il prezzo di partenza e l'incremento minimo.
@@ -180,7 +182,7 @@ Le primitive disponibili sono:
 {
     ||"cmd"||: "AddKV | GetKV | GetKeyHistory | DelKV | GetClasses | GetNumKeys | GetKeys",
     ||"class"||: "NomeClasse",
-    ||"key"||: ["NAMESPACE", "ID"],
+    ||"key"||: "Key",
     ||"value"||: { ... }
 }
 \end{lstlisting}
@@ -220,7 +222,7 @@ Di seguito vengono presentate le definizioni strutturali delle classi dati che c
         \texttt{bidderId} & string & Riferimento all'offerente \\
         \texttt{amount} & number & Importo offerto \\
         \texttt{timestamp} & int (epoch) & Data e ora offerta \\
-        \texttt{status} & enum & \texttt{ACCEPTED}, \texttt{REJECTED} \\
+        \texttt{status} & enum & \texttt{APPROVED}, \texttt{REJECTED} \\
         \texttt{rejectReason} & string | null & Motivo del rifiuto (se applicabile) \\
         \bottomrule
     \end{tabular}
@@ -243,7 +245,7 @@ Di seguito vengono presentate le definizioni strutturali delle classi dati che c
         \texttt{highestBidId} & string | null & ID dell'offerta vincente attuale \\
         \texttt{highestBidAmount} & number | null & Importo dell'offerta vincente \\
         \texttt{bidsCount} & int & Contatore totale offerte \\
-        \texttt{status} & enum & \texttt{ACTIVE}, \texttt{CLOSED}, \texttt{CANCELLED} \\
+        \texttt{status} & enum & \texttt{ACTIVE}, \texttt{CLOSED}, \texttt{CANCELLED}, \texttt{LOCKED} \\
         \bottomrule
     \end{tabular}
     \caption{Definizione della Classe Auction}
@@ -283,7 +285,7 @@ I principali endpoint sono:
     Registrazione di un nuovo immobile sul ledger. Richiede che l'utente sia autenticato e abbia il ruolo di "Venditore". Internamente invoca \texttt{AddKV} per la classe \texttt{Asset}.
     
     \item[\texttt{GET /assets/}] 
-    Recupero dettagli di tutti gli assets. Internamente invoca GetKeys e KetKV per la classe omonima.
+    Recupero dettagli di tutti gli assets. Internamente invoca \texttt{GetKeys} e \texttt{GetKV} per la classe omonima.
 
     \item[\texttt{GET /assets/\{id\}}] 
     Recupero dettagli di uno specifico asset. Internamente invoca \texttt{GetKV} per la classe omonima.
@@ -292,11 +294,29 @@ I principali endpoint sono:
     Creazione di una nuova asta per un asset posseduto dall'utente. Il sistema verifica la proprietà dell'asset e imposta lo stato iniziale dell'asta. Invoca \texttt{AddKV} per la classe \texttt{Auction}.
     
     \item[\texttt{GET /auctions}] 
-    Elenco delle aste attive. Supporta filtri opzionali per stato o range di prezzo. Internamente utilizza \texttt{GetKeys} o query specifiche se supportate.
-    
+    Elenco di tutte le aste presenti a sistema. Internamente utilizza \texttt{GetKeys}
+
+    \item[\texttt{GET /auctions/status/\{status\}}]
+    Filtraggio delle aste per stato (es. \texttt{ACTIVE}, \texttt{CLOSED}). Internamente utilizza \texttt{GetKeys} e \texttt{GetKV} per la classe \texttt{Auction}.
+
+    \item[\texttt{GET /auctions/\{id\}}]
+    Recupero dettagli di una specifica asta. Internamente invoca \texttt{GetKV} per la classe omonima.
+
+    \item[\texttt{GET /auctions/bids/\{id\}}]
+    Recupero di tutte le offerte di una specifica asta. Internamente invoca \texttt{GetKeys} \texttt{GetKV} per la classe Bids, filtrando i risultati in base all'ID dell'asta.
+
+    \item[\texttt{DELETE /auctions/\{id\}}]
+    Cancellazione di una specifica asta. Internamente invoca \texttt{DelKV} per la classe omonima.
+
     \item[\texttt{POST /bids}] 
     Invio di un'offerta per un'asta attiva. La logica di backend verifica che l'asta sia aperta, che l'offerta superi l'importo corrente più l'incremento minimo, e che l'offerente non sia il venditore stesso. Se valida, registra l'offerta tramite \texttt{AddKV} sulla classe \texttt{Bid} e aggiorna lo stato dell'asta.
     
+    \item[\texttt{GET /bids/user}]
+    Recupera tutte le offerte inviate dall'utente autenticato. Internamente invoca \texttt{GetKeys} e \texttt{GetKV} per la classe \texttt{Bid}, filtrando i risultati in base all'ID dell'offerente recuperato tramite \textbf{JWT}.
+
+    \item[\texttt{GET /bids/latest/\{id\}}]
+    Recupero dell'ultima offerta valida fatta dall'utente per una specifica asta. Internamente invoca \texttt{GetKeys} e \texttt{GetKV} per la classe \texttt{Bid}, filtrando i risultati in base all'ID dell'asta.
+
     \item[\texttt{GET /admin/users}] 
     Restituisce l'elenco completo degli utenti registrati nel database off-chain e il loro stato (attivo/sospeso), per permettere all'amministratore di gestire le utenze.
 
@@ -309,63 +329,99 @@ I principali endpoint sono:
 
 \newpage
 
+% \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per aggiungere un Asset}]
+% {
+%     ||"cmd"||: "AddKV",
+%     ||"class"||: "Assets",
+%     ||"key"||: "AssetID" -> HMAC(value),
+%     ||"value"||: {
+%         ||"id"||: key,
+%         ||"ownerId"||: "H("email\_utente\")",
+%         ||"title"||: "Villa sul mare",
+%         ||"description"||: "Splendida villa con vista mare, 4 camere, piscina e giardino.",
+%         ||"location"||: "Via del lungomare 12",
+%         ||"currentAuctionId"||: "AuctionID" -> HMAC(value\_auction),
+%         ||"createdAt"||: "timestamp",
+%         ||"status"||: "LOCKED"
+%     }
+% }
+% \end{lstlisting}
+
 \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per aggiungere un Asset}]
-{
     ||"cmd"||: "AddKV",
-    ||"class"||: "Asset",
-    ||"key"||: ["ASSET", "ASSET_1"],
+    ||"class"||: "Assets",
+    ||"key"||: [
+        "ef25bc38bb1182a80bd7d4b01bc45d9a34/
+        b84c939bf944459dc44a79c0bf6259"
+    ],
     ||"value"||: {
-        ||"id"||: "ASSET_1",
-        ||"ownerId"||: "USER_123",
-        ||"title"||: "Villa sul mare",
-        ||"location"||: "Via del lungomare 12",
-        ||"cadastralId"||: "a7bbcecb",
-        ||"metadataHash"||: "e5990593c22e6647a7bbde8e85f395e56727a7bbd8ccecb6",
-        ||"currentAuctionId"||: "AUCTION_2",
-        ||"createdAt"||: 1769509800,
-        ||"status"||: "LOCKED"
+        ||"asset_type"||: "villa",
+        ||"created_at"||: "2026-03-11T11:59:41.544210",
+        ||"current_auction_id"||: null,
+        ||"description"||: "Villetta indipendente",
+        ||"id"||: "ef25bc38bb1182a80bd7d4b01bc45d/
+        9a34b84c939bf944459dc44a79c0bf6259",
+        ||"location"||: "Roma",
+        ||"owner_id"||: "32503db9ad32a1b8999988977b40d/
+        fad523ec82a8a1251ce8c05c85842471b0c",
+        ||"picture"||: "Screenshot from 2026-02-26 15-50-08.png",
+        ||"price"||: 50000,
+        ||"size"||: 120,
+        ||"status"||: "active",
+        ||"title"||: "Villa"
     }
-}
 \end{lstlisting}
 
 \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per creare un'asta}]
 {
     ||"cmd"||: "AddKV",
-    ||"class"||: "Auction",
-    ||"key"||: "auction:AUCTION_2",
+    ||"class"||: "Auctions",
+    ||"key"||: "1781938b47129ab1e6059a4ec5cca/
+    f5336e69406de0852683e765c799cee7d04",
     ||"value"||: {
-        ||"id"||: ["AUCTION", "AUCTION_2"],
-        ||"assetId"||: "ASSET_1",
-        ||"sellerId"||: "USER_123",
-        ||"startTime"||: 1769509200,
-        ||"endTime"||: 1769516400,
-        ||"startPrice"||: 350000,
-        ||"minIncrement"||: 5000,
-        ||"highestBidId"||: null,
-        ||"highestBidAmount"||: null,
-        ||"bidsCount"||: 0,
+        ||"id"||: "1781938b47129ab1e6059a4ec5cca/
+        f5336e69406de0852683e765c799cee7d04",
+        ||"assetId"||: "ef25bc38bb1182a80bd7d4b01bc45d/
+        9a34b84c939bf944459dc44a79c0bf6259",
+        ||"asset_title"||: "Villa",
+        ||"asset_description"||: "Villetta indipendente",
+        ||"sellerId"||: "32503db9ad32a1b8999988977b40dfad/
+        523ec82a8a1251ce8c05c85842471b0c",
+        ||"bid_count"||: 0,
+        ||"high_bid_amount"||: null,
+        ||"high_bid_id"||: null,
+        ||"image_url"||: "/static/uploads/assets/seller_id/asset_id/primary-8b97d3c3f46f4546ac9c8407496901cb.png",
+        ||"min_incr"||: 15000,
+        ||"start_time"||: "2026-03-11T15:00:00",
+        ||"end_time"||: "2026-03-11T16:00:00",
+        ||"starting_price"||: 25000,
         ||"status"||: "ACTIVE"
     }
 }
 \end{lstlisting}
 
-
+\newpage
 \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per aggiungere un'offerta (Bid)}]
 {
     ||"cmd"||: "AddKV",
-    ||"class"||: "Bid",
-    ||"key"||: ["bid", "BID_1"],
+    ||"class"||: "Bids",
+    ||"key"||: "8f9b21b63558e4154fd8f0bf8cbaf7b/
+    0aaa7170dbd7e0565e0af60ffc782ecd4",
     ||"value"||: {
-        ||"id"||: "BID_1",
-        ||"auctionId"||: "AUCTION_2",
-        ||"bidderId"||: "USER_456",
-        ||"amount"||: 355000,
-        ||"timestamp"||: 1769509500,
-        ||"status"||: "ACCEPTED",
-        ||"rejectReason"||: null
+        ||"id"||: "8f9b21b63558e4154fd8f0bf8cbaf7b/
+        0aaa7170dbd7e0565e0af60ffc782ecd4",
+        ||"auctionId"||: "1781938b47129ab1e6059a4ec5cca/
+        f5336e69406de0852683e765c799cee7d04",
+        ||"bidderId"||: "01b1de7136182f016755e0bac1a61f60/
+        92df799e9fea2bf9848e1c682a73c9cf",
+        ||"bid_amount"||: 80000,
+        ||"timestamp"||: 2026-03-11T12:11:00.764654,
+        ||"status"||: "approved",
+        ||"reason"||: null
     }
 }
 \end{lstlisting}
+
 
 \subsection{Logica di Bussiness}
 
@@ -426,14 +482,14 @@ Il database off-chain è responsabile della persistenza dei dati sensibili e del
         \hline
         \texttt{id} & string & allineato a \texttt{user:<uuid>} on-chain \\
         \texttt{role} & array di enum & \texttt{ADMIN}, \texttt{SELLER}, \texttt{BIDDER} \\
-        \texttt{name} & string & \\
-        \texttt{surname} & string & \\
-        \texttt{email} & string & \\
-        \texttt{birthday} & date & \\
-        \texttt{cellularNumber} & number & \\
-        \texttt{passwordHash} & string & \\
-        \texttt{lastLoginAt} & int (epoch) & \\
-        \texttt{createdAt} & int (epoch) & \\
+        \texttt{name} & string & \texttt{nome utente} \\
+        \texttt{surname} & string & \texttt{cognome utente} \\
+        \texttt{email} & string & \texttt{indirizzo email} \\
+        \texttt{birthday} & date & \texttt{data di nascita} \\
+        \texttt{cellularNumber} & number & \texttt{numero di cellulare} \\
+        \texttt{passwordHash} & string & \texttt{hash della password} \\
+        \texttt{lastLoginAt} & int (epoch) &  \texttt{ultima data di login} \\
+        \texttt{createdAt} & int (epoch) &  \texttt{data di creazione account} \\
         \hline
     \end{tabular}
     \caption{Tabella Users}
@@ -443,7 +499,7 @@ Per l'interazione con PostgreSQL nel contesto del framework Flask, è stata adot
 
 Al fine di semplificare la gestione dell'infrastruttura di sviluppo e garantire la portabilità dell'applicazione, il database PostgreSQL è stato containerizzato mediante \textbf{Docker}. La configurazione del container è definita in un file \texttt{docker-compose.yml}, il quale specifica i parametri di connessione, il volume di persistenza dei dati e le variabili di ambiente necessarie. Questo approccio consente agli sviluppatori di avviare l'intera stack del database con un singolo comando, eliminando le dipendenze dall'ambiente locale e facilitando il deployment su sistemi eterogenei.
 
-Per la messa in sicurezza delle credenziali è stato adottato l'algoritmo di hashing crittografico bcrypt, basato sul cifrario Blowfish. Il processo integra nativamente la generazione di un salt univoco per ogni utente, restituendo una stringa finale che concatena versione, costo, salt e digest secondo la struttura:
+Per la messa in sicurezza delle credenziali è stato adottato l'algoritmo di hashing crittografico \textbf{bcrypt}, basato sul cifrario Blowfish. Il processo integra nativamente la generazione di un salt univoco per ogni utente, restituendo una stringa finale che concatena versione, costo, salt e digest secondo la struttura:
 \[
     \texttt{pwd\_hash}=\$2b\$[\texttt{cost}]\$[\texttt{salt}]\$[\texttt{hash}]
 \]

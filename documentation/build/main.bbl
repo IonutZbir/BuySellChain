@@ -6,29 +6,37 @@
 \newblock Versione 2.5 LTS. Accesso: Gennaio 2026.
 
 \bibitem{jinja2}
-A.~Ronacher, ``{Jinja2}: A full-featured template engine for {Python}.'' \url{https://jinja.palletsprojects.com/}, 2026.
+A.~Ronacher, ``{Jinja2}: A full-featured template engine for {Python}.''
+  \url{https://jinja.palletsprojects.com/}, 2026.
 \newblock Accessed: 2026-02-12.
 
 \bibitem{alpinejs}
-C.~Porzio, ``{Alpine.js}: A rugged, minimal framework for composing {JavaScript} behavior in your markup.'' \url{https://alpinejs.dev/}, 2026.
+C.~Porzio, ``{Alpine.js}: A rugged, minimal framework for composing
+  {JavaScript} behavior in your markup.'' \url{https://alpinejs.dev/}, 2026.
 \newblock Accessed: 2026-02-12.
 
 \bibitem{python_software_foundation}
-{Python Software Foundation}, ``Python language reference, version 3.12,'' 2023.
+{Python Software Foundation}, ``Python language reference, version 3.12,''
+  2023.
 \newblock Disponibile su python.org.
 
 \bibitem{pallets_flask}
-{Pallets Projects}, ``Flask: A microframework for python based on werkzeug, jinja 2 and good intentions,'' 2010.
+{Pallets Projects}, ``Flask: A microframework for python based on werkzeug,
+  jinja 2 and good intentions,'' 2010.
 \newblock Versione 3.0.x.
 
 \bibitem{flask_jwt_extended}
-L.~Turner, ``Flask-jwt-extended: Open source extension for flask adding support for json web tokens.'' \url{https://github.com/vimalloc/flask-jwt-extended}, 2023.
+L.~Turner, ``Flask-jwt-extended: Open source extension for flask adding support
+  for json web tokens.'' \url{https://github.com/vimalloc/flask-jwt-extended},
+  2023.
 
 \bibitem{JWTrfc7519}
-M.~B. Jones, J.~Bradley, and N.~Sakimura, ``{JSON Web Token (JWT)}.'' RFC 7519, May 2015.
+M.~B. Jones, J.~Bradley, and N.~Sakimura, ``{JSON Web Token (JWT)}.'' RFC 7519,
+  May 2015.
 
 \bibitem{postgresql}
-{PostgreSQL Global Development Group}, {\em PostgreSQL: The World's Most Advanced Open Source Relational Database}.
+{PostgreSQL Global Development Group}, {\em PostgreSQL: The World's Most
+  Advanced Open Source Relational Database}.
 \newblock PostgreSQL Global Development Group, 2026.
 \newblock Accessed: 2026-02-09.
 

@@ -10,11 +10,21 @@
 \contentsline {subsection}{\numberline {2.4.2}Modello Dati \& Interfaccia RESTful API}{9}{subsection.2.4.2}%
 \contentsline {subsubsection}{Definizione Modello Dati}{10}{section*.7}%
 \contentsline {subsubsection}{Definizione Interfaccia RESTful API}{12}{section*.12}%
-\contentsline {subsection}{\numberline {2.4.3}Logica di Bussiness}{14}{subsection.2.4.3}%
-\contentsline {paragraph}{Registrazione e Verifica dei Venditori}{14}{section*.13}%
-\contentsline {paragraph}{Struttura Temporale delle Aste}{14}{section*.14}%
-\contentsline {paragraph}{Vincoli sulle Offerte}{14}{section*.15}%
-\contentsline {paragraph}{Aggiornamento dello Stato dell'Asta}{14}{section*.16}%
-\contentsline {section}{\numberline {2.5}Blockchain Layer}{16}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Database Off-Chain}{17}{section.2.6}%
-\contentsline {chapter}{Bibliografia}{18}{section*.19}%
+\contentsline {subsection}{\numberline {2.4.3}Logica di Bussiness}{15}{subsection.2.4.3}%
+\contentsline {paragraph}{Registrazione e Verifica dei Venditori}{15}{section*.13}%
+\contentsline {paragraph}{Struttura Temporale delle Aste}{15}{section*.14}%
+\contentsline {paragraph}{Vincoli sulle Offerte}{15}{section*.15}%
+\contentsline {paragraph}{Aggiornamento dello Stato dell'Asta}{15}{section*.16}%
+\contentsline {section}{\numberline {2.5}Blockchain Layer}{17}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Database Off-Chain}{18}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Superficie osservabile e Perimetro di Attacco}{19}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Livello Client (Frontend)}{19}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Livello Application / Security Gateway (Backend)}{20}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Livello Dati Off-Chain (Database PostgreSQL)}{20}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Livello Blockchain e Smart Contract (Hyperledger Fabric)}{21}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Possibili Attacchi e Contromisure}{22}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Difesa del Frontend e Gestione Sicura delle Sessioni}{22}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Hardening del Security Gateway (Backend)}{23}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Protezione del Database Off-Chain e dell'Ambiente Docker}{23}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Sicurezza del Ledger Distribuito (Hyperledger Fabric)}{24}{section.4.4}%
+\contentsline {chapter}{Bibliografia}{25}{section.4.4}%
