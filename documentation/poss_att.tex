@@ -1,0 +1,76 @@
+\chapter{Possibili Attacchi e Contromisure}
+
+Alla luce della superficie d'attacco analizzata nel capitolo precedente, è fondamentale definire una strategia di difesa in profondità (\textit{Defense-in-Depth}). Il sistema \texttt{BuySellChain} deve garantire la confidenzialità, l'integrità e la disponibilità dei dati in ogni layer della sua architettura ibrida. Di seguito vengono descritti in dettaglio gli scenari di attacco più critici e le contromisure tecniche e architetturali adottate per la loro mitigazione.
+
+\section{Difesa del Frontend e Gestione Sicura delle Sessioni}
+
+Il layer di presentazione, pur essendo privo di logica di business, rappresenta il primo punto di contatto con l'utente ed è esposto ad attacchi client-side.
+
+\begin{itemize}
+    \item \textbf{Attacco: Cross-Site Scripting (XSS) e Furto di JWT}\\
+    Come evidenziato, l'archiviazione del token JWT nel \texttt{LocalStorage} del browser espone il sistema al furto delle sessioni in caso di vulnerabilità XSS.
+    \item \textbf{Contromisura: Cookie HttpOnly e CSP}\\
+    Per mitigare questo rischio, il Security Gateway è configurato per rilasciare il token JWT esclusivamente tramite un \textit{Cookie} di sessione protetto dai flag \texttt{HttpOnly}, \texttt{Secure} e \texttt{SameSite=Strict}. Il flag \texttt{HttpOnly} rende il cookie invisibile agli script JavaScript eseguiti nel browser (es. Alpine.js o script malevoli), impedendone il furto diretto. Inoltre, viene implementata una rigorosa \textit{Content Security Policy} (CSP) tramite gli header HTTP per restringere le fonti da cui il browser è autorizzato a caricare script esterni, riducendo drasticamente la probabilità di successo di un attacco XSS.
+    
+    \item \textbf{Attacco: Cross-Site Request Forgery (CSRF)}\\
+    L'utilizzo di cookie di sessione reintroduce il rischio di CSRF, dove un sito malevolo potrebbe forzare il browser dell'utente a inviare richieste autenticate al backend di \texttt{BuySellChain}.
+    \item \textbf{Contromisura: Token Anti-CSRF}\\
+    Viene introdotto un meccanismo di token sincrono (\textit{Synchronizer Token Pattern}). Il server Flask genera un token CSRF univoco per ogni sessione, integrato nei form HTML generati da Jinja2. Ogni richiesta di modifica dello stato (es. \texttt{POST /bids}) deve includere questo token, validato dal backend prima di processare la transazione.
+\end{itemize}
+
+\section{Hardening del Security Gateway (Backend)}
+
+Il backend Flask agisce come \textit{Security Gateway} e richiede protezioni rigorose per impedire compromissioni dirette e abusi.
+
+\begin{itemize}
+    \item \textbf{Attacco: Man-in-the-Middle (MitM)}\\
+    L'utilizzo del protocollo HTTP in chiaro espone le credenziali e le comunicazioni API.
+    \item \textbf{Contromisura: Cifratura TLS/SSL (HTTPS)}\\
+    In ambiente di produzione, il server Flask non viene esposto direttamente. Viene introdotto un Reverse Proxy (es. NGINX) incaricato di gestire la terminazione TLS. Tutte le comunicazioni tra il client e il sistema sono cifrate forzatamente in HTTPS (TLS 1.3), garantendo la confidenzialità in transito e neutralizzando il \textit{packet sniffing}.
+    
+    \item \textbf{Attacco: Lisp Command Injection e Payload Malformati}\\
+    L'iniezione di caratteri di escape nel JSON potrebbe manipolare le query verso il client Lisp.
+    \item \textbf{Contromisura: Validazione Rigorosa degli Input (JSON Schema)}\\
+    Prima di invocare le primitive \texttt{AddKV} o \texttt{GetKV}, il backend applica una validazione strutturale e semantica (\textit{Input Sanitization}) tramite \texttt{JSON Schema}. Ogni campo viene tipizzato, limitato in lunghezza e filtrato per rimuovere caratteri non consentiti. Solo i payload conformi allo schema atteso vengono inoltrati alla rete Fabric.
+    
+    \item \textbf{Attacco: Denial of Service (DoS) e Brute Force}\\
+    Inondare gli endpoint di autenticazione o di offerta di richieste massive.
+    \item \textbf{Contromisura: Rate Limiting e Account Lockout}\\
+    Viene implementata la libreria \texttt{Flask-Limiter} per applicare politiche di \textit{Rate Limiting} basate sull'indirizzo IP del richiedente. Endpoint critici come \texttt{/auth/login} accettano un massimo di 5 tentativi al minuto. Superata tale soglia, l'account o l'IP subiscono un \textit{lockout} temporaneo.
+\end{itemize}
+
+\section{Protezione del Database Off-Chain e dell'Ambiente Docker}
+
+Il database PostgreSQL conserva dati sensibili e necessita di isolamento sia a livello applicativo che di sistema operativo.
+
+\begin{itemize}
+    \item \textbf{Attacco: SQL Injection Avanzato}\\
+    Esecuzione di comandi SQL non previsti.
+    \item \textbf{Contromisura: Uso esclusivo di ORM parametrizzato}\\
+    Tutte le interazioni con il database sono mediate da SQLAlchemy tramite query parametrizzate (\textit{Prepared Statements}). È vietato da policy di sviluppo l'utilizzo di concatenazione di stringhe o query raw, annullando di fatto la fattibilità degli attacchi di tipo SQLi.
+    
+    \item \textbf{Attacco: Container Escape e Misconfigurazioni}\\
+    Accesso non autorizzato al file system host dal container Docker.
+    \item \textbf{Contromisura: Principio del Minimo Privilegio (Docker Hardening)}\\
+    Il file \texttt{docker-compose.yml} è stato revisionato: il container PostgreSQL non espone la porta 5432 all'host (\texttt{ports: - "5432:5432"}), ma comunica con il backend Flask esclusivamente tramite una \textit{Virtual Network} interna creata da Docker. Inoltre, il container viene eseguito con un utente non root e con \textit{capabilities} del kernel ridotte (\texttt{cap\_drop: - ALL}), prevenendo scalate di privilegi verso il sistema host.
+\end{itemize}
+
+\section{Sicurezza del Ledger Distribuito (Hyperledger Fabric)}
+
+Essendo il \textit{Core} fiduciario del sistema, lo Smart Contract (Chaincode) e la gestione delle identità richiedono difese architetturali a livello di consenso.
+
+\begin{itemize}
+    \item \textbf{Attacco: Race Conditions e Inconsistenza dello Stato}\\
+    Sovrascrittura accidentale dell'offerta vincente se due transazioni vengono processate simultaneamente al termine della finestra temporale.
+    \item \textbf{Contromisura: Multiversion Concurrency Control (MVCC)}\\
+    Hyperledger Fabric gestisce nativamente le \textit{race conditions} tramite l'MVCC. Quando una transazione legge una variabile (es. \texttt{highestBidAmount}), la rete annota la versione della chiave. Se una transazione concorrente modifica quella stessa chiave prima della validazione, la transazione successiva fallisce per \textit{MVCC Read Conflict}. Il Chaincode è progettato per gestire questi fallimenti informando l'utente e mantenendo l'assoluta coerenza del \textit{world state}.
+    
+    \item \textbf{Attacco: Frontrunning basato su Clock Drift}\\
+    Sfruttamento di disallineamenti temporali per inserire offerte illegittime al limite della \textit{window duration}.
+    \item \textbf{Contromisura: Affidamento ai Timestamp dell'Orderer}\\
+    Il Chaincode non fa affidamento sui timestamp inviati dal client (che potrebbero essere manipolati), ma estrae il timestamp direttamente dalla \textit{Transaction Proposal} firmata dal nodo Orderer al momento della creazione del blocco. Poiché il servizio di \textit{Ordering} determina la sequenza cronologica definitiva delle transazioni, la valutazione di appartenenza a una specifica finestra temporale diventa deterministica e immutabile, disinnescando tentativi di manipolazione lato client.
+    
+    \item \textbf{Attacco: Compromissione delle Certificate Authorities (CA)}\\
+    \item \textbf{Contromisura: Hardware Security Module (HSM)}\\
+    Per la gestione delle identità (MSP), le chiavi private delle \textit{Root CA} della rete Fabric devono essere generate e conservate all'interno di dispositivi crittografici dedicati (HSM), conformi allo standard FIPS 140-2. Questo rende impossibile l'esfiltrazione delle chiavi private anche nell'eventualità in cui il server host venga interamente compromesso.
+\end{itemize}
