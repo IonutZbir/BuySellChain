@@ -57,7 +57,7 @@ class AssetService:
             current_app.logger.error("Error: {}".format(result.get("error")))
             return False
 
-        if not AssetService._upload_picture(owner_id, asset.get_id(), asset.picture):
+        if not AssetService._upload_picture(owner_id, asset.get_id(), asset.picture): # da modificare nome picture, mettere prima di inseire in blockchain
             current_app.logger.debug(f"Failed to upload picture for asset ID: {asset.get_id()}")
             return False
 

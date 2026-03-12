@@ -21,10 +21,8 @@
 \contentsline {section}{\numberline {3.1}Livello Client (Frontend)}{19}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Livello Application / Security Gateway (Backend)}{20}{section.3.2}%
 \contentsline {section}{\numberline {3.3}Livello Dati Off-Chain (Database PostgreSQL)}{20}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Livello Blockchain e Smart Contract (Hyperledger Fabric)}{21}{section.3.4}%
 \contentsline {chapter}{\numberline {4}Possibili Attacchi e Contromisure}{22}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Difesa del Frontend e Gestione Sicura delle Sessioni}{22}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Hardening del Security Gateway (Backend)}{23}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Protezione del Database Off-Chain e dell'Ambiente Docker}{23}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Sicurezza del Ledger Distribuito (Hyperledger Fabric)}{24}{section.4.4}%
-\contentsline {chapter}{Bibliografia}{25}{section.4.4}%
+\contentsline {chapter}{Bibliografia}{25}{section.4.3}%

@@ -118,8 +118,6 @@ Il frontend consiste delle seguenti route:
     \item[\texttt{/}] Pagina home nella quale vengono presentate tutte le aste disponibili in formato grid. Ogni card della griglia mostra la foto principale dell'immobile, il titolo dell'asta, il prezzo di partenza e lo stato. Gli utenti non autenticati possono consultare le aste ma non partecipare.
     
     \item[\texttt{/faq}] Pagina statica con le domande frequenti e le informazioni di contatto per l'assistenza.
-
-    \item[\texttt{/assets/register}] Pagina dedicata alla registrazione di un nuovo immobile. Un venditore deve fornire le informazioni necessarie quali titolo, ubicazione, descrizione, foto principale e ulteriori dettagli catastali prima di poter procedere alla creazione dell'asta.
     
     \item[\texttt{/auctions/create}] Pagina per la creazione di una nuova asta. Accessibile solo dai venditori che abbiano precedentemente registrato almeno un immobile. Consente di impostare i parametri temporali (data inizio e fine), il prezzo di partenza e l'incremento minimo.
     
@@ -284,12 +282,15 @@ I principali endpoint sono:
     \item[\texttt{POST /assets}] 
     Registrazione di un nuovo immobile sul ledger. Richiede che l'utente sia autenticato e abbia il ruolo di "Venditore". Internamente invoca \texttt{AddKV} per la classe \texttt{Asset}.
     
-    \item[\texttt{GET /assets/}] 
+    \item[\texttt{GET /assets}] 
     Recupero dettagli di tutti gli assets. Internamente invoca \texttt{GetKeys} e \texttt{GetKV} per la classe omonima.
 
     \item[\texttt{GET /assets/\{id\}}] 
     Recupero dettagli di uno specifico asset. Internamente invoca \texttt{GetKV} per la classe omonima.
     
+    \item[\texttt{GET /assets/user}]
+    Recupero dettagli di tutti gli asset posseduti dall'utente autenticato. Internamente invoca \texttt{GetKeys} e \texttt{GetKV} per la classe \texttt{Asset}, filtrando i risultati in base all'ID del proprietario recuperato tramite \textbf{JWT}.
+
     \item[\texttt{POST /auctions}] 
     Creazione di una nuova asta per un asset posseduto dall'utente. Il sistema verifica la proprietà dell'asset e imposta lo stato iniziale dell'asta. Invoca \texttt{AddKV} per la classe \texttt{Auction}.
     
@@ -364,7 +365,6 @@ I principali endpoint sono:
         ||"location"||: "Roma",
         ||"owner_id"||: "32503db9ad32a1b8999988977b40d/
         fad523ec82a8a1251ce8c05c85842471b0c",
-        ||"picture"||: "Screenshot from 2026-02-26 15-50-08.png",
         ||"price"||: 50000,
         ||"size"||: 120,
         ||"status"||: "active",
@@ -446,13 +446,9 @@ Al termine di ogni finestra temporale, il sistema esegue automaticamente un'oper
 \end{itemize}
 Una volta completato l'aggiornamento, l'asta ritorna allo stato \texttt{ACTIVE}, rendendo di nuovo disponibile la partecipazione per la finestra temporale successiva.
 
-L'intervallo temporale compreso tra \texttt{startTime} e \texttt{endTime} viene suddiviso in finestre temporali discrete secondo il seguente schema:
+La finestra temporale dell'asta viene definita dagli admin, ed è preimpostata a 12 ore (dalle 8.00 AM fino alle 20.00 PM).
 
-\[
-    \mathrm{window\_duration} = \frac{\mathrm{endTime} - \mathrm{startTime}}{n}
-\]
-
-dove $n$ rappresenta il numero totale di finestre temporali configurabili dal venditore al momento dell'inizializzazione dell'asta. Questo meccanismo garantisce una distribuzione equa degli intervalli di partecipazione e facilita l'implementazione di politiche anti-frontrunning, in quanto ogni finestra temporale costituisce un perimetro di validazione indipendente per le offerte ricevute.
+Questo meccanismo garantisce una distribuzione equa degli intervalli di partecipazione e facilita l'implementazione di politiche anti-frontrunning, in quanto ogni finestra temporale costituisce un perimetro di validazione indipendente per le offerte ricevute.
 
 \newpage
 \section{Blockchain Layer}
@@ -482,14 +478,14 @@ Il database off-chain è responsabile della persistenza dei dati sensibili e del
         \hline
         \texttt{id} & string & allineato a \texttt{user:<uuid>} on-chain \\
         \texttt{role} & array di enum & \texttt{ADMIN}, \texttt{SELLER}, \texttt{BIDDER} \\
-        \texttt{name} & string & \texttt{nome utente} \\
-        \texttt{surname} & string & \texttt{cognome utente} \\
-        \texttt{email} & string & \texttt{indirizzo email} \\
-        \texttt{birthday} & date & \texttt{data di nascita} \\
-        \texttt{cellularNumber} & number & \texttt{numero di cellulare} \\
-        \texttt{passwordHash} & string & \texttt{hash della password} \\
-        \texttt{lastLoginAt} & int (epoch) &  \texttt{ultima data di login} \\
-        \texttt{createdAt} & int (epoch) &  \texttt{data di creazione account} \\
+        \texttt{name} & string & nome utente \\
+        \texttt{surname} & string & cognome utente \\
+        \texttt{email} & string & indirizzo email \\
+        \texttt{birthday} & date & data di nascita \\
+        \texttt{cellularNumber} & number & numero di cellulare \\
+        \texttt{passwordHash} & string & hash della password \\
+        \texttt{lastLoginAt} & int (epoch) &  ultima data di login \\
+        \texttt{createdAt} & int (epoch) &  data di creazione account \\
         \hline
     \end{tabular}
     \caption{Tabella Users}
