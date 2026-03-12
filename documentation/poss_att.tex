@@ -23,7 +23,7 @@ Il layer di presentazione, pur essendo privo di logica di business, rappresenta 
 Il backend Flask agisce come \textit{Security Gateway} e richiede protezioni rigorose per impedire compromissioni dirette e abusi.
 
 \begin{itemize}
-    \item \textbf{Attacco: Man-in-the-Middle (MitM)}\\
+    \item \textbf{Attacco: Man-in-the-Middle (MiTM)}\\
     L'utilizzo del protocollo HTTP in chiaro espone le credenziali e le comunicazioni API.
     \item \textbf{Contromisura: Cifratura TLS/SSL (HTTPS)}\\
     In ambiente di produzione, il server Flask non viene esposto direttamente. Viene introdotto un Reverse Proxy (es. NGINX) incaricato di gestire la terminazione TLS. Tutte le comunicazioni tra il client e il sistema sono cifrate forzatamente in HTTPS (TLS 1.3), garantendo la confidenzialità in transito e neutralizzando il \textit{packet sniffing}.
@@ -55,22 +55,22 @@ Il database PostgreSQL conserva dati sensibili e necessita di isolamento sia a l
     Il file \texttt{docker-compose.yml} è stato revisionato: il container PostgreSQL non espone la porta 5432 all'host (\texttt{ports: - "5432:5432"}), ma comunica con il backend Flask esclusivamente tramite una \textit{Virtual Network} interna creata da Docker. Inoltre, il container viene eseguito con un utente non root e con \textit{capabilities} del kernel ridotte (\texttt{cap\_drop: - ALL}), prevenendo scalate di privilegi verso il sistema host.
 \end{itemize}
 
-\section{Sicurezza del Ledger Distribuito (Hyperledger Fabric)}
+% \section{Sicurezza del Ledger Distribuito (Hyperledger Fabric)}
 
-Essendo il \textit{Core} fiduciario del sistema, lo Smart Contract (Chaincode) e la gestione delle identità richiedono difese architetturali a livello di consenso.
+% Essendo il \textit{Core} fiduciario del sistema, lo Smart Contract (Chaincode) e la gestione delle identità richiedono difese architetturali a livello di consenso.
 
-\begin{itemize}
-    \item \textbf{Attacco: Race Conditions e Inconsistenza dello Stato}\\
-    Sovrascrittura accidentale dell'offerta vincente se due transazioni vengono processate simultaneamente al termine della finestra temporale.
-    \item \textbf{Contromisura: Multiversion Concurrency Control (MVCC)}\\
-    Hyperledger Fabric gestisce nativamente le \textit{race conditions} tramite l'MVCC. Quando una transazione legge una variabile (es. \texttt{highestBidAmount}), la rete annota la versione della chiave. Se una transazione concorrente modifica quella stessa chiave prima della validazione, la transazione successiva fallisce per \textit{MVCC Read Conflict}. Il Chaincode è progettato per gestire questi fallimenti informando l'utente e mantenendo l'assoluta coerenza del \textit{world state}.
+% \begin{itemize}
+%     % \item \textbf{Attacco: Race Conditions e Inconsistenza dello Stato}\\
+%     % Sovrascrittura accidentale dell'offerta vincente se due transazioni vengono processate simultaneamente al termine della finestra temporale.
+%     % \item \textbf{Contromisura: Multiversion Concurrency Control (MVCC)}\\
+%     % Hyperledger Fabric gestisce nativamente le \textit{race conditions} tramite l'MVCC. Quando una transazione legge una variabile (es. \texttt{highestBidAmount}), la rete annota la versione della chiave. Se una transazione concorrente modifica quella stessa chiave prima della validazione, la transazione successiva fallisce per \textit{MVCC Read Conflict}. Il Chaincode è progettato per gestire questi fallimenti informando l'utente e mantenendo l'assoluta coerenza del \textit{world state}.
     
-    \item \textbf{Attacco: Frontrunning basato su Clock Drift}\\
-    Sfruttamento di disallineamenti temporali per inserire offerte illegittime al limite della \textit{window duration}.
-    \item \textbf{Contromisura: Affidamento ai Timestamp dell'Orderer}\\
-    Il Chaincode non fa affidamento sui timestamp inviati dal client (che potrebbero essere manipolati), ma estrae il timestamp direttamente dalla \textit{Transaction Proposal} firmata dal nodo Orderer al momento della creazione del blocco. Poiché il servizio di \textit{Ordering} determina la sequenza cronologica definitiva delle transazioni, la valutazione di appartenenza a una specifica finestra temporale diventa deterministica e immutabile, disinnescando tentativi di manipolazione lato client.
+%     \item \textbf{Attacco: Frontrunning basato su Clock Drift}\\
+%     Sfruttamento di disallineamenti temporali per inserire offerte illegittime al limite della \textit{window duration}.
+%     \item \textbf{Contromisura: Affidamento ai Timestamp dell'Orderer}\\
+%     Il Chaincode non fa affidamento sui timestamp inviati dal client (che potrebbero essere manipolati), ma estrae il timestamp direttamente dalla \textit{Transaction Proposal} firmata dal nodo Orderer al momento della creazione del blocco. Poiché il servizio di \textit{Ordering} determina la sequenza cronologica definitiva delle transazioni, la valutazione di appartenenza a una specifica finestra temporale diventa deterministica e immutabile, disinnescando tentativi di manipolazione lato client.
     
-    \item \textbf{Attacco: Compromissione delle Certificate Authorities (CA)}\\
-    \item \textbf{Contromisura: Hardware Security Module (HSM)}\\
-    Per la gestione delle identità (MSP), le chiavi private delle \textit{Root CA} della rete Fabric devono essere generate e conservate all'interno di dispositivi crittografici dedicati (HSM), conformi allo standard FIPS 140-2. Questo rende impossibile l'esfiltrazione delle chiavi private anche nell'eventualità in cui il server host venga interamente compromesso.
-\end{itemize}
+%     \item \textbf{Attacco: Compromissione delle Certificate Authorities (CA)}\\
+%     \item \textbf{Contromisura: Hardware Security Module (HSM)}\\
+%     Per la gestione delle identità (MSP), le chiavi private delle \textit{Root CA} della rete Fabric devono essere generate e conservate all'interno di dispositivi crittografici dedicati (HSM), conformi allo standard FIPS 140-2. Questo rende impossibile l'esfiltrazione delle chiavi private anche nell'eventualità in cui il server host venga interamente compromesso.
+% \end{itemize}

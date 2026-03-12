@@ -185,7 +185,7 @@ class Bid:
         status: BidStatus,
         reason: str = None
     ) -> str:
-        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{status.value}-{reason if reason else 'None'}-{uuid4()}" 
+        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{status}-{reason if reason else 'None'}-{uuid4()}" 
         print(f"Generating bid ID with combined string: {combined_string}")  # Debug print
         return hmac.new(os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256).hexdigest()
 
@@ -202,7 +202,7 @@ class Bid:
             "bidder_id": self.bidder_id,
             "bid_amount": self.bid_amount,
             "timestamp": self.timestamp.isoformat(),
-            "status": self.status.value,
+            "status": self.status,
             "reason": self.reason,
         }
 class Asset:
