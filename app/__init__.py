@@ -18,11 +18,13 @@ bcrypt = Bcrypt()
 db = SQLAlchemy()
 jwt = JWTManager()
 
+
 @jwt.expired_token_loader
 def my_expired_token_callback(jwt_header, jwt_payload):
     # This function runs automatically when an expired token is detected
     session.clear()
-    return redirect(url_for('frontend.login'))
+    return redirect(url_for("frontend.login"))
+
 
 @jwt.user_identity_loader
 def user_identity_lookup(user_data):
@@ -47,15 +49,13 @@ def user_lookup_callback(_jwt_header, jwt_data):
 def format_datetime(value, format="%d/%m/%Y %H:%M"):
     if value is None:
         return ""
-    
+
     if isinstance(value, str):
         try:
-            # .fromisoformat() is the cleanest way to handle your specific string
             value = datetime.fromisoformat(value)
         except ValueError:
-            # Fallback for older Python versions or non-ISO strings
             return value
-            
+
     return value.strftime(format)
 
 
@@ -63,18 +63,18 @@ def create_app():
 
     setup_logging(__name__)
     app = Flask(__name__)
-    
+
     CORS(app)
 
     # Configurazione
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret")
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
     app.config["JWT_ALGORITHM"] = "HS256"
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "una_chiave_molto_segreta")
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 
-    app.jinja_env.filters['datetimeformat'] = format_datetime
+    app.jinja_env.filters["datetimeformat"] = format_datetime
 
     # Inizializzazione estensioni
     db.init_app(app)
@@ -97,18 +97,18 @@ def create_app():
     app.register_blueprint(api_assets, url_prefix="/api/v1/")
     app.register_blueprint(api_auctions, url_prefix="/api/v1/")
     app.register_blueprint(api_bids, url_prefix="/api/v1/")
-    app.register_blueprint(api_admin, url_prefix="/api/v1/admin/")
-    app.register_blueprint(api_admin_asset, url_prefix="/api/v1/admin/")
-    app.register_blueprint(api_admin_auctions, url_prefix="/api/v1/admin/")
+    app.register_blueprint(api_admin, url_prefix="/api/v1/admin")
+    app.register_blueprint(api_admin_asset, url_prefix="/api/v1/admin")
+    app.register_blueprint(api_admin_auctions, url_prefix="/api/v1/admin")
 
     # Database Upgrade automatico
     from flask_migrate import upgrade
+
     with app.app_context():
         try:
             upgrade()
             app.logger.info("Database migrato/aggiornato con successo!")
         except Exception as e:
             app.logger.error(f"Errore durante l'upgrade del database: {e}")
-
 
     return app

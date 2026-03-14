@@ -9,34 +9,48 @@ Contiene i percorsi per:
 from glob import glob
 import os
 
-from flask import Blueprint, abort, flash, redirect, render_template, session, url_for
+from flask import Blueprint, current_app, redirect, render_template, session, url_for
 
-from flask_jwt_extended import jwt_required
-
-from app.models.models import AuctionStatus
-from app.routes.auctions.api_auctions import list_auctions_by_status
 from app.services.asset_services import AssetService
 from app.services.auction_services import AuctionService
 
-frontend_bp = Blueprint('frontend', __name__)
+frontend_bp = Blueprint("frontend", __name__)
 
 
-@frontend_bp.route('/login')
+@frontend_bp.route("/login")
 def login():
-    return render_template('login.html')
+    return render_template("login.html")
 
-@frontend_bp.route('/signin')
+
+@frontend_bp.route("/signin")
 def signin():
-    return render_template('signin.html')
+    return render_template("signin.html")
 
-@frontend_bp.route('/faq')
+
+@frontend_bp.route("/faq")
 def faq():
-    return render_template('faq.html')
+    return render_template("faq.html")
 
-@frontend_bp.route('/')
+
+@frontend_bp.route("/dashboard")
+def dashboard_page():
+    if "user_id" not in session:
+        return redirect(url_for("frontend.login"))
+
+    user_role = session.get("role")
+    user_id = session.get("user_id")
+
+    if user_role == "admin":
+        return render_template("admin.html")
+
+    return render_template("dashboard.html", user_role=user_role, user_id=user_id)
+
+
+@frontend_bp.route("/")
 def index():
-    session.pop('allowed_navigation', None)
-    return render_template('index.html')
+    session.pop("allowed_navigation", None)
+    return render_template("index.html")
+
 
 """
 Meccanismo di protezione per la pagina di creazione aste:
@@ -58,26 +72,30 @@ Meccanismo di protezione per la pagina di creazione aste:
     l'implementazione di richieste POST anziché GET.
 """
 
-@frontend_bp.route('/click-create-auction')
+
+@frontend_bp.route("/click-create-auction")
 def click_create_auction():
-    if 'user_id' not in session:
-        return redirect(url_for('frontend.login'))
-    
-    session['allowed_navigation'] = True
-    return redirect(url_for('frontend.create_auction_page'))
+    if "user_id" not in session:
+        return redirect(url_for("frontend.login"))
 
-@frontend_bp.route('/auctions/create')
+    session["allowed_navigation"] = True
+    return redirect(url_for("frontend.create_auction_page"))
+
+
+@frontend_bp.route("/auctions/create")
 def create_auction_page():
-    if not session.get('allowed_navigation', None):
-        return redirect(url_for('frontend.index'))
-    
-    return render_template('create_auction.html')
+    if not session.get("allowed_navigation", None):
+        return redirect(url_for("frontend.index"))
 
-@frontend_bp.route('/auction/<auction_id>')
+    return render_template("create_auction.html")
+
+
+@frontend_bp.route("/auction/<auction_id>")
 def show_asta(auction_id):
+    current_user_id = session.get("user_id")
     data = AuctionService.get_auction(auction_id)
     auction = data.get("auction_data", {})
-    
+
     high_bid_amount = auction.get("high_bid_amount", 0)
     if high_bid_amount is None:
         high_bid_amount = 0
@@ -91,32 +109,44 @@ def show_asta(auction_id):
         "min_incr": int(auction.get("min_incr", 0)),
         "status": auction.get("status"),
         "high_bid_amount": int(high_bid_amount),
-        "bid_count": int(auction.get("bid_count", 0))
+        "bid_count": int(auction.get("bid_count", 0)),
     }
-        
+
     # CARICHIAMO L'ASSET SEMPRE (indipendentemente dallo status)
     asset_response = AssetService.get_asset(auction.get("asset_id"))
     if asset_response and asset_response.get("success"):
         asset_data = asset_response.get("data", {}).get("value", {})
         auction_data["asset_title"] = asset_data.get("title", "Titolo non disponibile")
         auction_data["asset_description"] = asset_data.get("description", "")
-        
+
         # Gestione Immagine
         asset_id = asset_data.get("id", "")
         owner_id = asset_data.get("owner_id", "")
-        image_paths = glob(os.path.join(AssetService.base_upload_dir_absolute(), owner_id, asset_id, "primary-*.*"))
-        
+        image_paths = glob(
+            os.path.join(AssetService.base_upload_dir_absolute(), owner_id, asset_id, "primary-*.*")
+        )
+
         if image_paths:
             filename = os.path.basename(image_paths[0])
-            
-            auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), asset_data.get("owner_id", ""), asset_data.get("id", ""), filename).replace("\\", "/")
+
+            auction_data["image_url"] = os.path.join(
+                AssetService.base_upload_dir_relative(),
+                asset_data.get("owner_id", ""),
+                asset_data.get("id", ""),
+                filename,
+            ).replace("\\", "/")
         else:
-            auction_data["image_url"] = os.path.join(AssetService.base_upload_dir_relative(), 'default.png').replace("\\", "/")
+            auction_data["image_url"] = os.path.join(
+                AssetService.base_upload_dir_relative(), "default.png"
+            ).replace("\\", "/")
     else:
         auction_data["asset_title"] = "Asset non trovato"
         auction_data["asset_description"] = "Dettagli non disponibili."
 
-    print(f"DEBUG: image_url: {auction_data['image_url']}")
+    current_app.logger.info(
+        f"Rendering auction page for auction_id={auction_id} with data: {auction_data}"
+    )
 
-    return render_template('auction.html', auction_data=auction_data)
+    is_owner = bool(current_user_id and auction_data.get("seller_id") == current_user_id)
 
+    return render_template("auction.html", auction_data=auction_data, is_owner=is_owner)

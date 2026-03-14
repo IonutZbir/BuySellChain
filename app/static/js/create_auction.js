@@ -111,10 +111,6 @@ document.addEventListener("alpine:init", () => {
             const start = new Date(this.startTime);
             const end = new Date(this.endTime);
 
-            if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-                this.message = "Formato data non valido. Usa il formato YYYY-MM-DDTHH:MM.";
-                return;
-            }
             console.log(start, end, now);
             console.log(start < now, end < now);
             // devono essere >= adesso (giorno corrente incluso)
@@ -165,3 +161,4 @@ document.addEventListener("alpine:init", () => {
         }
     }));
 });
+

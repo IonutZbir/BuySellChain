@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Utente - BuySellChain{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section
+	class="container user-dashboard"
+	x-data="userDashboard"
+	x-init="init('{{ user_role }}', '{{ user_id }}')"
+>
+	<header class="user-dashboard-header">
+		<hgroup>
+			<h1 x-text="role === 'seller' ? 'Dashboard Seller' : 'Dashboard Bidder'"></h1>
+			<p x-text="role === 'seller' ? 'Storico aste create, offerte ricevute e partecipazioni.' : 'Aste a cui hai partecipato e dettaglio offerte.'"></p>
+		</hgroup>
+		<button type="button" class="secondary" @click="refreshAll()" :aria-busy="loading.global">Aggiorna</button>
+	</header>
+
+	<template x-if="errorMessage">
+		<article class="admin-error-banner">
+			<strong>Errore:</strong> <span x-text="errorMessage"></span>
+		</article>
+	</template>
+
+	<section class="admin-stats-grid">
+		<article class="admin-stat-card" x-show="role === 'seller'">
+			<small>Aste create</small>
+			<h3 x-text="ownAuctions.length"></h3>
+		</article>
+		<article class="admin-stat-card" x-show="role === 'seller'">
+			<small>Aste aperte create</small>
+			<h3 x-text="openOwnAuctions.length"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Aste partecipate</small>
+			<h3 x-text="participatedAuctions.length"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Offerte effettuate</small>
+			<h3 x-text="userBids.length"></h3>
+		</article>
+	</section>
+
+	<section class="user-dashboard-grid" x-show="role === 'seller'">
+		<article>
+			<header class="admin-section-header">
+				<h3>Storico Aste Create</h3>
+				<small x-text="ownAuctions.length + ' aste'"></small>
+			</header>
+
+			<template x-if="loading.auctions">
+				<p aria-busy="true">Caricamento aste...</p>
+			</template>
+
+			<div class="admin-table-wrap" x-show="!loading.auctions">
+				<table>
+					<thead>
+						<tr>
+							<th>ID Asta</th>
+							<th>Stato</th>
+							<th>Inizio</th>
+							<th>Fine</th>
+							<th>Offerte</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template x-for="auction in ownAuctions" :key="auction.auction_id || auction.id">
+							<tr>
+								<td class="admin-cell-truncate" x-text="auction.auction_id || auction.id"></td>
+								<td>
+									<span class="badge" :class="(auction.status || '').toLowerCase() === 'active' ? 'badge-active' : 'badge-inactive'" x-text="auction.status || '-' "></span>
+								</td>
+								<td x-text="formatDateTime(auction.start_time)"></td>
+								<td x-text="formatDateTime(auction.end_time)"></td>
+								<td x-text="auction.bid_count ?? 0"></td>
+							</tr>
+						</template>
+						<tr x-show="ownAuctions.length === 0">
+							<td colspan="5">Non hai ancora creato aste.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</article>
+
+		<article>
+			<header class="admin-section-header">
+				<h3>Offerte su Tue Aste Aperte</h3>
+				<small x-text="openOwnAuctions.length + ' aste aperte'"></small>
+			</header>
+
+			<template x-if="loading.openAuctionBids">
+				<p aria-busy="true">Caricamento offerte...</p>
+			</template>
+
+			<div class="user-open-bids" x-show="!loading.openAuctionBids">
+				<template x-for="auction in openOwnAuctions" :key="auction.auction_id || auction.id">
+					<details>
+						<summary>
+							<strong x-text="auction.asset_title || ('Asta ' + (auction.auction_id || auction.id))"></strong>
+							<small x-text="' • Offerte: ' + (openAuctionBids[(auction.auction_id || auction.id)]?.length || 0)"></small>
+						</summary>
+						<div class="admin-table-wrap" style="margin-top: 0.75rem;">
+							<table>
+								<thead>
+									<tr>
+										<th>Bidder</th>
+										<th>Importo</th>
+										<th>Stato</th>
+										<th>Data</th>
+									</tr>
+								</thead>
+								<tbody>
+									<template x-for="bid in (openAuctionBids[(auction.auction_id || auction.id)] || [])" :key="bid.id || Math.random()">
+										<tr>
+											<td class="admin-cell-truncate" x-text="extractBidValue(bid, 'bidder_id') || '-' "></td>
+											<td x-text="'€' + formatCurrency(extractBidValue(bid, 'bid_amount'))"></td>
+											<td x-text="extractBidValue(bid, 'status') || '-' "></td>
+											<td x-text="formatDateTime(extractBidValue(bid, 'timestamp'))"></td>
+										</tr>
+									</template>
+									<tr x-show="(openAuctionBids[(auction.auction_id || auction.id)] || []).length === 0">
+										<td colspan="4">Nessuna offerta su questa asta aperta.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</details>
+				</template>
+				<p x-show="openOwnAuctions.length === 0">Non hai aste aperte al momento.</p>
+			</div>
+		</article>
+	</section>
+
+	<article>
+		<header class="admin-section-header">
+			<h3>Aste a Cui Hai Partecipato</h3>
+			<small x-text="participatedAuctions.length + ' aste'"></small>
+		</header>
+
+		<template x-if="loading.participations">
+			<p aria-busy="true">Caricamento partecipazioni...</p>
+		</template>
+
+		<div class="admin-table-wrap" x-show="!loading.participations">
+			<table>
+				<thead>
+					<tr>
+						<th>ID Asta</th>
+						<th>Stato</th>
+						<th>Offerta Massima Tua</th>
+						<th>Fine Asta</th>
+						<th>Dettaglio</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template x-for="auction in participatedAuctions" :key="auction.auction_id || auction.id">
+						<tr>
+							<td class="admin-cell-truncate" x-text="auction.auction_id || auction.id"></td>
+							<td>
+								<span class="badge" :class="(auction.status || '').toLowerCase() === 'active' ? 'badge-active' : 'badge-inactive'" x-text="auction.status || '-' "></span>
+							</td>
+							<td x-text="'€' + formatCurrency(maxUserBidByAuction[auction.auction_id || auction.id] || 0)"></td>
+							<td x-text="formatDateTime(auction.end_time)"></td>
+							<td>
+								<a :href="'/auction/' + (auction.auction_id || auction.id)">Apri Asta</a>
+							</td>
+						</tr>
+					</template>
+					<tr x-show="participatedAuctions.length === 0">
+						<td colspan="5">Non hai ancora partecipato ad alcuna asta.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</article>
+</section>
+{% endblock %}

@@ -16,6 +16,7 @@ api_auctions = Blueprint("api_auctions", __name__)
 
 # TODO: Usare jsend_response in tutte le risposte, anche quelle di errore, per mantenere coerenza nell'API
 
+
 @api_auctions.route("/auctions", methods=["POST"])
 @jwt_required()
 def create_auction():

@@ -8,6 +8,7 @@ document.addEventListener("alpine:init", () => {
 				localStorage.getItem("Authorization") ||
 				sessionStorage.getItem("Authorization");
 			this.isLoggedIn = !!token;
+			// Se è autenticato, verifica se è un venditore
 		},
 
 		async logout() {

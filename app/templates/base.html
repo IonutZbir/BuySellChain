@@ -1,191 +1,139 @@
 <!doctype html>
 <html lang="it">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{% block title %}BuySellChain{% endblock %}</title>
 
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="{{ url_for('static', filename='favicons/favicon-16x16.png') }}"
-		/>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{% block title %}BuySellChain{% endblock %}</title>
 
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="{{ url_for('static', filename='favicons/apple-touch-icon.png') }}"
-		/>
+	<link rel="icon" type="image/png" sizes="32x32"
+		href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}" />
+	<link rel="icon" type="image/png" sizes="16x16"
+		href="{{ url_for('static', filename='favicons/favicon-16x16.png') }}" />
 
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="192x192"
-			href="{{ url_for('static', filename='favicons/android-chrome-192x192.png') }}"
-		/>
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="{{ url_for('static', filename='favicons/apple-touch-icon.png') }}" />
 
-		<link
-			rel="shortcut icon"
-			href="{{ url_for('static', filename='favicons/favicon.ico') }}"
-		/>
+	<link rel="icon" type="image/png" sizes="192x192"
+		href="{{ url_for('static', filename='favicons/android-chrome-192x192.png') }}" />
 
-		<script
-			defer
-			src="{{ url_for('static', filename='js/nav.js') }}"
-		></script>
-		{% block scripts %} {% endblock %}
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicons/favicon.ico') }}" />
 
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
-		/>
+	<script defer src="{{ url_for('static', filename='js/nav.js') }}"></script>
+	{% block scripts %} {% endblock %}
 
-		<link
-			rel="stylesheet"
-			href="{{ url_for('static', filename='css/style.css') }}"
-		/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
 
-		<script
-			defer
-			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-		></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 
-		<script
-			src="https://kit.fontawesome.com/7c5beba676.js"
-			crossorigin="anonymous"
-		></script>
-	</head>
-	<body>
-		<nav class="navbar-custom" x-data="navHandler">
-			<div
-				class="container-fluid"
-				style="
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+	<script src="https://kit.fontawesome.com/7c5beba676.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<nav class="navbar-custom" x-data="navHandler">
+		<div class="container-fluid" style="
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-				"
-			>
-				<a href="/" class="brand-container">
-					<i class="fas fa-link brand-logo"></i>
-					<strong class="brand-text">BuySellChain</strong>
-				</a>
+				">
+			<a href="/" class="brand-container">
+				<i class="fas fa-link brand-logo"></i>
+				<strong class="brand-text">BuySellChain</strong>
+			</a>
 
-				<ul class="nav-links">
-					<li><a href="/">Home</a></li>
+			<ul class="nav-links">
+				<li><a href="/">Home</a></li>
 
-					<template x-if="!isLoggedIn">
-						<li class="auth-buttons">
-							<a href="/login">Login</a>
-							<a href="/signin">Signin</a>
-						</li>
-					</template>
+				{% if not session.get('user_id') %}
+				<li class="auth-buttons">
+					<a href="/login">Login</a>
+					<a href="/signin">Signin</a>
+				</li>
+				{% else %}
+				<li class="user-menu">
+					{% if session.get('role') == 'seller' %}
+					<a href="{{ url_for('frontend.click_create_auction') }}" class="nav-item">Crea Asta</a>
+					{% endif %}
+					<a href="/dashboard" class="nav-item">Dashboard</a>
+					<a href="#" @click="logout()" class="nav-item logout-special">Logout</a>
+				</li>
+				{% endif %}
+				</template>
+			</ul>
+		</div>
+	</nav>
 
-					<template x-if="isLoggedIn">
-						<li class="user-menu">
-							<a href="/profile" class="nav-item">Profilo</a>
-							<a
-								href="{{ url_for('frontend.click_create_auction') }}"
-								class="nav-item"
-								>Crea Asta</a
-							>
-							<a
-								href="#"
-								@click="logout()"
-								class="nav-item logout-special"
-								>Logout</a
-							>
-						</li>
-					</template>
-				</ul>
-			</div>
-		</nav>
+	{%block hero %}{% endblock %}
 
-		{%block hero %}{% endblock %}
+	<main class="container-fluid">{% block content %}{% endblock %}</main>
+	<button class="theme-toggle" @click="toggleTheme()"
+		x-data="{ toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark') } }">
+		<i class="fas fa-moon"></i>
+	</button>
 
-		<main class="container">{% block content %}{% endblock %}</main>
-		<button
-			class="theme-toggle"
-			@click="toggleTheme()"
-			x-data="{ toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark') } }"
-		>
-			<i class="fas fa-moon"></i>
-		</button>
-
-		<footer class="custom-footer" x-data="navHandler">
-			<div class="container">
-				<div class="grid">
-					<section>
-						<hgroup>
-							<h5 class="brand-title">BuySellChain</h5>
-							<p>L'asta del futuro, sulla blockchain.</p>
-						</hgroup>
-						<div class="status-badge">
-							<span class="dot"></span> Network Live
-						</div>
-					</section>
-
-					<section>
-						<h6>Esplora</h6>
-						<ul class="footer-links">
-							<li><a href="/">Home</a></li>
-							<template x-if="isLoggedIn">
-								<li><a href="/profile">Il mio Profilo</a></li>
-							</template>
-							<li><a href="/faq">Come funziona</a></li>
-						</ul>
-					</section>
-
-					<section>
-						<h6>Supporto</h6>
-						<ul class="footer-links">
-							<li>
-								<a href="mailto:support@buysellchain.com"
-									>Assistenza</a
-								>
-							</li>
-							<li><a href="/privacy">Privacy Policy</a></li>
-						</ul>
-					</section>
-				</div>
-
-				<hr />
-
-				<div class="footer-bottom">
-					<div class="social-placeholder">
-						<span>
-							Sviluppato da
-							<strong>Zbirciog Ionut Georgian</strong> &
-							<strong>Salvucci Franco</strong>
-						</span>
-						<div class="social-links">
-							<a
-								href="https://github.com/IonutZbir"
-								title="GitHub Zbirciog Ionut Georgian"
-							>
-								<i class="fab fa-github"></i>
-							</a>
-							<a
-								href="https://github.com/francosalvucci14"
-								title="GitHub Salvucci Franco"
-							>
-								<i class="fab fa-github"></i>
-							</a>
-						</div>
+	<footer class="custom-footer" x-data="navHandler">
+		<div class="container">
+			<div class="grid">
+				<section>
+					<hgroup>
+						<h5 class="brand-title">BuySellChain</h5>
+						<p>L'asta del futuro, sulla blockchain.</p>
+					</hgroup>
+					<div class="status-badge">
+						<span class="dot"></span> Network Live
 					</div>
+				</section>
 
-					<small>
-						&copy; 2026 BuySellChain •
-						<mark>Progetto Blockchain</mark>
-					</small>
-				</div>
+				<section>
+					<h6>Esplora</h6>
+					<ul class="footer-links">
+						<li><a href="/">Home</a></li>
+						<template x-if="isLoggedIn">
+							<li><a href="/dashboard">Dashboard</a></li>
+						</template>
+						<li><a href="/faq">Come funziona</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h6>Supporto</h6>
+					<ul class="footer-links">
+						<li>
+							<a href="mailto:support@buysellchain.com">Assistenza</a>
+						</li>
+						<li><a href="/privacy">Privacy Policy</a></li>
+					</ul>
+				</section>
 			</div>
-		</footer>
-	</body>
+
+			<hr />
+
+			<div class="footer-bottom">
+				<div class="social-placeholder">
+					<span>
+						Sviluppato da
+						<strong>Zbirciog Ionut Georgian</strong> &
+						<strong>Salvucci Franco</strong>
+					</span>
+					<div class="social-links">
+						<a href="https://github.com/IonutZbir" title="GitHub Zbirciog Ionut Georgian">
+							<i class="fab fa-github"></i>
+						</a>
+						<a href="https://github.com/francosalvucci14" title="GitHub Salvucci Franco">
+							<i class="fab fa-github"></i>
+						</a>
+					</div>
+				</div>
+
+				<small>
+					&copy; 2026 BuySellChain •
+					<mark>Progetto Blockchain</mark>
+				</small>
+			</div>
+		</div>
+	</footer>
+</body>
+
 </html>

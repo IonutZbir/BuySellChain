@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin - BuySellChain{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="container admin-dashboard" x-data="adminDashboard" x-init="init()">
+	<header class="admin-dashboard-header">
+		<hgroup>
+			<h1>Dashboard Amministratore</h1>
+			<p>Panoramica aste, utenti e attività di sistema in tempo reale.</p>
+		</hgroup>
+		<button type="button" class="secondary" @click="refreshAll()" :aria-busy="globalLoading">Aggiorna dati</button>
+	</header>
+
+	<template x-if="errorMessage">
+		<article class="admin-error-banner">
+			<strong>Errore:</strong> <span x-text="errorMessage"></span>
+		</article>
+	</template>
+
+	<section class="admin-stats-grid">
+		<article class="admin-stat-card">
+			<small>Aste totali</small>
+			<h3 x-text="stats.total_auctions ?? 0"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Aste attive</small>
+			<h3 x-text="stats.active_auctions ?? 0"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Utenti registrati</small>
+			<h3 x-text="stats.total_users ?? 0"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Offerte registrate</small>
+			<h3 x-text="stats.total_bids ?? 0"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Asset registrati</small>
+			<h3 x-text="stats.total_assets ?? 0"></h3>
+		</article>
+		<article class="admin-stat-card">
+			<small>Volume transato</small>
+			<h3>€<span x-text="formatCurrency(stats.total_volume)"></span></h3>
+		</article>
+	</section>
+
+	<section class="admin-dashboard-grid">
+		<article>
+			<header class="admin-section-header">
+				<h3>Ultime Aste</h3>
+				<small x-text="auctions.length + ' record'">0 record</small>
+			</header>
+
+			<template x-if="loading.auctions">
+				<p aria-busy="true">Caricamento aste...</p>
+			</template>
+
+			<div class="admin-table-wrap" x-show="!loading.auctions">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Seller</th>
+							<th>Stato</th>
+							<th>Fine</th>
+							<th>Offerte</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template x-for="auction in auctions" :key="auction.id">
+							<tr>
+								<td class="admin-cell-truncate" x-text="auction.id"></td>
+								<td class="admin-cell-truncate" x-text="auction.seller_id"></td>
+								<td>
+									<span class="badge" :class="auction.status === 'active' ? 'badge-active' : 'badge-inactive'" x-text="auction.status"></span>
+								</td>
+								<td x-text="formatDateTime(auction.end_time)"></td>
+								<td x-text="auction.bid_count ?? 0"></td>
+							</tr>
+						</template>
+						<tr x-show="auctions.length === 0">
+							<td colspan="5">Nessuna asta trovata.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</article>
+
+		<article>
+			<header class="admin-section-header">
+				<h3>Utenti</h3>
+				<small x-text="users.length + ' utenti'">0 utenti</small>
+			</header>
+
+			<template x-if="loading.users">
+				<p aria-busy="true">Caricamento utenti...</p>
+			</template>
+
+			<div class="admin-table-wrap" x-show="!loading.users">
+				<table>
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Email</th>
+							<th>Ruolo</th>
+							<th>Creato il</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template x-for="user in users" :key="user.id">
+							<tr>
+								<td x-text="(user.name || '') + ' ' + (user.surname || '')"></td>
+								<td class="admin-cell-truncate" x-text="user.email"></td>
+								<td><mark x-text="user.role"></mark></td>
+								<td x-text="formatDateTime(user.created_at)"></td>
+							</tr>
+						</template>
+						<tr x-show="users.length === 0">
+							<td colspan="4">Nessun utente trovato.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</section>
+
+	<article>
+		<header class="admin-section-header">
+			<h3>Log Applicazione</h3>
+			<small x-text="logs.length + ' righe'">0 righe</small>
+		</header>
+
+		<template x-if="loading.logs">
+			<p aria-busy="true">Caricamento log...</p>
+		</template>
+
+		<div class="admin-logs" x-show="!loading.logs">
+			<template x-for="entry in logs" :key="entry.id">
+				<code x-text="entry.message"></code>
+			</template>
+			<p x-show="logs.length === 0">Nessun log disponibile.</p>
+		</div>
+	</article>
+</section>
+{% endblock %}

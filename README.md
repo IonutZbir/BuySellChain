@@ -43,6 +43,13 @@ Per cancellare tutto, sia container che dati: `docker-compose down -v`
 
 Quando si deve fare una migrazione, in locale eseguire i passaggi precedenti, poi lanciare il docker con PSQL, ci penserà poi python ad aggiorane la struttura del db.
 
+## Generazione chiavi segrete
+
+```python
+import secrets
+sk = secrets.token_hex(32)
+```
+
 ## Note
 
 post registrazione, email di conferma
@@ -109,7 +116,7 @@ lavorare ancora su bid, anche con jwt
 - Frontend:
 * modifica pagina "partecipa ad asta"
 
-TODO prossimo aggiornamento, fare asta attiva per un tot di ore (es: 8.00 - 20.00), poi da fine a inizio asta in stato locked -> stato lock = blocco invio offerte e calcolo e visualiazzione high_bid_amount (parziale)
+TODO: prossimo aggiornamento, fare asta attiva per un tot di ore (es: 8.00 - 20.00), poi da fine a inizio asta in stato locked -> stato lock = blocco invio offerte e calcolo e visualiazzione high_bid_amount (parziale)
 
 ## Modifiche fatte il giorno 11/03/2026 - Ionut
 
@@ -119,3 +126,12 @@ TODO prossimo aggiornamento, fare asta attiva per un tot di ore (es: 8.00 - 20.0
 TODO: Se il token jwt è expired gestire errore e rimandare al frontend.
 TODO: Generare le chiavi in modo sicuro.
 TODO: Finire le aste, aggiungere il lock temporale
+
+## Modifiche fatte il giorno 14/03/2026 - Ionut
+
+- Frontend: L'unico dettaglio temporale che il venditore puo definire è l'inizio e la fine dell'asta. Nella pagina di creazione asta, ho aggiunto quell'aside nel quale scrivere le informazioni su come funziona l'asta e la sua durata.
+- Backend: Quando viene effettuata una bid, viene effettuato un controllo per verificare se l'offerta è stata effettuata entro le 8 (n) ore a disposizione. Le ore le ho definite in una costante. Aggiunta una route in api_bids `get_allowed_bid_timeframe` per poter creare un timer da frontend nella pagina dell'asta. Inoltre ora il bottone per inviare offerte è renderizzato solo se bidderId != sellerId
+- Creata pagina dashboard per l'admin, per ora per creare un admin lo si fa direttamente da psql.
+- Dashboard utente "seller" e "bidder"
+
+TODO: Fare un ultimo check per assigurarci che tutto funziona come dovrebbe funzionare. Rivedere alcuni dettagli a livello frontend. Creare una routine che aggiorna automaticamente lo stato delle aste sulla blockchain.

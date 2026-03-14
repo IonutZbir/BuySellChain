@@ -5,12 +5,8 @@
 {% endblock %} 
 
 {% block content %}
-<main class="container">
-    <div x-data="auctionManager">
-        
-        <div x-show="loading" class="container" style="text-align: center; padding: 50px;">
-            <article aria-busy="true">Caricamento in corso dei tuoi asset...</article>
-        </div>
+<main class="container create-auction-layout">
+    <div x-data="auctionManager" class="create-auction-main">
 
         <div x-show="hasAssets && !loading && !showAssetForm" x-transition>
             <article>
@@ -27,11 +23,11 @@
                         <div class="grid">
                             <label>
                                 Inizio Asta
-                                <input type="datetime-local" required x-model="startTime" @input="message = ''" />
+                                <input type="date" required x-model="startTime" @input="message = ''" />
                             </label>
                             <label>
                                 Fine Asta
-                                <input type="datetime-local" required x-model="endTime" @input="message = ''" />
+                                <input type="date" required x-model="endTime" @input="message = ''" />
                             </label>
                         </div>
                     </fieldset>
@@ -143,5 +139,21 @@
             </article>
         </div>
     </div>
+    <aside class="create-auction-help">
+        <div class="create-auction-help-card">
+            <h3>Come funziona l'asta?</h3>
+            <ul class="create-auction-help-list">
+                <li>Definisci le date di inizio e fine dell'asta.</li>
+                <li>Stabilisci il prezzo base e il rilancio minimo.</li>
+                <li>Seleziona l'asset da mettere all'asta o creane uno nuovo.</li>
+                <li>Gli utenti potranno fare offerte fino alla scadenza.</li>
+                <li>L'asta si aggiudica al miglior offerente.</li>
+            </ul>
+            <p class="create-auction-help-note">
+                Ricorda: puoi gestire le tue aste dalla dashboard personale.<br>
+                Per assistenza, consulta la <a href="/faq" class="secondary">Guida</a>.
+            </p>
+        </div>
+    </aside>
 </main>
 {% endblock %}

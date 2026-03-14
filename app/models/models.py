@@ -16,16 +16,19 @@ class UserRoles(enum.Enum):
     SELLER = "seller"
     BIDDER = "bidder"
 
+
 class AuctionStatus(enum.Enum):
-    LOCKED = "locked" #per validazione delle offerte, quando è LOCKED non si possono più fare offerte, e si aspetta che venga aggiornata a CLOSED o CANCELLED
+    LOCKED = "locked"  # per validazione delle offerte, quando è LOCKED non si possono più fare offerte, e si aspetta che venga aggiornata a CLOSED o CANCELLED
     ACTIVE = "active"
     CLOSED = "closed"
-    CANCELLED = "cancelled" #asta cancellata, non più attiva, ma non conclusa (es: venditore ritira l'asta prima della scadenza, oppure asta chiusa senza vincitori, ecc)
+    CANCELLED = "cancelled"  # asta cancellata, non più attiva, ma non conclusa (es: venditore ritira l'asta prima della scadenza, oppure asta chiusa senza vincitori, ecc)
+
 
 class BidStatus(enum.Enum):
     PENDING = "pending"
     ACCEPTED = "accepted"
     REJECTED = "rejected"
+
 
 class AssetType(enum.Enum):
     VILLA = "villa"
@@ -98,11 +101,14 @@ class User(db.Model):
         super().__init__(**kwargs)
         # Genera un blockChainId unico per l'utente, usando email + uuid4
         unique_string = f"{self.email}-{uuid4()}"
-        self.blockChainId = hmac.new(os.getenv("HMAC_SECRET_KEY").encode(), unique_string.encode(), sha256).hexdigest()
+        self.blockChainId = hmac.new(
+            os.getenv("HMAC_SECRET_KEY").encode(), unique_string.encode(), sha256
+        ).hexdigest()
 
 
 class Auction:
     """Classe che rappresenta un'asta memorizzata nella blockchain"""
+
     def __init__(
         self,
         asset_id: str,
@@ -110,10 +116,11 @@ class Auction:
         start_time: datetime,
         end_time: datetime,
         starting_price: float,
-        min_incr: float
-
+        min_incr: float,
     ):
-        self.id = self._generate_id(asset_id, seller_id, start_time, end_time, starting_price, min_incr)
+        self.id = self._generate_id(
+            asset_id, seller_id, start_time, end_time, starting_price, min_incr
+        )
         self.asset_id = asset_id
         self.seller_id = seller_id
         self.start_time = start_time
@@ -135,13 +142,15 @@ class Auction:
         min_incr: float,
     ) -> str:
         combined_string = f"{asset_id}-{seller_id}-{start_time.isoformat()}-{end_time.isoformat()}-{starting_price}-{min_incr}-{uuid4()}"
-        
+
         print(f"Generating auction ID with combined string: {combined_string}")  # Debug print
-        return hmac.new(os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256).hexdigest()
+        return hmac.new(
+            os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256
+        ).hexdigest()
 
     def get_id(self) -> str:
         return self.id
-    
+
     def __repr__(self) -> str:
         return f"Auction(id={self.id}, asset_id={self.asset_id}, seller_id={self.seller_id}, status={self.status.value})"
 
@@ -159,15 +168,18 @@ class Auction:
             "bid_count": self.bid_count,
             "status": self.status.value,
         }
+
+
 class Bid:
     """Classe che rappresenta un'offerta (bid) memorizzata nella blockchain"""
+
     def __init__(
         self,
         auction_id: str,
         bidder_id: str,
         bid_amount: float,
         status: BidStatus = BidStatus.PENDING,
-        reason: str = None
+        reason: str = None,
     ):
         self.id = self._generate_id(auction_id, bidder_id, bid_amount, status, reason)
         self.auction_id = auction_id
@@ -183,15 +195,17 @@ class Bid:
         bidder_id: str,
         bid_amount: float,
         status: BidStatus,
-        reason: str = None
+        reason: str = None,
     ) -> str:
-        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{status}-{reason if reason else 'None'}-{uuid4()}" 
+        combined_string = f"{auction_id}-{bidder_id}-{bid_amount}-{status}-{reason if reason else 'None'}-{uuid4()}"
         print(f"Generating bid ID with combined string: {combined_string}")  # Debug print
-        return hmac.new(os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256).hexdigest()
+        return hmac.new(
+            os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256
+        ).hexdigest()
 
     def get_id(self) -> str:
         return self.id
-    
+
     def __repr__(self) -> str:
         return f"Bid(id={self.id}, auction_id={self.auction_id}, bidder_id={self.bidder_id}, bid_amount={self.bid_amount})"
 
@@ -205,6 +219,8 @@ class Bid:
             "status": self.status,
             "reason": self.reason,
         }
+
+
 class Asset:
     """Classe che rappresenta un asset memorizzato nella blockchain"""
 
@@ -217,7 +233,7 @@ class Asset:
         size: float,
         price: float,
         location: str,
-        picture=None
+        picture=None,
     ):
         self.id = self._generate_id(owner_id, title, description, asset_type, size, price, location)
         self.owner_id = owner_id
@@ -231,7 +247,7 @@ class Asset:
         self.status = AssetStatus.ACTIVE
         self.current_auction_id = None
         self.picture = picture
-        
+
     def _generate_id(
         self,
         owner_id: str,
@@ -242,9 +258,11 @@ class Asset:
         price: float,
         location: str,
     ) -> str:
-        combined_string = f"{owner_id}-{title}-{description}-{asset_type.value}-{size}-{price}-{location}-{uuid4()}" 
+        combined_string = f"{owner_id}-{title}-{description}-{asset_type.value}-{size}-{price}-{location}-{uuid4()}"
         print(f"Generating asset ID with combined string: {combined_string}")  # Debug print
-        return hmac.new(os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256).hexdigest()
+        return hmac.new(
+            os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256
+        ).hexdigest()
 
     def get_id(self) -> str:
         return self.id

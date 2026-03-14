@@ -5,7 +5,7 @@ endblock %}
 {% endblock %} 
 {% block content %}
 
-<section x-data="bidForm('{{ auction_data.auction_id }}')">
+<section x-data="bidForm('{{ auction_data.auction_id }}')" class="container">
 	<article class="auction-detail">
 		<div class="grid">
 			<div>
@@ -18,6 +18,13 @@ endblock %}
 						border: 1px solid var(--muted-border-color);
 					"
 				/>
+
+				<div class="create-auction-timer-card" data-window-start-hour="8" data-window-end-hour="22" style="margin-top: 1rem;">
+					<h4>Timer Offerte</h4>
+					<p id="bidWindowStatus" class="create-auction-timer-status"></p>
+					<p id="bidWindowCountdown" class="create-auction-timer-value">--:--:--</p>
+					<small class="create-auction-timer-hint"></small>
+	        		</div>
 			</div>
 
 			<div>
@@ -31,7 +38,7 @@ endblock %}
 
 				<hgroup>
 					<h1>{{ auction_data.asset_title }}</h1>
-					<!-- <p>Codice Asta: #{{ auction_data.auction_id }}</p> -->
+					<p>Codice Asta: #{{ auction_data.auction_id }}</p>
 				</hgroup>
 
 				<div
@@ -77,7 +84,7 @@ endblock %}
 
 				<hr />
 				<form @submit.prevent="make_bid()">
-					{% if auction_data.status == 'active' %}
+					{% if auction_data.status == 'active' and not is_owner %}
 					<label for="bid_amount"
 						>La tua offerta</label
 					>
@@ -93,6 +100,17 @@ endblock %}
 					
 						<button type="submit">Invia Offerta</button>
 					</fieldset>
+					{% elif auction_data.status == 'active' and is_owner %}
+					<p
+						style="
+							padding: 1rem;
+							background: var(--card-sectionning-background);
+							border-radius: var(--border-radius);
+							text-align: center;
+						"
+					>
+						Sei il proprietario di questa asta: non puoi inserire offerte.
+					</p>
 					{% else %}
 					<p
 						style="

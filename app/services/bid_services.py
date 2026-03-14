@@ -1,4 +1,4 @@
-
+import datetime
 from typing import List, Dict, Any
 
 from flask import current_app
@@ -9,6 +9,8 @@ from app.services.auction_services import AuctionService
 
 class BidService:
     BID_CLASS = "Bids"
+    BID_ALLOWED_TIME_START = datetime.time(9, 0)  # 9 AM
+    BID_ALLOWED_TIME_END = datetime.time(21, 0)   # 9 PM
 
     """Service for managing bid operations"""
 
@@ -46,7 +48,6 @@ class BidService:
         
         return {"success": True, "validate_success": validate_result.get("success"), "Bid_status": validate_result.get("bid_status"), "Bid_status_reason": validate_result.get("error") if not validate_result.get("success") else None} 
 
-
     def _validate_bid(auction_id: str, bidder_id: str, amount: float) -> Dict[str, Any]:
         """Validate a bid for an auction.
         Performs validation checks on a bid submission to ensure:
@@ -54,6 +55,7 @@ class BidService:
         - Bidder is not the auction seller
         - Bid amount meets minimum increment requirement
         - Bid amount exceeds the previous highest bid for that auction
+        - Current date is within the auction's start and end dates and respects the time range allowed for bids (e.g., bids allowed only from 9 AM to 9 PM)
 
         Args:
             auction_id (str): _id dell'asta a cui si vuole fare l'offerta
@@ -66,6 +68,7 @@ class BidService:
 
         bid_status = ""
         bid_status_reason = ""
+        current_time = datetime.datetime.now().time()
 
         auction_result = AuctionService.get_auction(auction_id)
         if not auction_result.get("success"):
@@ -73,7 +76,6 @@ class BidService:
             return {"success": False, "error": auction_result.get("error")}
 
         if auction_result.get("auction_data"):
-
             auction_data = auction_result.get("auction_data", {})
             if auction_data.get("status") != AuctionStatus.ACTIVE.value:
                 bid_status = BidStatus.REJECTED.value
@@ -83,6 +85,11 @@ class BidService:
                 bid_status = BidStatus.REJECTED.value
                 bid_status_reason = "Bidder cannot be the seller"
                 return {"success": False, "error": "Bidder cannot be the seller", "bid_status": bid_status, "bid_status_reason": bid_status_reason}
+            
+            if not (BidService.BID_ALLOWED_TIME_START <= current_time <= BidService.BID_ALLOWED_TIME_END):
+                bid_status = BidStatus.REJECTED.value
+                bid_status_reason = "Bid is not within the allowed time frame"
+                return {"success": False, "error": "Bid is not within the allowed time frame", "bid_status": bid_status, "bid_status_reason": bid_status_reason}
             
             min_incr = auction_data.get("min_incr", 0)
             
@@ -107,6 +114,15 @@ class BidService:
         current_app.logger.info("Bid validated successfully")
         return {"success": True, "bid_status": BidStatus.ACCEPTED.value}
 
+    def get_allowed_bid_timeframe() -> Dict[str, Any]:
+        """Get the allowed time frame for placing bids.
+
+        Returns:
+            Dict[str, Any]: {"success": bool, "allowed_time_start": str, "allowed_time_end": str} - success indicates if the operation was successful, allowed_time_start is the start time for placing bids (in HH:MM format), allowed_time_end is the end time for placing bids (in HH:MM format)
+        """
+        allowed_time_start = BidService.BID_ALLOWED_TIME_START.strftime("%H:%M")
+        allowed_time_end = BidService.BID_ALLOWED_TIME_END.strftime("%H:%M")
+        return {"success": True, "allowed_time_start": allowed_time_start, "allowed_time_end": allowed_time_end}
 
     def list_all_bids() -> Dict[str, Any]:
         """List all bids"""
@@ -248,6 +264,7 @@ class BidService:
         auction_data = AuctionService.get_auction(auction_id)
         
         if auction_data.get("auction_data").get("seller_id") == bidderId:
+            current_app.logger.warning(f"Seller {bidderId} cannot be the bidder for auction {auction_id}")
             return {"success": False, "error": "Seller cannot be the bidder"}
         all_bids = BidService.list_bids_by_user(bidderId)
 

@@ -1,15 +1,16 @@
+import re
 from datetime import timedelta, datetime
-from flask import Blueprint, jsonify, request, current_app, session
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import create_access_token
-from app.models.models import User, UserRoles
-from app import bcrypt, db
 from sqlalchemy import select
 
-api_auth = Blueprint("api", __name__)
+from flask import Blueprint, jsonify, request, current_app, session
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
+
+from app.models.models import User, UserRoles
+from app import bcrypt, db
+
 from email_validator import validate_email, EmailNotValidError
-import re
+
+api_auth = Blueprint("api", __name__)
 
 
 def is_valid_phone(phone):
@@ -29,10 +30,6 @@ def signin():
     password = request.json.get("password", None)
     is_vendor = request.json.get("isVendor", False)
     tax_code = request.json.get("taxCode", None)
-
-    print(
-        f"{name=}, {surname=}, {email=}, {birthday=} {cellularNumber=}, {password=}, {is_vendor=}, {tax_code=}"
-    )
 
     # Validazione input
 
@@ -88,7 +85,7 @@ def signin():
                 jsonify({"status": "fail", "data": {"message": "Codice fiscale non valido"}}),
                 400,
             )
-    
+
     password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     if is_vendor:
@@ -147,6 +144,7 @@ def signin():
             "taxCode": None,
         }
 
+    current_app.logger.info(f"USER CREATED: {email=}, {user.blockChainId=}, {user.role=}")
     access_token = create_access_token(identity=user_data, additional_claims=additional_info)
 
     return jsonify({"status": "success", "data": {"authorization": access_token}}), 200
@@ -212,6 +210,11 @@ def login():
     access_token = create_access_token(
         identity=user_data, additional_claims=additional_info, expires_delta=expires
     )
+
+    current_app.logger.info(
+        f"USER LOGGED IN: {email=}, {user.blockChainId=}, {user.role=}, expires in {expires}"
+    )
+
     return jsonify({"status": "success", "data": {"authorization": access_token}}), 200
 
 
@@ -221,11 +224,3 @@ def logout():
     session.clear()
 
     return jsonify({"status": "success", "data": {"message": "Log out correttamente!"}}), 200
-
-
-@api_auth.route("/test", methods=["GET"])
-@jwt_required()
-def test():
-    current_user = get_jwt_identity()
-    current_app.logger.debug(current_user)
-    return jsonify(logged_in_as=current_user), 200
