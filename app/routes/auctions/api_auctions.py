@@ -2,13 +2,14 @@ import os
 from datetime import datetime
 import glob
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 
 from app.models.models import AuctionStatus
 from app.services.asset_services import AssetService
 from app.services.bid_services import BidService
 from app.services.auction_services import AuctionService
+from app.services.email_service import EmailService
 from app.services.jsend import jsend_response
 
 api_auctions = Blueprint("api_auctions", __name__)
@@ -16,7 +17,9 @@ api_auctions = Blueprint("api_auctions", __name__)
 
 # TODO: Usare jsend_response in tutte le risposte, anche quelle di errore, per mantenere coerenza nell'API
 
-
+# se startTime e endTime sono nel futuro, l'asta è in stato scheduled, 
+# se startTime è passato ma endTime è nel futuro, l'asta è active, 
+# se endTime è passato, l'asta è closed
 @api_auctions.route("/auctions", methods=["POST"])
 @jwt_required()
 def create_auction():
@@ -51,7 +54,7 @@ def create_auction():
                 jsonify({"error": "Minimum increment must be at least 10% of the starting price"}),
                 400,
             )
-        if endTime <= startTime:
+        if endTime < startTime:
             return jsonify({"error": "End time must be after start time"}), 400
     except (ValueError, TypeError):
         return jsonify({"error": "Invalid data types for auction fields"}), 400
@@ -93,7 +96,7 @@ def list_auctions():
             "bid_count": auction.get("bid_count"),
         }
 
-        if auction_data["status"] == AuctionStatus.ACTIVE.value:
+        if auction_data["status"] == AuctionStatus.ACTIVE.value or auction_data["status"] == AuctionStatus.SCHEDULED.value or auction_data["status"] == AuctionStatus.LOCKED.value:
             # Ottieni i dettagli dell'asset
             asset = AssetService.get_asset(auction.get("asset_id"))
             asset_data = asset.get("data", {}).get("value", {})
@@ -183,10 +186,39 @@ def get_bids_for_auction(auction_id):
         return jsend_response("fail", data={"error": result.get("error")}, code=404)
     return jsend_response("success", data={"bids": result.get("bids")})
 
+@api_auctions.route("/auctions/close/<string:auction_id>", methods=["POST"])
+def close_auction(auction_id):
+    # 1. Recupera tutte le offerte per trovare il vincitore
+    result_bids = BidService.get_all_bids_of_auction(auction_id)
+    bids_list = result_bids.get("bids", []) if result_bids and result_bids.get("success") else []
+    current_app.logger.debug(f"Bids for auction {auction_id}: {bids_list}")
+    # 2. Chiudi l'asta sulla blockchain
+    result = AuctionService.end_auction_get_winner(auction_id, bids_list)
+    
+    if not result or not result.get("success"):
+        return jsend_response("fail", data={"error": "Errore durante la chiusura dell'asta"}, code=500)
+    current_app.logger.debug(f"Winner of auction {auction_id}: {result.get('winner_id')}, Winning bid: {result.get('winning_amount')}")
+    
+    return jsend_response("success", code=200)
 
 @api_auctions.route("/auctions/lock/<string:auction_id>", methods=["POST"])
 def lock_auction(auction_id):
     result = AuctionService.set_locked(auction_id)
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    return jsend_response("success", code=200)
+
+@api_auctions.route("/auctions/active/<string:auction_id>", methods=["POST"])
+def activate_auction(auction_id):
+    result = AuctionService.set_active(auction_id)
+    if not result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    return jsend_response("success", code=200)
+
+@api_auctions.route("/auctions/test_mail", methods=["GET"])
+def test_mail():
+    # Simulazione dell'invio dell'email (sostituisci con la logica reale)
+    current_app.logger.info("Simulating email sending for test_mail endpoint")
+    # Qui potresti integrare un servizio di email reale come SendGrid, Amazon SES, etc.
+    EmailService.send_email_to_winner("test_winner_id", "test_auction_id", {"high_bid_id": "test_high_bid_id"})
     return jsend_response("success", code=200)

@@ -58,9 +58,9 @@ document.addEventListener("alpine:init", () => {
 
                 if (response.ok && payload?.status === "success") {
                     this.stats = payload?.data?.stats || {};
+                    console.log("Stats loaded:", this.stats);
                     return;
                 }
-
                 this.handleApiError(payload, "Impossibile caricare le statistiche.");
             } catch (error) {
                 this.errorMessage = "Errore nel caricamento delle statistiche.";

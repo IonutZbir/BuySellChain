@@ -195,6 +195,12 @@
 .badge-inactive {
 	background-color: var(--del-color);
 } /* Rosso Pico */
+.badge-scheduled {
+	background-color: #3C71F7/*#F2DF0D*/;
+} /* Giallo Pico */
+.badge-locked {
+	background-color: #303030;
+} /* Giallo Pico */
 
 /* Card Body */
 .card-body {

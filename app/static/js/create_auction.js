@@ -107,7 +107,9 @@ document.addEventListener("alpine:init", () => {
         async create_auction() {
             const token = sessionStorage.getItem("Authorization") || localStorage.getItem("Authorization");
             
+            // prendere solo il giorno mese anno, non tutto l'oggetto Date
             const now = new Date();
+            now.setHours(0, 0, 0, 0);
             const start = new Date(this.startTime);
             const end = new Date(this.endTime);
 
@@ -118,7 +120,7 @@ document.addEventListener("alpine:init", () => {
                 this.message = "Le date di inizio e fine devono essere nel futuro.";
                 
                 return;
-            }else if (start>=end){
+            }else if (start>end){
                 this.message = "La data di inizio deve essere precedente alla data di fine.";
                 return;
             }
@@ -156,6 +158,7 @@ document.addEventListener("alpine:init", () => {
                     this.message = "Errore nella creazione dell'asta";
                 }
             } catch (error) {
+                console.log(error)
                 this.message = "Errore: " + error.message;
             }
         }

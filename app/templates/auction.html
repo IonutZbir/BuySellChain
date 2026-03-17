@@ -19,7 +19,8 @@ endblock %}
 					"
 				/>
 
-				<div class="create-auction-timer-card" data-window-start-hour="8" data-window-end-hour="22" style="margin-top: 1rem;">
+				<!-- <div class="create-auction-timer-card" data-window-start-hour="8" data-window-end-hour="11" style="margin-top: 1rem;"> -->
+					<div class="create-auction-timer-card"  data-auction-id="{{ auction_data.auction_id }}" data-auction-status="{{ auction_data.status }}" data-auction-start="{{ auction_data.start_time }}" data-auction-end="{{ auction_data.end_time }}" style="margin-top: 1rem;">
 					<h4>Timer Offerte</h4>
 					<p id="bidWindowStatus" class="create-auction-timer-status"></p>
 					<p id="bidWindowCountdown" class="create-auction-timer-value">--:--:--</p>
@@ -31,6 +32,10 @@ endblock %}
 				<div style="margin-bottom: 1rem">
 					{% if auction_data.status == "active" %}
 					<span class="badge badge-active">Attiva</span>
+					{% elif auction_data.status == "scheduled" %}
+					<span class="badge badge-scheduled">Programmata</span>
+					{% elif auction_data.status == "locked" %}
+					<span class="badge badge-locked">Bloccata</span>
 					{% else %}
 					<span class="badge badge-inactive">Chiusa</span>
 					{% endif %}
@@ -50,6 +55,7 @@ endblock %}
 						margin: 1rem 0;
 					"
 				>
+				{%if not is_owner%}
 					<p>
 						<strong>Offerta Attuale:</strong>
 						<mark
@@ -64,6 +70,50 @@ endblock %}
 							
 						</mark>
 					</p>
+					{% else %}
+					<p>
+						<strong>Offerte Totali:</strong>
+						<mark
+							style="
+								font-size: 1.5rem;
+								font-weight: bold;
+								background: transparent;
+								color: var(--primary);
+							"
+						>
+							<span x-model="allBid" x-text="Number(allBid)"></span>
+							
+						</mark>
+					</p>
+					<p>
+						<strong>Offerte Rifiutate:</strong>
+						<mark
+							style="
+								font-size: 1.5rem;
+								font-weight: bold;
+								background: transparent;
+								color: var(--primary);
+							"
+						>
+							<span x-model="total_rejected_bids" x-text="Number(total_rejected_bids)"></span>
+							
+						</mark>
+					</p>
+					<p>
+						<strong>Offerte Valide:</strong>
+						<mark
+							style="
+								font-size: 1.5rem;
+								font-weight: bold;
+								background: transparent;
+								color: var(--primary);
+							"
+						>
+							<span x-model="total_valid_bids" x-text="Number(total_valid_bids)"></span>
+							
+						</mark>
+					</p>
+					{% endif %}
 					<small
 						>Prezzo partenza: €{{
 						"{:,.2f}".format(auction_data.starting_price) }} |
@@ -72,10 +122,18 @@ endblock %}
 				</div>
 
 				<div class="grid">
+					{% if auction_data.status == 'scheduled' %}
+					<p>
+						<strong>Inizio asta:</strong><br />{{
+						auction_data.start_time | datetimeformat}}
+					</p>
+					{% endif %}
 					<p>
 						<strong>Fine asta:</strong><br />{{
 						auction_data.end_time | datetimeformat}}
 					</p>
+					
+					
 					<p>
 						<strong>Offerta minima:</strong><br />€{{
 						auction_data.min_incr }}
@@ -100,7 +158,7 @@ endblock %}
 					
 						<button type="submit">Invia Offerta</button>
 					</fieldset>
-					{% elif auction_data.status == 'active' and is_owner %}
+					{% elif auction_data.status == 'active' and is_owner or auction_data.status == 'scheduled' and is_owner or auction_data.status == 'locked' and is_owner %}
 					<p
 						style="
 							padding: 1rem;
@@ -110,6 +168,28 @@ endblock %}
 						"
 					>
 						Sei il proprietario di questa asta: non puoi inserire offerte.
+					</p>
+					{% elif auction_data.status == 'scheduled' and not is_owner %}
+					<p
+						style="
+							padding: 1rem;
+							background: var(--card-sectionning-background);
+							border-radius: var(--border-radius);
+							text-align: center;
+						"
+					>
+						L'asta non è ancora iniziata.
+					</p>
+					{% elif auction_data.status == 'locked' and not is_owner %}
+					<p
+						style="
+							padding: 1rem;
+							background: var(--card-sectionning-background);
+							border-radius: var(--border-radius);
+							text-align: center;
+						"
+					>
+						È scaduta la finestra temporale in cui fare offerte.
 					</p>
 					{% else %}
 					<p
