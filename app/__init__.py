@@ -1,3 +1,5 @@
+from flask_mail import Mail
+
 from app.logging_config import setup_logging
 
 import os
@@ -73,6 +75,12 @@ def create_app():
     app.config["JWT_ALGORITHM"] = "HS256"
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
+    app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
 
     app.jinja_env.filters["datetimeformat"] = format_datetime
 
@@ -81,6 +89,8 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
     Migrate(app, db)
+    mail = Mail(app)
+    app.extensions['mail'] = mail  # Salva l'istanza di Mail nelle estensioni di Flask per poterla usare nei servizi
 
     # Blueprints
     from app.routes.admin.admin_asset.api_admin_asset import api_admin_asset

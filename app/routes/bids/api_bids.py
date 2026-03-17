@@ -71,6 +71,15 @@ def get_latest_bid_for_auction(auction_id):
 
     return jsend_response("success", data={"latest_bid": result.get("latest_bid")})
 
+@api_bids.route("/bids/total/<auction_id>", methods=["GET"])
+@jwt_required()
+def get_total_bids_for_auction(auction_id):
+    result = BidService.get_total_bids_for_auction(auction_id)
+
+    if not result.get("success"):
+        return jsend_response("error", message=result.get("error", "Errore del server"), code=500)
+
+    return jsend_response("success", data={"total_bids": result.get("total_bids"),"total_rejected_bids": result.get("total_rejected_bids"), "total_valid_bids": result.get("total_valid_bids")})
 
 @api_bids.route("/bids/allowed_timeframe", methods=["GET"])
 def get_allowed_bid_timeframe():

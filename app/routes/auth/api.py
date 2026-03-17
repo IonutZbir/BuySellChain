@@ -10,6 +10,8 @@ from app import bcrypt, db
 
 from email_validator import validate_email, EmailNotValidError
 
+from app.services.email_service import EmailService
+
 api_auth = Blueprint("api", __name__)
 
 
@@ -99,6 +101,8 @@ def signin():
             codiceFiscale=tax_code,
             role=UserRoles.SELLER,
         )
+        EmailService.send_email_to_admin()
+        current_app.logger.warning(f"New vendor registered: {email=}, {user.blockChainId=}, {user.role=}")
     else:
         user = User(
             name=name,

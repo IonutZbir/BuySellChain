@@ -84,10 +84,13 @@ def get_stats():
     active_auctions = 0
     closed_auctions = 0
 
+
+    # qua total_volume prende high_bid_amount, ma per tutta l'asta il valore è None, 
+    # viene aggiornato quando l'asta va in locked, funziona?
     if all_auctions_result.get("success"):
         for auction in all_auctions_result.get("auctions", []):
             value = auction.get("value", {})
-            total_volume += float(value.get("high_bid_amount") or 0)
+            total_volume += float(value.get("high_bid_amount") or 0) 
             status = (value.get("status") or "").lower()
             if status == "active":
                 active_auctions += 1

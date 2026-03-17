@@ -104,9 +104,19 @@
 							>Attiva</span
 						>
 						<span
-							x-show="auction.status !== 'active'"
+							x-show="auction.status === 'closed'"
 							class="badge badge-inactive"
 							>Chiusa</span
+						>
+						<span
+							x-show="auction.status === 'scheduled'"
+							class="badge badge-scheduled"
+							>Programmata</span
+						>
+						<span
+							x-show="auction.status === 'locked'"
+							class="badge badge-locked"
+							>Bloccata</span
 						>
 					</div>
 				</div>

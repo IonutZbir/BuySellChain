@@ -135,3 +135,17 @@ TODO: Finire le aste, aggiungere il lock temporale
 - Dashboard utente "seller" e "bidder"
 
 TODO: Fare un ultimo check per assigurarci che tutto funziona come dovrebbe funzionare. Rivedere alcuni dettagli a livello frontend. Creare una routine che aggiorna automaticamente lo stato delle aste sulla blockchain.
+
+## Modifiche fatte il giorno 17/03/2026 - Franco
+
+- Frontend: 
+    - modifiche grafiche alla pagina dell'asta in base a chi sta guardando (seller, bidder)
+    - modifiche alla dashboard
+- Backend:
+    - implementata logica di chiusura asta e ottenimento vincitore
+    - implementata logica per invio email al vincitore + email in fase di registrazione seller + creazione `email_service`
+    - implementata logica per impostare lo status dell'asta in base al tempo trascorso con aggiunta delle route `auctions/active/auction_id`, `auctions/lock/auction_id` e `auctions/close/auction_id`
+    - aggiunta della route `bids/total/auction_id` per recupero offerte totali di specifica asta
+
+Modifiche e sistemazione della gestione dei range temporali per asta
+TODO: fare check finale + routine aggiornamento status aste

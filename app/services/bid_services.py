@@ -9,8 +9,8 @@ from app.services.auction_services import AuctionService
 
 class BidService:
     BID_CLASS = "Bids"
-    BID_ALLOWED_TIME_START = datetime.time(9, 0)  # 9 AM
-    BID_ALLOWED_TIME_END = datetime.time(21, 0)   # 9 PM
+    BID_ALLOWED_TIME_START = datetime.time(15, 0)  # 2:48 PM
+    BID_ALLOWED_TIME_END = datetime.time(15, 30)   # 2:49 PM
 
     """Service for managing bid operations"""
 
@@ -55,7 +55,7 @@ class BidService:
         - Bidder is not the auction seller
         - Bid amount meets minimum increment requirement
         - Bid amount exceeds the previous highest bid for that auction
-        - Current date is within the auction's start and end dates and respects the time range allowed for bids (e.g., bids allowed only from 9 AM to 9 PM)
+        - Current date is within the auction's start and end dates and respects the time range allowed for bids (e.g., bids allowed only from 1 PM to 4 PM)
 
         Args:
             auction_id (str): _id dell'asta a cui si vuole fare l'offerta
@@ -280,4 +280,34 @@ class BidService:
         current_app.logger.info(f"Latest bid for auction {auction_id}: {latest_bid}")        
         
         return {"success": True, "latest_bid": latest_bid}
+    
+    def get_total_bids_for_auction(auction_id: str) -> Dict[str, Any]:
+        """get total number of bids for an auction
+
+        Args:
+            auction_id (str): _id dell'asta di cui si vuole recuperare il numero totale di offerte
+        """
         
+        total_bids = 0
+        total_rejected_bids = 0
+        total_valid_bids = 0
+        current_app.logger.debug(f"Getting total bids for auction_id: {auction_id}")
+        
+        all_bids = BidService.list_all_bids()
+        if not all_bids.get("success"):
+            return {"success": False, "error": all_bids.get("error")}
+        
+        for bid in all_bids.get("bids", []):
+            print(bid)
+            bid_data = bid.get("bid_data", {}).get("value", {})
+            if bid_data.get("auction_id") == auction_id:
+                total_bids += 1
+                if bid_data.get("status") == BidStatus.REJECTED.value:
+                    total_rejected_bids += 1
+                elif bid_data.get("status") == BidStatus.ACCEPTED.value:
+                    total_valid_bids += 1
+        current_app.logger.info(f"Total bids for auction {auction_id}: {total_bids}")
+        current_app.logger.info(f"Total rejected bids for auction {auction_id}: {total_rejected_bids}")
+        current_app.logger.info(f"Total valid bids for auction {auction_id}: {total_valid_bids}")
+
+        return {"success": True, "total_bids": total_bids, "total_rejected_bids": total_rejected_bids, "total_valid_bids": total_valid_bids}

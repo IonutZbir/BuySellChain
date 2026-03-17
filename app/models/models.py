@@ -22,6 +22,7 @@ class AuctionStatus(enum.Enum):
     ACTIVE = "active"
     CLOSED = "closed"
     CANCELLED = "cancelled"  # asta cancellata, non più attiva, ma non conclusa (es: venditore ritira l'asta prima della scadenza, oppure asta chiusa senza vincitori, ecc)
+    SCHEDULED = "scheduled"  # asta programmata, con startTime nel futuro, non ancora attiva
 
 
 class BidStatus(enum.Enum):
@@ -117,6 +118,7 @@ class Auction:
         end_time: datetime,
         starting_price: float,
         min_incr: float,
+        status: AuctionStatus = AuctionStatus.ACTIVE,
     ):
         self.id = self._generate_id(
             asset_id, seller_id, start_time, end_time, starting_price, min_incr
@@ -130,7 +132,7 @@ class Auction:
         self.high_bid_id = None
         self.high_bid_amount = None
         self.bid_count = 0
-        self.status = AuctionStatus.ACTIVE
+        self.status = status
 
     def _generate_id(
         self,
@@ -152,7 +154,7 @@ class Auction:
         return self.id
 
     def __repr__(self) -> str:
-        return f"Auction(id={self.id}, asset_id={self.asset_id}, seller_id={self.seller_id}, status={self.status.value})"
+        return f"Auction(id={self.id}, asset_id={self.asset_id}, seller_id={self.seller_id}, status={self.status})"
 
     def to_json(self) -> dict:
         return {
@@ -166,7 +168,7 @@ class Auction:
             "high_bid_id": self.high_bid_id,
             "high_bid_amount": self.high_bid_amount,
             "bid_count": self.bid_count,
-            "status": self.status.value,
+            "status": self.status,
         }
 
 
