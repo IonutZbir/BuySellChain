@@ -156,4 +156,4 @@ Aggiunta tracciamento delle offerte (storico offerte con GetKeyHistory)
 Modifche ai layout pagina aste
 Modifiche lato backend alle api (bids, auctions)
 
-TODO : Aggiungere refresh pagine con polling
+TODO : Aggiungere refresh pagine con polling (lato backend?)
