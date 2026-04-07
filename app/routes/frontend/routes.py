@@ -149,4 +149,9 @@ def show_asta(auction_id):
 
     is_owner = bool(current_user_id and auction_data.get("seller_id") == current_user_id)
 
-    return render_template("auction.html", auction_data=auction_data, is_owner=is_owner)
+    return render_template(
+        "auction.html",
+        auction_data=auction_data,
+        is_owner=is_owner,
+        current_user_id=current_user_id,
+    )

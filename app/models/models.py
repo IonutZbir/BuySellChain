@@ -107,6 +107,15 @@ class User(db.Model):
             os.getenv("HMAC_SECRET_KEY").encode(), unique_string.encode(), sha256
         ).hexdigest()
 
+# DA CAPIRE COME IMPOSTARE L'ADMIN, SE CREARE UNA TABELLA A PARTE O GESTIRLO COME UN RUOLO DELL'UTENTE (ES: USER CON ROLE=ADMIN) --- IGNORE ---
+# class Admin(db.Model):
+#     __tablename__ = "admin"
+
+#     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+#     user_id: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+
+#     def __init__(self, user_id: str):
+#         self.user_id = user_id
 
 class Auction:
     """Classe che rappresenta un'asta memorizzata nella blockchain"""

@@ -149,3 +149,11 @@ TODO: Fare un ultimo check per assigurarci che tutto funziona come dovrebbe funz
 
 Modifiche e sistemazione della gestione dei range temporali per asta
 TODO: fare check finale + routine aggiornamento status aste
+
+## Modifiche fatte il giorno 02/04/2026 - Franco & Ionut
+
+Aggiunta tracciamento delle offerte (storico offerte con GetKeyHistory)
+Modifche ai layout pagina aste
+Modifiche lato backend alle api (bids, auctions)
+
+TODO : Aggiungere refresh pagine con polling (lato backend?)

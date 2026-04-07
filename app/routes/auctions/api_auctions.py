@@ -208,7 +208,9 @@ def close_auction(auction_id):
 
 @api_auctions.route("/auctions/lock/<string:auction_id>", methods=["POST"])
 def lock_auction(auction_id):
-    result = AuctionService.set_locked(auction_id)
+    result_bids = BidService.get_all_bids_of_auction(auction_id)
+    bids_list = result_bids.get("bids", []) if result_bids and result_bids.get("success") else []
+    result = AuctionService.set_locked(auction_id,bids_list)
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     return jsend_response("success", code=200)
@@ -219,3 +221,53 @@ def activate_auction(auction_id):
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     return jsend_response("success", code=200)
+<<<<<<< HEAD
+
+@api_auctions.route("/auctions/getAuctionHistory/<string:auction_id>", methods=["GET"])
+def get_auction_history(auction_id):
+    result_bids = BidService.get_all_bids_of_auction(auction_id)
+
+    if not result_bids:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    if not result_bids.get("success"):
+        return jsend_response("fail", data={"error": result_bids.get("error")}, code=404)
+    
+    bids_list = result_bids.get("bids", []) if result_bids and result_bids.get("success") else []
+    current_app.logger.debug(f"List of bids for auction {auction_id}: {bids_list}")
+    
+    
+    bids_history=[]
+
+    for bid in bids_list:
+        #bid["timestamp"] = BidService.get_bid_timestamp_txid(bid.get("id", "")).get("timestamp")
+        result = BidService.get_bid_timestamp_txid(bid.get("id", ""))
+        bidder_id = bid.get("bidder_id", "")
+
+        if not result.get("success"):
+            current_app.logger.warning(f"Could not retrieve timestamp for bid {bid.get('id', '')}: {result.get('error')}")
+            result["timestamp"] = "Unknown"
+            result["txid"] = "Unknown"
+            result["bid_id"] = bid.get("id", "")
+            result["bidder_id"] = bidder_id
+            result["bid_amount"] = bid.get("bid_amount", "Unknown")
+            result["reason"] = bid.get("reason", result.get("reason", "Unknown"))
+            result["status"] = bid.get("status", result.get("status", "Unknown"))
+        else:
+            result["bid_id"] = bid.get("id", "")
+            result["bidder_id"] = bidder_id or result.get("bidder", "")
+            result["bid_amount"] = bid.get("bid_amount", result.get("bid_amount", "Unknown"))
+            result["reason"] = bid.get("reason", result.get("reason", "Unknown"))
+            result["status"] = bid.get("status", result.get("status", "Unknown"))
+        result.pop("success", None) 
+        result.pop("bidder", None)
+        bids_history.append(result)
+    
+    current_app.logger.debug(f"Bids history for auction {auction_id}: {bids_history}")
+    
+
+    return jsend_response(
+        "success",
+        data=bids_history,
+    )
+=======
+>>>>>>> acd28da276670f67b9d903463669f6725adf4521

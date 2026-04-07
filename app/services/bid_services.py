@@ -6,11 +6,17 @@ from flask import current_app
 from app.models.models import Bid, AuctionStatus, BidStatus
 from app.services.guile_services import GuileService
 from app.services.auction_services import AuctionService
+import json
 
 class BidService:
     BID_CLASS = "Bids"
+<<<<<<< HEAD
+    BID_ALLOWED_TIME_START = datetime.time(9, 0)  # 1:00 PM
+    BID_ALLOWED_TIME_END = datetime.time(10, 5)   # 1:45 PM
+=======
     BID_ALLOWED_TIME_START = datetime.time(9, 0)
     BID_ALLOWED_TIME_END = datetime.time(11, 36)
+>>>>>>> acd28da276670f67b9d903463669f6725adf4521
 
     """Service for managing bid operations"""
 
@@ -309,3 +315,50 @@ class BidService:
         current_app.logger.info(f"Total valid bids for auction {auction_id}: {total_valid_bids}")
 
         return {"success": True, "total_bids": total_bids, "total_rejected_bids": total_rejected_bids, "total_valid_bids": total_valid_bids}
+    
+    def get_bid_timestamp_txid(bid_id: str):
+        """get the timestamp and txid of a bid
+
+        Args:
+            bid_id (str): _id dell'offerta di cui si vogliono recuperare timestamp e txid
+
+        Returns:
+            Dict[str, Any]: {"success": bool, "timestamp": str, "txid": str, "error": str} - success indica se l'operazione è andata a buon fine, timestamp è la data e ora in cui è stata fatta l'offerta (se success è True), txid è l'id della transazione associata all'offerta (se success è True), error è il messaggio di errore (se success è False)
+        """        
+        
+        current_app.logger.debug(f"Getting timestamp, txid, amount and bidder for bid_id: {bid_id}")
+        
+        result = GuileService.GetKeyHistory(Class=BidService.BID_CLASS, key=str(bid_id))
+        if "error" in result:
+            current_app.logger.error("Error: {}".format(result.get("error")))
+            return {"success": False, "error": result.get("error")}
+
+        if result.get("answer") is not False and result.get("answer"):
+            bid_data = result.get("answer", {})
+            dict = bid_data[0]
+            timestamp_raw = dict.get("timestamp")
+            # aggiungo 2 ore al timestamp per allinearlo all'orario italiano (Guile restituisce il timestamp in UTC)
+            # timestamp è stringa, il formato ha questo stile 2026-04-02T14:30:20.504612776Z
+            timestamp = None
+            if timestamp_raw:
+                timestamp_clean = timestamp_raw.rstrip("Z")
+                if "." in timestamp_clean:
+                    base, frac = timestamp_clean.split(".", 1)
+                    frac = (frac + "000000")[:6]  # Python gestisce microsecondi, non nanosecondi
+                    timestamp_dt = datetime.datetime.fromisoformat(f"{base}.{frac}")
+                else:
+                    timestamp_dt = datetime.datetime.fromisoformat(timestamp_clean)
+                timestamp = (timestamp_dt + datetime.timedelta(hours=2)).isoformat()
+            current_app.logger.debug(f"Raw timestamp: {timestamp_raw}, Cleaned timestamp: {timestamp_clean}, Final timestamp: {timestamp}")
+            
+            txid = dict.get("txId")
+            data = json.loads(dict.get("data", {})).get("value", {})
+            bidder = data.get("bidder_id", "")
+            bid_amount = data.get("bid_amount", 0)
+            reason = data.get("reason", "")
+            status = data.get("status", "")
+            current_app.logger.info(f"Timestamp for bid {bid_id}: {timestamp}, TxID: {txid}")
+            return {"success": True, "timestamp": timestamp, "txid": txid, "bidder": bidder, "bid_amount": bid_amount, "reason": reason, "status": status}
+
+        current_app.logger.warning(f"Bid not found for ID: {bid_id}")
+        return {"success": False, "error": "Bid not found"}

@@ -172,11 +172,12 @@ class AuctionService:
 
         return {"success": False, "error": "Auction not found"}
 
-    def set_locked(auction_id: str) -> bool:
+    def set_locked(auction_id: str, bids_list: list) -> bool:
         """_summary_
 
         Args:
             auction_id (str): id dell'asta da mettere in stato locked
+            bids_list (list): lista di offerte per l'asta
 
         Returns:
             bool: True se l'asta è stata aggiornata con successo, False altrimenti
@@ -193,6 +194,16 @@ class AuctionService:
         if result.get("answer") is not False and result.get("answer"):
             auction_data = result.get("answer", {}).get("value", {})
             auction_data["status"] = "locked"
+            # calcolo vincitore parziale
+            for bid in bids_list:
+                current_app.logger.debug(f"Evaluating bid: {bid} for auction {auction_id}")
+                if bid.get("auction_id") == auction_id:
+                    if auction_data.get("high_bid_amount") is None:
+                        auction_data["high_bid_amount"] = 0
+                    if bid.get("bid_amount", 0) > auction_data.get("high_bid_amount"):
+                        auction_data["high_bid_amount"] = bid.get("bid_amount", 0)
+                        auction_data["high_bid_id"] = bid.get("id")
+            
             result_update = GuileService.AddKV(
                 Class=AuctionService.AUCTION_CLASS, key=str(auction_id), value=auction_data
             )

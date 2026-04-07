@@ -5,8 +5,9 @@ endblock %}
 {% endblock %} 
 {% block content %}
 
-<section x-data="bidForm('{{ auction_data.auction_id }}')" class="container">
-	<article class="auction-detail">
+<section x-data="bidForm('{{ auction_data.auction_id }}')" data-current-user-id="{{ current_user_id }}" class="container auction-page-container">
+	<div class="auction-page-layout">
+	<article class="auction-detail auction-main-column">
 		<div class="grid">
 			<div>
 				<img
@@ -70,6 +71,23 @@ endblock %}
 							
 						</mark>
 					</p>
+					{% if auction_data.status == 'locked' %}
+					<p>
+						<strong>Offerta Massima Attuale:</strong>
+						<mark
+							style="
+								font-size: 1.5rem;
+								font-weight: bold;
+								background: transparent;
+								color: var(--primary);
+							"
+						>
+							<span>€{{
+						auction_data.high_bid_amount }}</span>
+							
+						</mark>
+					</p>
+					{% endif %}
 					{% else %}
 					<p>
 						<strong>Offerte Totali:</strong>
@@ -138,6 +156,7 @@ endblock %}
 						<strong>Offerta minima:</strong><br />€{{
 						auction_data.min_incr }}
 					</p>
+					
 				</div>
 
 				<hr />
@@ -214,5 +233,70 @@ endblock %}
 			<p>{{ auction_data.asset_description }}</p>
 		</footer>
 	</article>
+
+	<div class="auction-history-column">
+		<button
+			type="button"
+			@click="showHistory = !showHistory"
+			x-text="showHistory ? 'Nascondi storico offerte' : 'Mostra storico offerte'"
+		></button>
+
+		<aside
+			x-show="showHistory"
+			x-transition
+			class="auction-history"
+		>
+			<h3 class="auction-history-title">Storico Offerte</h3>
+			<ul x-show="history.length > 0" class="auction-history-list">
+				<template x-for="(item, index) in history" :key="item.bid_id || index">
+					<li
+						class="auction-history-item"
+						:class="{
+							'auction-history-item-own': String(item.bidder_id || '') === '{{ current_user_id }}',
+							'auction-history-item-rejected': String(item.status || '').toLowerCase() === 'rejected'
+						}"
+					>
+						<div class="auction-history-row">
+							<small>ID Offerta</small>
+							<span x-text="item.bid_id || '-' "></span>
+						</div>
+						
+						<div class="auction-history-row">
+							<small>Timestamp</small>
+							<span x-text="formatTimestamp(item.timestamp)"></span>
+						</div>
+						
+						<div class="auction-history-row">
+							<small>Importo Offerta</small>
+							<span x-text="item.bid_amount || '-' "></span>
+						</div>
+						<div
+							x-show="String(item.bidder_id || '') === '{{ current_user_id }}'"
+							class="auction-history-row"
+						>
+							<small>Status</small>
+							<span x-text="item.status || '-' "></span>
+						</div>
+						<div
+							x-show="String(item.bidder_id || '') === '{{ current_user_id }}'"
+							class="auction-history-row"
+						>
+							<small>Reason</small>
+							<span x-text="item.reason || '-' "></span>
+						</div>
+						<div class="auction-history-row">
+							<small>TXID</small>
+							<span class="auction-history-txid" x-text="item.txid || '-' "></span>
+						</div>
+					</li>
+				</template>
+			</ul>
+			<p x-show="history.length === 0" class="auction-history-empty">
+				Nessuna offerta presente nello storico.
+			</p>
+		</aside>
+	</div>
+	</div>
+	
 </section>
 {% endblock %}

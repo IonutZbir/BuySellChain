@@ -17,8 +17,6 @@ function auctionList() {
 
 				// fare funzione che prende immagini da cartelle su webserver, con nome corrispondente all'id dell'asta, e le aggiunge agli oggetti delle aste
 				//cicla su data.data, per ogni valore prendere il campo key di auction_Data
-				// console.log(res_data);
-				console.log("Aste recuperate:", res_data.data.auctions);
 				if (response.status === 200 && res_data.status === "success") {
 					this.auctions = res_data.data.auctions;
 				}
