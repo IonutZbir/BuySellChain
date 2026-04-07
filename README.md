@@ -199,6 +199,7 @@ Nuova sezione Profile visibile solo da utente loggato:
 
 Navbar: aggiunto link Profile accanto a Dashboard e Logout nel blocco utenti autenticati.
 Rotta frontend protetta: aggiunta pagina /profile accessibile solo con sessione attiva.
+
 Pagina profilo:
 - Nuovo template profile.html.
 - Nuovo script profile.js per caricamento/salvataggio dati.
@@ -206,5 +207,6 @@ Pagina profilo:
 API profilo sicure su PostgreSQL:
 - aggiunto GET /api/v1/auth/profile.
 - aggiunto PUT /api/v1/auth/profile.
+
 Query eseguite con SQLAlchemy (parameter-safe), con validazioni su email, telefono, data nascita, codice fiscale seller, unicità e whitelist campi aggiornabili.
 
