@@ -5,7 +5,7 @@ import glob
 from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 
-from app.models.models import AuctionStatus
+from app.models.models import AuctionStatus, BidStatus
 from app.services.asset_services import AssetService
 from app.services.bid_services import BidService
 from app.services.auction_services import AuctionService
@@ -221,10 +221,28 @@ def activate_auction(auction_id):
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
     return jsend_response("success", code=200)
-<<<<<<< HEAD
 
 @api_auctions.route("/auctions/getAuctionHistory/<string:auction_id>", methods=["GET"])
+@jwt_required()
 def get_auction_history(auction_id):
+    current_user = get_current_user()
+    current_user_id = current_user.get("id")
+
+    auction_result = AuctionService.get_auction(auction_id)
+    if not auction_result:
+        return jsend_response("fail", data={"error": "Errore del server"}, code=500)
+    if not auction_result.get("success"):
+        return jsend_response("fail", data={"error": auction_result.get("error")}, code=404)
+
+    auction_data = auction_result.get("auction_data", {})
+    auction_status = str(auction_data.get("status", "")).lower()
+    seller_id = auction_data.get("seller_id")
+    is_owner = current_user_id == seller_id
+    is_public_history = auction_status in {
+        AuctionStatus.LOCKED.value,
+        AuctionStatus.CLOSED.value,
+    }
+
     result_bids = BidService.get_all_bids_of_auction(auction_id)
 
     if not result_bids:
@@ -233,12 +251,25 @@ def get_auction_history(auction_id):
         return jsend_response("fail", data={"error": result_bids.get("error")}, code=404)
     
     bids_list = result_bids.get("bids", []) if result_bids and result_bids.get("success") else []
+    if is_owner:
+        visible_bids = bids_list
+    elif is_public_history:
+        visible_bids = [
+            bid for bid in bids_list
+            if str(bid.get("status", "")).lower() != BidStatus.REJECTED.value
+        ]
+    else:
+        visible_bids = [
+            bid for bid in bids_list
+            if str(bid.get("bidder_id", "")) == str(current_user_id)
+        ]
+
     current_app.logger.debug(f"List of bids for auction {auction_id}: {bids_list}")
     
     
     bids_history=[]
 
-    for bid in bids_list:
+    for bid in visible_bids:
         #bid["timestamp"] = BidService.get_bid_timestamp_txid(bid.get("id", "")).get("timestamp")
         result = BidService.get_bid_timestamp_txid(bid.get("id", ""))
         bidder_id = bid.get("bidder_id", "")
@@ -267,7 +298,5 @@ def get_auction_history(auction_id):
 
     return jsend_response(
         "success",
-        data=bids_history,
+        data={"history": bids_history},
     )
-=======
->>>>>>> acd28da276670f67b9d903463669f6725adf4521

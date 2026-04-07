@@ -94,6 +94,28 @@
 	width: 100%;
 }
 
+.profile-link-with-avatar {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+}
+
+.user-initials-circle {
+	width: 1.8rem;
+	height: 1.8rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid var(--primary);
+	background: color-mix(in srgb, var(--primary) 14%, var(--card-background-color) 86%);
+	color: var(--primary);
+	font-size: 0.72rem;
+	font-weight: 700;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
 /* ========================================
     HERO SECTION
     ======================================== */

@@ -46,6 +46,14 @@ def dashboard_page():
     return render_template("dashboard.html", user_role=user_role, user_id=user_id)
 
 
+@frontend_bp.route("/profile")
+def profile_page():
+    if "user_id" not in session:
+        return redirect(url_for("frontend.login"))
+
+    return render_template("profile.html")
+
+
 @frontend_bp.route("/")
 def index():
     session.pop("allowed_navigation", None)

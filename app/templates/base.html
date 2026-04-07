@@ -57,6 +57,10 @@
 					<a href="{{ url_for('frontend.click_create_auction') }}" class="nav-item">Crea Asta</a>
 					{% endif %}
 					<a href="/dashboard" class="nav-item">Dashboard</a>
+					<a href="/profile" class="nav-item profile-link-with-avatar">
+						<span>Profile</span>
+						<span class="user-initials-circle" x-text="userInitials || '?'"></span>
+					</a>
 					<a href="#" @click="logout()" class="nav-item logout-special">Logout</a>
 				</li>
 				{% endif %}

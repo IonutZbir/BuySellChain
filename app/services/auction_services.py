@@ -163,10 +163,11 @@ class AuctionService:
                 
             current_app.logger.info(f"Auction {auction_id} closed. Winner Bid: {auction_data.get('high_bid_id')}")
             
-            send_email_result = EmailService.send_email_to_winner(winner_id, auction_id, auction_data)
-            if not send_email_result.get("success"):
-                current_app.logger.error(f"Error sending email to winner: {send_email_result.get('error')}")
-                # Non ritorniamo un errore critico se l'email fallisce, ma logghiamo l'errore
+            participants_email_result = EmailService.send_email_to_participants(auction_id, auction_data, bids_list)
+            if not participants_email_result.get("success"):
+                current_app.logger.error(
+                    f"Error sending emails to auction participants: {participants_email_result.get('error')}"
+                )
 
             return {"success": True, "winner_id": auction_data.get("high_bid_id"), "winning_amount": auction_data.get("high_bid_amount")}
 

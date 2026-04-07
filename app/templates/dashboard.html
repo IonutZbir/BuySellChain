@@ -80,7 +80,7 @@
 								</td>
 								<td x-text="formatDateTime(auction.start_time)"></td>
 								<td x-text="formatDateTime(auction.end_time)"></td>
-								<td x-text="auction.bid_count ?? 0"></td>
+								<td x-text="auctionBidTotals[auction.auction_id || auction.id]?.total_bids ?? auction.bid_count ?? 0"></td>
 							</tr>
 						</template>
 						<tr x-show="ownAuctions.length === 0">
@@ -161,6 +161,7 @@
 					<tr>
 						<th>ID Asta</th>
 						<th>Stato</th>
+								<th>Offerte</th>
 						<th>Offerta Massima Tua</th>
 						<th>Fine Asta</th>
 						<th>Dettaglio</th>
@@ -180,6 +181,7 @@
 									}"
 									x-text="auction.status || '-' "></span>
 							</td>
+								<td x-text="auctionBidTotals[auction.auction_id || auction.id]?.total_bids ?? auction.bid_count ?? 0"></td>
 							<td
 								x-text="'€' + formatCurrency(maxUserBidByAuction[auction.auction_id || auction.id] || 0)">
 							</td>
@@ -190,7 +192,7 @@
 						</tr>
 					</template>
 					<tr x-show="participatedAuctions.length === 0">
-						<td colspan="5">Non hai ancora partecipato ad alcuna asta.</td>
+							<td colspan="6">Non hai ancora partecipato ad alcuna asta.</td>
 					</tr>
 				</tbody>
 			</table>
