@@ -62,7 +62,7 @@ def create_auction():
     result = AuctionService.create_auction(
         assetId, sellerId, startTime, endTime, startingPrice, minIncr
     )
-
+    
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
 
@@ -95,12 +95,15 @@ def list_auctions():
             "high_bid_id": auction.get("high_bid_id"),
             "bid_count": auction.get("bid_count"),
         }
-
-        if auction_data["status"] == AuctionStatus.ACTIVE.value or auction_data["status"] == AuctionStatus.SCHEDULED.value or auction_data["status"] == AuctionStatus.LOCKED.value:
+        
+        if auction_data["status"] == AuctionStatus.ACTIVE.value or auction_data["status"] == AuctionStatus.SCHEDULED.value or auction_data["status"] == AuctionStatus.LOCKED.value or auction_data["status"] == AuctionStatus.CLOSED.value:
+            current_app.logger.debug(f"Processing auction {auction.get('id')} with status {auction_data['status']}")
             # Ottieni i dettagli dell'asset
             asset = AssetService.get_asset(auction.get("asset_id"))
             asset_data = asset.get("data", {}).get("value", {})
 
+            current_app.logger.debug(f"Asset data for auction {auction.get('id')}: {asset_data}")
+            
             if asset and asset.get("success"):
                 auction_data["asset_title"] = asset_data.get("title")
                 auction_data["asset_description"] = asset_data.get("description")
@@ -131,6 +134,8 @@ def list_auctions():
                     AssetService.base_upload_dir_relative(), "default.png"
                 ).replace("\\", "/")
                 # Fallback a un'immagine di default se non ne troviamo una specifica
+
+        current_app.logger.debug(f"Auction data for auction {auction.get('id')}: {auction_data}")
 
         response_data.append(auction_data)
 
@@ -213,12 +218,4 @@ def activate_auction(auction_id):
     result = AuctionService.set_active(auction_id)
     if not result:
         return jsend_response("fail", data={"error": "Errore del server"}, code=500)
-    return jsend_response("success", code=200)
-
-@api_auctions.route("/auctions/test_mail", methods=["GET"])
-def test_mail():
-    # Simulazione dell'invio dell'email (sostituisci con la logica reale)
-    current_app.logger.info("Simulating email sending for test_mail endpoint")
-    # Qui potresti integrare un servizio di email reale come SendGrid, Amazon SES, etc.
-    EmailService.send_email_to_winner("test_winner_id", "test_auction_id", {"high_bid_id": "test_high_bid_id"})
     return jsend_response("success", code=200)

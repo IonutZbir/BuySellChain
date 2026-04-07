@@ -9,8 +9,8 @@ from app.services.auction_services import AuctionService
 
 class BidService:
     BID_CLASS = "Bids"
-    BID_ALLOWED_TIME_START = datetime.time(15, 0)  # 2:48 PM
-    BID_ALLOWED_TIME_END = datetime.time(15, 30)   # 2:49 PM
+    BID_ALLOWED_TIME_START = datetime.time(9, 0)
+    BID_ALLOWED_TIME_END = datetime.time(11, 36)
 
     """Service for managing bid operations"""
 
@@ -38,7 +38,6 @@ class BidService:
             Class=BidService.BID_CLASS, key=bid.get_id(), value=bid.to_json()
         )
         
-        current_app.logger.info(f"Result from Guile AddKV: {result}")
         
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
@@ -298,7 +297,6 @@ class BidService:
             return {"success": False, "error": all_bids.get("error")}
         
         for bid in all_bids.get("bids", []):
-            print(bid)
             bid_data = bid.get("bid_data", {}).get("value", {})
             if bid_data.get("auction_id") == auction_id:
                 total_bids += 1

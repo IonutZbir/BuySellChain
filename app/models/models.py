@@ -52,7 +52,8 @@ class AssetType(enum.Enum):
 
 
 class AssetStatus(enum.Enum):
-    ACTIVE = "active"
+    ACTIVE = "active" # asset disponibile, non in asta
+    LOCKED = "locked"  # asset bloccato, non più disponibile per essere messo all'asta, ma non ancora venduto (es: asset in asta, ma asta non ancora conclusa)
     SOLD = "sold"
 
 

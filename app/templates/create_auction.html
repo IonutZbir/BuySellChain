@@ -1,159 +1,270 @@
-{% extends "base.html" %} 
-{% block title %} Crea Asta - BuySellChain {% endblock %}
-{% block scripts %}
-<script defer src="{{ url_for('static', filename='js/create_auction.js') }}"></script>
-{% endblock %} 
-
-{% block content %}
+{% extends "base.html" %} {% block title %} Crea Asta - BuySellChain {% endblock
+%} {% block scripts %}
+<script
+	defer
+	src="{{ url_for('static', filename='js/create_auction.js') }}"
+></script>
+{% endblock %} {% block content %}
 <main class="container create-auction-layout">
-    <div x-data="auctionManager" class="create-auction-main">
+	<div x-data="auctionManager" class="create-auction-main">
+		<div x-show="hasAssets && !loading && !showAssetForm" x-transition>
+			<article>
+				<header>
+					<hgroup>
+						<h1>Pubblica una nuova Asta</h1>
+						<p>
+							Inserisci i dettagli economici e temporali per la
+							tua vendita
+						</p>
+					</hgroup>
+				</header>
 
-        <div x-show="hasAssets && !loading && !showAssetForm" x-transition>
-            <article>
-                <header>
-                    <hgroup>
-                        <h1>Pubblica una nuova Asta</h1>
-                        <p>Inserisci i dettagli economici e temporali per la tua vendita</p>
-                    </hgroup>
-                </header>
+				<form @submit.prevent="create_auction()">
+					<fieldset>
+						<legend><strong>Dettagli Temporali</strong></legend>
+						<div class="grid">
+							<label>
+								Inizio Asta
+								<input
+									type="date"
+									required
+									x-model="startTime"
+									@input="message = ''"
+								/>
+							</label>
+							<label>
+								Fine Asta
+								<input
+									type="date"
+									required
+									x-model="endTime"
+									@input="message = ''"
+								/>
+							</label>
+						</div>
+					</fieldset>
 
-                <form @submit.prevent="create_auction()">
-                    <fieldset>
-                        <legend><strong>Dettagli Temporali</strong></legend>
-                        <div class="grid">
-                            <label>
-                                Inizio Asta
-                                <input type="date" required x-model="startTime" @input="message = ''" />
-                            </label>
-                            <label>
-                                Fine Asta
-                                <input type="date" required x-model="endTime" @input="message = ''" />
-                            </label>
-                        </div>
-                    </fieldset>
+					<label for="assetId">
+						<strong>Asset Selezionato</strong>
+						<select
+							id="assetId"
+							x-model="assetId"
+							@change="updateBasePrice()"
+							required
+						>
+							<option value="" disabled selected>
+								Scegli l'immobile o l'oggetto...
+							</option>
+							<template x-for="asset in assets" :key="asset.id">
+								<template
+									x-if="asset.value.status === 'active'"
+								>
+									<option
+										:value="asset.id"
+										x-text="asset.value.title + ' — ' + asset.value.location"
+									></option>
+								</template>
+							</template>
+						</select>
+					</label>
 
-                    <fieldset>
-                        <legend><strong>Dettagli Economici</strong></legend>
-                        <div class="grid">
-                            <label>
-                                Prezzo Base (€)
-                                <input type="number" step="0.01" required x-model="startPrice" placeholder="Es: 150000.00" />
-                            </label>
-                            <label>
-                                Rilancio Minimo (€)
-                                <input type="number" step="0.01" required x-model="minIncrement" placeholder="Es: 1000.00" />
-                            </label>
-                        </div>
-                    </fieldset>
+					<fieldset>
+						<legend><strong>Dettagli Economici</strong></legend>
+						<div class="grid">
+							<label>
+								Prezzo Base (€)
+								<input
+									type="number"
+									step="0.01"
+									required
+									x-model="startPrice"
+									placeholder="Es: 150000.00"
+								/>
+							</label>
+							<label>
+								Rilancio Minimo (€) - Prezzo Base + 10%
+								<input
+									type="number"
+									step="0.01"
+									required
+									x-model="minIncrement"
+									placeholder="Es: 1000.00"
+								/>
+							</label>
+						</div>
+					</fieldset>
 
-                    <label for="assetId">
-                        <strong>Asset Selezionato</strong>
-                        <select id="assetId" x-model="assetId" required>
-                            <option value="" disabled selected>Scegli l'immobile o l'oggetto...</option>
-                            <template x-for="asset in assets" :key="asset.id">
-                                <option :value="asset.id" x-text="asset.value.title + ' — ' + asset.value.location"></option>
-                            </template>
-                        </select>
-                        <small>Non trovi l'asset? Clicca su "Crea Asset" in basso.</small>
-                    </label>
+					<template x-if="message">
+						<div
+							role="alert"
+							class="pico-background-red-100 pico-color-red-600"
+							style="
+								padding: 1rem;
+								border-radius: 8px;
+								margin-bottom: 1rem;
+							"
+						>
+							<small><span x-text="message"></span></small>
+						</div>
+					</template>
 
-                    <template x-if="message">
-                        <div role="alert" class="pico-background-red-100 pico-color-red-600" style="padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                            <small><span x-text="message"></span></small>
-                        </div>
-                    </template>
+					<footer>
+						<div
+							style="
+								display: flex;
+								gap: 1rem;
+								justify-content: flex-end;
+							"
+						>
+							<button
+								type="button"
+								class="secondary outline"
+								@click="showAssetForm = true"
+							>
+								+ Crea Nuovo Asset
+							</button>
+							<button type="submit">Pubblica Asta</button>
+						</div>
+					</footer>
+				</form>
+			</article>
+		</div>
 
-                    <footer>
-                        <div style="display: flex; gap: 1rem; justify-content: flex-end">
-                            <button type="button" class="secondary outline" @click="showAssetForm = true">
-                                + Crea Nuovo Asset
-                            </button>
-                            <button type="submit">
-                                Pubblica Asta
-                            </button>
-                        </div>
-                    </footer>
-                </form>
-            </article>
-        </div>
+		<div x-show="(!hasAssets && !loading) || showAssetForm" x-transition>
+			<article>
+				<header>
+					<hgroup>
+						<h2>Crea un nuovo Asset</h2>
+						<p>
+							Definisci le caratteristiche dell'immobile o del
+							bene
+						</p>
+					</hgroup>
+				</header>
 
-        <div x-show="(!hasAssets && !loading) || showAssetForm" x-transition>
-            <article>
-                <header>
-                    <hgroup>
-                        <h2>Crea un nuovo Asset</h2>
-                        <p>Definisci le caratteristiche dell'immobile o del bene</p>
-                    </hgroup>
-                </header>
+				<form @submit.prevent="create_assets()">
+					<div class="grid">
+						<label
+							>Titolo Asset
+							<input
+								type="text"
+								required
+								x-model="title"
+								placeholder="Es: Villa Vista Mare"
+							/>
+						</label>
+						<label
+							>Tipo Proprietà
+							<select required x-model="type">
+								<option value="" disabled selected>
+									Seleziona...
+								</option>
+								<option value="villa">Villa</option>
+								<option value="flat">Appartamento</option>
+								<option value="cottage">Cottage</option>
+								<option value="bungalow">Bungalow</option>
+								<option value="furniture">Arredamento</option>
+								<option value="detached_house">
+									Casa Indipendente
+								</option>
+								<option value="other">Altro</option>
+							</select>
+						</label>
+					</div>
 
-                <form @submit.prevent="create_assets()">
-                    <div class="grid">
-                        <label>Titolo Asset
-                            <input type="text" required x-model="title" placeholder="Es: Villa Vista Mare" />
-                        </label>
-                        <label>Tipo Proprietà
-                            <select required x-model="type">
-                                <option value="" disabled selected>Seleziona...</option>
-                                <option value="villa">Villa</option>
-                                <option value="flat">Appartamento</option>
-                                <option value="cottage">Cottage</option>
-                                <option value="bungalow">Bungalow</option>
-                                <option value="furniture">Arredamento</option>
-                                <option value="detached_house">Casa Indipendente</option>
-                                <option value="other">Altro</option>
-                            </select>
-                        </label>
-                    </div>
+					<label
+						>Descrizione Completa
+						<textarea
+							required
+							x-model="descr"
+							placeholder="Descrivi i dettagli dell'asset..."
+							rows="3"
+						></textarea>
+					</label>
 
-                    <label>Descrizione Completa
-                        <textarea required x-model="descr" placeholder="Descrivi i dettagli dell'asset..." rows="3"></textarea>
-                    </label>
+					<div class="grid">
+						<label
+							>Ubicazione
+							<input
+								type="text"
+								required
+								x-model="locat"
+								placeholder="Città, Indirizzo"
+							/>
+						</label>
+						<label
+							>Dimensione (m²)
+							<input
+								type="number"
+								required
+								x-model="size"
+								placeholder="Es: 120"
+							/>
+						</label>
+						<label
+							>Valutazione (€)
+							<input
+								type="number"
+								required
+								x-model="price"
+								placeholder="Valore stimato"
+							/>
+						</label>
+					</div>
 
-                    <div class="grid">
-                        <label>Ubicazione
-                            <input type="text" required x-model="locat" placeholder="Città, Indirizzo" />
-                        </label>
-                        <label>Dimensione (m²)
-                            <input type="number" required x-model="size" placeholder="Es: 120" />
-                        </label>
-                        <label>Valutazione (€)
-                            <input type="number" required x-model="price" placeholder="Valore stimato" />
-                        </label>
-                    </div>
+					<label for="picture"
+						>Immagine Rappresentativa
+						<input
+							type="file"
+							x-ref="picture"
+							accept="image/png, image/jpeg"
+							required
+						/>
+					</label>
 
-                    <label for="picture">Immagine Rappresentativa
-                        <input type="file" x-ref="picture" accept="image/png, image/jpeg" required />
-                    </label>
-
-                    <footer>
-                        <div style="display: flex; gap: 1rem; justify-content: flex-end">
-                            <button type="button" class="secondary outline" x-show="hasAssets" @click="showAssetForm = false">
-                                Annulla
-                            </button>
-                            <button type="submit" class="contrast">
-                                Salva Asset
-                            </button>
-                        </div>
-                    </footer>
-                </form>
-            </article>
-        </div>
-    </div>
-    <aside class="create-auction-help">
-        <div class="create-auction-help-card">
-            <h3>Come funziona l'asta?</h3>
-            <ul class="create-auction-help-list">
-                <li>Definisci le date di inizio e fine dell'asta.</li>
-                <li>Stabilisci il prezzo base e il rilancio minimo.</li>
-                <li>Seleziona l'asset da mettere all'asta o creane uno nuovo.</li>
-                <li>Gli utenti potranno fare offerte fino alla scadenza.</li>
-                <li>L'asta si aggiudica al miglior offerente.</li>
-            </ul>
-            <p class="create-auction-help-note">
-                Ricorda: puoi gestire le tue aste dalla dashboard personale.<br>
-                Per assistenza, consulta la <a href="/faq" class="secondary">Guida</a>.
-            </p>
-        </div>
-    </aside>
+					<footer>
+						<div
+							style="
+								display: flex;
+								gap: 1rem;
+								justify-content: flex-end;
+							"
+						>
+							<button
+								type="button"
+								class="secondary outline"
+								x-show="hasAssets"
+								@click="showAssetForm = false"
+							>
+								Annulla
+							</button>
+							<button type="submit" class="contrast">
+								Salva Asset
+							</button>
+						</div>
+					</footer>
+				</form>
+			</article>
+		</div>
+	</div>
+	<aside class="create-auction-help">
+		<div class="create-auction-help-card">
+			<h3>Come funziona l'asta?</h3>
+			<ul class="create-auction-help-list">
+				<li>Definisci le date di inizio e fine dell'asta.</li>
+				<li>Stabilisci il prezzo base e il rilancio minimo.</li>
+				<li>
+					Seleziona l'asset da mettere all'asta o creane uno nuovo.
+				</li>
+				<li>Gli utenti potranno fare offerte fino alla scadenza.</li>
+				<li>L'asta si aggiudica al miglior offerente.</li>
+			</ul>
+			<p class="create-auction-help-note">
+				Ricorda: puoi gestire le tue aste dalla dashboard personale.<br />
+				Per assistenza, consulta la
+				<a href="/faq" class="secondary">Guida</a>.
+			</p>
+		</div>
+	</aside>
 </main>
 {% endblock %}
