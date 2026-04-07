@@ -9,11 +9,13 @@ document.addEventListener("alpine:init", () => {
         participatedAuctions: [],
         userBids: [],
         maxUserBidByAuction: {},
+        auctionBidTotals: {},
         openAuctionBids: {},
         loading: {
             global: false,
             auctions: false,
             participations: false,
+            bidTotals: false,
             openAuctionBids: false,
         },
 
@@ -40,6 +42,7 @@ document.addEventListener("alpine:init", () => {
             this.loading.global = true;
             await Promise.all([this.fetchAuctions(), this.fetchUserBids()]);
             this.computeDerivedData();
+            await this.fetchAuctionBidTotals();
             if (this.role === "seller") {
                 await this.fetchOpenAuctionBids();
             }
@@ -168,6 +171,53 @@ document.addEventListener("alpine:init", () => {
                 }
             } finally {
                 this.loading.openAuctionBids = false;
+            }
+        },
+
+        async fetchAuctionBidTotals() {
+            this.loading.bidTotals = true;
+            this.auctionBidTotals = {};
+            try {
+                const headers = this.getAuthHeaders();
+                if (!headers) {
+                    return;
+                }
+
+                const requests = this.allAuctions.map(async (auction) => {
+                    const auctionId = auction?.auction_id || auction?.id;
+                    if (!auctionId) {
+                        return;
+                    }
+
+                    const response = await fetch(`/api/v1/bids/total/${auctionId}`, {
+                        method: "GET",
+                        headers,
+                    });
+
+                    const payload = await response.json();
+                    if (response.ok && payload?.status === "success") {
+                        this.auctionBidTotals[auctionId] = payload?.data || {
+                            total_bids: 0,
+                            total_rejected_bids: 0,
+                            total_valid_bids: 0,
+                        };
+                    } else {
+                        this.auctionBidTotals[auctionId] = {
+                            total_bids: 0,
+                            total_rejected_bids: 0,
+                            total_valid_bids: 0,
+                        };
+                    }
+                });
+
+                await Promise.all(requests);
+            } catch (error) {
+                console.error(error);
+                if (!this.errorMessage) {
+                    this.errorMessage = "Errore nel recupero del contatore offerte.";
+                }
+            } finally {
+                this.loading.bidTotals = false;
             }
         },
 

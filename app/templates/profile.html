@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Profilo Utente - BuySellChain{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="container" x-data="profileForm" x-init="init()" style="max-width: 900px; margin-top: 2rem; margin-bottom: 2rem;">
+    <article>
+        <header>
+            <h2>Il tuo Profilo</h2>
+            <p>Visualizza e aggiorna i tuoi dati personali.</p>
+        </header>
+
+        <template x-if="loading">
+            <p aria-busy="true">Caricamento profilo...</p>
+        </template>
+
+        <template x-if="message">
+            <p :style="isError ? 'color: var(--del-color);' : 'color: var(--ins-color);'" x-text="message"></p>
+        </template>
+
+        <form @submit.prevent="saveProfile()" x-show="!loading">
+            <div class="grid">
+                <label>
+                    Nome
+                    <input type="text" x-model="form.name" required />
+                </label>
+
+                <label>
+                    Cognome
+                    <input type="text" x-model="form.surname" required />
+                </label>
+            </div>
+
+            <div class="grid">
+                <label>
+                    Email
+                    <input type="email" x-model="form.email" required />
+                </label>
+
+                <label>
+                    Numero di cellulare
+                    <input type="text" x-model="form.cellularNumber" />
+                </label>
+            </div>
+
+            <div class="grid">
+                <label>
+                    Data di nascita
+                    <input type="date" x-model="form.birthday" required />
+                </label>
+
+                <label>
+                    Ruolo
+                    <input type="text" x-model="form.role" disabled />
+                </label>
+            </div>
+
+            <template x-if="String(form.role || '').toLowerCase() === 'seller'">
+                <label>
+                    Codice fiscale
+                    <input type="text" x-model="form.taxCode" maxlength="16" />
+                </label>
+            </template>
+
+            <label>
+                ID Blockchain
+                <input type="text" x-model="form.id" disabled />
+            </label>
+
+            <button type="submit" :aria-busy="saving" :disabled="saving">Salva modifiche</button>
+        </form>
+    </article>
+</section>
+{% endblock %}

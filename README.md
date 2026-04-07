@@ -157,3 +157,54 @@ Modifche ai layout pagina aste
 Modifiche lato backend alle api (bids, auctions)
 
 TODO : Aggiungere refresh pagine con polling (lato backend?)
+
+## Modifiche fatte il giorno 07/04/2026 - Franco
+
+Gestione visibilità storico offerte per ruolo e stato asta:
+
+storico offerte è filtrato lato backend con autenticazione.
+- Regole applicate:
+    - Seller: vede tutte le offerte (incluse rejected).
+    - Utente normale con asta active/scheduled: vede solo le proprie offerte.
+    - Utente normale con asta locked/closed: vede anche le offerte altrui, ma senza rejected.
+
+Aggiornamento UI storico offerte in pagina asta:
+
+seller vede status e reason su tutte le offerte.
+- Gli altri utenti vedono status e reason solo sulle proprie offerte.
+- Le offerte personali restano evidenziate visivamente.
+- Counter offerte live in pagina asta e dashboard:
+
+Pagina asta:
+
+contatore Offerte totali è mostrato in modo dinamico.
+
+Dashboard:
+
+aggiunta la mappa dei totali per asta con fetch dedicata, usano i totali live invece del valore statico.
+Correzione bug: la fetch dei totali ora include header Authorization (prima causava Offerte: 0 in Storico aste create).
+
+Notifiche email post-chiusura asta per tutti i partecipanti:
+
+estesa la logica email con:
+- email vincitore,
+- email personalizzata ai non vincitori.
+
+Motivazioni non vincita implementate:
+- Hai offerto troppo poco.
+- Hai offerto quanto il vincitore, ma il tuo timestamp era troppo datato.
+- Non hai mai avuto offerte valide.
+
+Nuova sezione Profile visibile solo da utente loggato:
+
+Navbar: aggiunto link Profile accanto a Dashboard e Logout nel blocco utenti autenticati.
+Rotta frontend protetta: aggiunta pagina /profile accessibile solo con sessione attiva.
+Pagina profilo:
+- Nuovo template profile.html.
+- Nuovo script profile.js per caricamento/salvataggio dati.
+
+API profilo sicure su PostgreSQL:
+- aggiunto GET /api/v1/auth/profile.
+- aggiunto PUT /api/v1/auth/profile.
+Query eseguite con SQLAlchemy (parameter-safe), con validazioni su email, telefono, data nascita, codice fiscale seller, unicità e whitelist campi aggiornabili.
+

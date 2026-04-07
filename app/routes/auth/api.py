@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from sqlalchemy import select
 
 from flask import Blueprint, jsonify, request, current_app, session
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
+from flask_jwt_extended import jwt_required, create_access_token, get_current_user
 
 from app.models.models import User, UserRoles
 from app import bcrypt, db
@@ -247,3 +247,138 @@ def logout():
     session.clear()
 
     return jsonify({"status": "success", "data": {"message": "Log out correttamente!"}}), 200
+
+
+@api_auth.route("/profile", methods=["GET"])
+@jwt_required()
+def get_profile():
+    current_user = get_current_user() or {}
+    user_id = current_user.get("id")
+
+    if not user_id:
+        return jsonify({"status": "fail", "data": {"message": "Utente non autenticato"}}), 401
+
+    user = db.session.execute(select(User).where(User.blockChainId == user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"status": "fail", "data": {"message": "Utente non trovato"}}), 404
+
+    return jsonify(
+        {
+            "status": "success",
+            "data": {
+                "id": user.blockChainId,
+                "name": user.name,
+                "surname": user.surname,
+                "email": user.email,
+                "birthday": user.birthday.isoformat() if user.birthday else None,
+                "cellularNumber": user.cellularNumber,
+                "role": user.role.value,
+                "taxCode": user.codiceFiscale,
+            },
+        }
+    ), 200
+
+
+@api_auth.route("/profile", methods=["PUT"])
+@jwt_required()
+def update_profile():
+    current_user = get_current_user() or {}
+    user_id = current_user.get("id")
+
+    if not user_id:
+        return jsonify({"status": "fail", "data": {"message": "Utente non autenticato"}}), 401
+
+    user = db.session.execute(select(User).where(User.blockChainId == user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"status": "fail", "data": {"message": "Utente non trovato"}}), 404
+
+    payload = request.get_json(silent=True) or {}
+
+    allowed_fields = {"name", "surname", "email", "birthday", "cellularNumber", "taxCode"}
+    update_data = {k: v for k, v in payload.items() if k in allowed_fields}
+
+    if "name" in update_data:
+        name = str(update_data.get("name") or "").strip()
+        if not name:
+            return jsonify({"status": "fail", "data": {"message": "Il nome non puo essere vuoto"}}), 400
+        user.name = name
+
+    if "surname" in update_data:
+        surname = str(update_data.get("surname") or "").strip()
+        if not surname:
+            return jsonify({"status": "fail", "data": {"message": "Il cognome non puo essere vuoto"}}), 400
+        user.surname = surname
+
+    if "email" in update_data:
+        email = str(update_data.get("email") or "").strip()
+        try:
+            validate_email(email, check_deliverability=False)
+        except EmailNotValidError:
+            return jsonify({"status": "fail", "data": {"message": "Formato email non valido"}}), 400
+
+        existing_email = db.session.execute(
+            select(User).where(User.email == email, User.blockChainId != user_id)
+        ).scalar_one_or_none()
+        if existing_email:
+            return jsonify({"status": "fail", "data": {"message": "Questa email e gia registrata"}}), 409
+
+        user.email = email
+
+    if "birthday" in update_data:
+        birthday_raw = update_data.get("birthday")
+        try:
+            birthday = datetime.strptime(str(birthday_raw), "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            return jsonify({"status": "fail", "data": {"message": "Data di nascita non valida"}}), 400
+        user.birthday = birthday
+
+    if "cellularNumber" in update_data:
+        cellular_number = str(update_data.get("cellularNumber") or "").strip()
+        if cellular_number and not is_valid_phone(cellular_number):
+            return jsonify({"status": "fail", "data": {"message": "Numero di telefono non valido"}}), 400
+        user.cellularNumber = cellular_number
+
+    if "taxCode" in update_data and user.role == UserRoles.SELLER:
+        tax_code = str(update_data.get("taxCode") or "").strip().upper()
+        if tax_code:
+            cf_regex = r"^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$"
+            if not re.match(cf_regex, tax_code):
+                return jsonify({"status": "fail", "data": {"message": "Codice fiscale non valido"}}), 400
+
+            existing_tax_code = db.session.execute(
+                select(User).where(User.codiceFiscale == tax_code, User.blockChainId != user_id)
+            ).scalar_one_or_none()
+            if existing_tax_code:
+                return jsonify({"status": "fail", "data": {"message": "Codice fiscale gia in uso"}}), 409
+
+        user.codiceFiscale = tax_code or None
+
+    try:
+        db.session.commit()
+    except Exception as exc:
+        db.session.rollback()
+        current_app.logger.error(f"Errore aggiornamento profilo: {exc}")
+        return jsonify({"status": "error", "data": {"message": "Errore interno durante l'aggiornamento"}}), 500
+
+    session["user_id"] = user.blockChainId
+    session["role"] = user.role.value
+    if user.role == UserRoles.SELLER:
+        session["taxCode"] = user.codiceFiscale
+    else:
+        session.pop("taxCode", None)
+
+    return jsonify(
+        {
+            "status": "success",
+            "data": {
+                "id": user.blockChainId,
+                "name": user.name,
+                "surname": user.surname,
+                "email": user.email,
+                "birthday": user.birthday.isoformat() if user.birthday else None,
+                "cellularNumber": user.cellularNumber,
+                "role": user.role.value,
+                "taxCode": user.codiceFiscale,
+            },
+        }
+    ), 200
