@@ -174,6 +174,68 @@ class AssetService:
         return {"success": False, "error": f"No assets found"}
 
     @staticmethod
+    def lock_asset(asset_id: str) -> dict:
+        """
+        Blocca un asset (ad esempio quando viene messo all'asta)
+
+        Args:
+            asset_id: ID dell'asset
+
+        Returns:
+            dict: Risultato dell'operazione
+        """
+        current_app.logger.debug(f"Locking asset with ID: {asset_id}")
+        res = AssetService.get_asset(asset_id)
+
+        if not res:
+            current_app.logger.error(f"Asset not found for ID: {asset_id}")
+            return False
+
+        if not res.get("success"):
+            return res
+
+        asset_data = res.get("data")
+        
+        # Aggiorna lo stato a "locked"
+        asset_data["value"]["status"] = AssetStatus.LOCKED.value
+
+        result = GuileService.AddKV(Class=AssetService.ASSETS_CLASS, key=asset_id, value=asset_data["value"])
+
+        if "error" in result:
+            current_app.logger.error("Error: {}".format(result.get("error")))
+            return False
+
+        current_app.logger.debug(f"Asset with ID: {asset_id} locked successfully")
+        return {"success": True, "asset_id": asset_id, "status": AssetStatus.LOCKED.value}
+
+    @staticmethod
+    def get_status(asset_id: str) -> dict:
+        """
+        Controlla lo stato di un asset
+
+        Args:
+            asset_id: ID dell'asset
+
+        Returns:
+            dict: Stato dell'asset
+        """
+        current_app.logger.debug(f"Checking status for asset ID: {asset_id}")
+        res = AssetService.get_asset(asset_id)
+
+        if not res:
+            current_app.logger.error(f"Asset not found for ID: {asset_id}")
+            return False
+
+        if not res.get("success"):
+            return res
+
+        asset_data = res.get("data")
+        status = asset_data.get("status", "unknown")
+
+        current_app.logger.debug(f"Status for asset ID: {asset_id} is {status}")
+        return {"success": True, "asset_id": asset_id, "status": status}
+
+    @staticmethod
     def get_asset_history(asset_id: str) -> dict:
         """
         Recupera la storia di un asset (tutte le modifiche)

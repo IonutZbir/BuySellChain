@@ -4,7 +4,8 @@ from typing import Dict, Any
 
 from flask import current_app
 
-from app.models.models import Auction
+from app.models.models import Auction, AssetStatus
+from app.services.asset_services import AssetService
 from app.services.guile_services import GuileService
 from app.services.email_service import EmailService
 
@@ -37,11 +38,28 @@ class AuctionService:
 
         # aggiungere controllo su start e endTime prima di creare il modello
         if start_time > datetime.now():
-            status = "scheduled"
+            auction_status = "scheduled"
         else:
-            status = "active"
+            auction_status = "active"
 
-        auction = Auction(asset_id, seller_id, start_time, end_time, starting_price, min_incr, status)
+        status_res = AssetService.get_status(asset_id)  # Controlla che l'asset sia disponibile per essere messo all'asta
+        
+        if not status_res:
+            current_app.logger.error(f"Asset with ID {asset_id} not found")
+            return {"success": False, "error": "Asset not found"}
+        
+        asset_status = status_res.get("status")
+        if asset_status == AssetStatus.LOCKED.value or asset_status == AssetStatus.SOLD.value:
+            current_app.logger.error(f"Asset with ID {asset_id} is not available for auction (current status: {asset_status})")
+            return {"success": False, "error": f"Asset is not available for auction (current status: {asset_status})"}
+        
+        res = AssetService.lock_asset(asset_id)  # Lock the asset immediately after creating the auction
+
+        if not res or not res.get("success"):
+            current_app.logger.error(f"Failed to lock asset with ID {asset_id}")
+            return {"success": False, "error": "Failed to lock asset"}
+
+        auction = Auction(asset_id, seller_id, start_time, end_time, starting_price, min_incr, auction_status)
 
         result = GuileService.AddKV(
             Class=AuctionService.AUCTION_CLASS, key=auction.get_id(), value=auction.to_json()
@@ -49,12 +67,11 @@ class AuctionService:
 
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
-            return False
+            return {"success": False, "error": result.get("error")}
 
         current_app.logger.info(f"Auction created with ID: {auction.get_id()}")
 
-        return True
-
+        return {"success": True, "id": auction.get_id()}
     def get_auction(auction_id: str) -> Dict[str, Any]:
         """
         Args:

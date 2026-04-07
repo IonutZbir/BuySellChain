@@ -144,7 +144,7 @@ def show_asta(auction_id):
         auction_data["asset_description"] = "Dettagli non disponibili."
 
     current_app.logger.info(
-        f"Rendering auction page for auction_id={auction_id} with data: {auction_data}"
+        f"Rendering auction page for auction_id={auction_id}"
     )
 
     is_owner = bool(current_user_id and auction_data.get("seller_id") == current_user_id)

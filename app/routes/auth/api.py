@@ -71,6 +71,23 @@ def signin():
 
     # .7 Controllo codice fiscale se è venditore
     if is_vendor:
+        # check che nel db non esista già un venditore con lo stesso codice fiscale
+        existing_tax_code = db.session.execute(
+            select(User).where(User.codiceFiscale == tax_code)
+        ).scalar_one_or_none()
+        if existing_tax_code:
+            return (
+                jsonify(
+                    {
+                        "status": "fail",
+                        "data": {
+                            "message": "Esiste già un venditore registrato con questo codice fiscale"
+                        },
+                    }
+                ),
+                409,
+            )
+
         if not tax_code:
             return (
                 jsonify(
@@ -102,7 +119,9 @@ def signin():
             role=UserRoles.SELLER,
         )
         EmailService.send_email_to_admin()
-        current_app.logger.warning(f"New vendor registered: {email=}, {user.blockChainId=}, {user.role=}")
+        current_app.logger.warning(
+            f"New vendor registered: {email=}, {user.blockChainId=}, {user.role=}"
+        )
     else:
         user = User(
             name=name,

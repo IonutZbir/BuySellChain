@@ -10,8 +10,13 @@ import json
 
 class BidService:
     BID_CLASS = "Bids"
+<<<<<<< HEAD
     BID_ALLOWED_TIME_START = datetime.time(9, 0)  # 1:00 PM
     BID_ALLOWED_TIME_END = datetime.time(10, 5)   # 1:45 PM
+=======
+    BID_ALLOWED_TIME_START = datetime.time(9, 0)
+    BID_ALLOWED_TIME_END = datetime.time(11, 36)
+>>>>>>> acd28da276670f67b9d903463669f6725adf4521
 
     """Service for managing bid operations"""
 
@@ -39,7 +44,6 @@ class BidService:
             Class=BidService.BID_CLASS, key=bid.get_id(), value=bid.to_json()
         )
         
-        current_app.logger.info(f"Result from Guile AddKV: {result}")
         
         if "error" in result:
             current_app.logger.error("Error: {}".format(result.get("error")))
@@ -299,7 +303,6 @@ class BidService:
             return {"success": False, "error": all_bids.get("error")}
         
         for bid in all_bids.get("bids", []):
-            print(bid)
             bid_data = bid.get("bid_data", {}).get("value", {})
             if bid_data.get("auction_id") == auction_id:
                 total_bids += 1
