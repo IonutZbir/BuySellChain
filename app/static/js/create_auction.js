@@ -41,9 +41,6 @@ document.addEventListener("alpine:init", () => {
                 });
 
                 const res_data = await response.json();
-                console.log(res_data);
-                console.log("Assets recuperati:", res_data.data.assets);
-                console.log("Response status:", response.status);
                 if (response.status === 200 && res_data.status === "success") {
                     this.assets = res_data.data.assets;
                     this.showAssetForm = this.assets.length === 0; // Mostra il form se non ci sono asset
@@ -113,8 +110,6 @@ document.addEventListener("alpine:init", () => {
             const start = new Date(this.startTime);
             const end = new Date(this.endTime);
 
-            console.log(start, end, now);
-            console.log(start < now, end < now);
             // devono essere >= adesso (giorno corrente incluso)
             if (start < now || end < now) {
                 this.message = "Le date di inizio e fine devono essere nel futuro.";
@@ -158,7 +153,7 @@ document.addEventListener("alpine:init", () => {
                     this.message = "Errore nella creazione dell'asta";
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error);
                 this.message = "Errore: " + error.message;
             }
         }

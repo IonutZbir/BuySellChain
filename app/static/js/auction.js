@@ -7,9 +7,32 @@ document.addEventListener("alpine:init", () => {
         allBid: 0,
         total_rejected_bids: 0,
         total_valid_bids: 0,
+        history: [],
+        showHistory: false,
+        formatTimestamp(rawTimestamp) {
+            if (!rawTimestamp || rawTimestamp === "Unknown") {
+                return "-";
+            }
+            
+            const date = new Date(rawTimestamp);
+            if (Number.isNaN(date.getTime())) {
+                return "-";
+            }
+
+            const year = String(date.getUTCFullYear());
+            const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+            const day = String(date.getUTCDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+            const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+            const milliseconds = String(date.getUTCMilliseconds()).padStart(3, "0");
+            
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+        },
         async init() {
             await this.fetchForLatestBid();
             await this.fetchForAllBids();
+            await this.fetchBidsHistory();
         },
 
         async fetchForLatestBid() {
@@ -29,11 +52,9 @@ document.addEventListener("alpine:init", () => {
                 });
 
                 const res_data = await response.json();
-                console.log("Response data for latest bid:", res_data);
                 if (response.status === 200 && res_data.status === "success") {
                     
                     this.latestBid = res_data.data.latest_bid;
-                    console.log("Latest bid amount:", this.latestBid);
                 }
                 
             } catch (error) {
@@ -57,15 +78,43 @@ document.addEventListener("alpine:init", () => {
                 });
 
                 const res_data = await response.json();
-                console.log("Response data for total bids:", res_data);
                 if (response.status === 200 && res_data.status === "success") {
                     
                     this.allBid = res_data.data.total_bids;
                     this.total_rejected_bids = res_data.data.total_rejected_bids;
                     this.total_valid_bids = res_data.data.total_valid_bids;
-                    console.log("Total bids:", this.allBid);
-                    console.log("Total rejected bids:", this.total_rejected_bids);
-                    console.log("Total valid bids:", this.total_valid_bids);
+                }
+                
+            } catch (error) {
+                console.error("Errore nel recupero dell'offerta più recente:", error);
+            }
+        },
+
+        async fetchBidsHistory() {
+            this.history = []; // Reset history before fetching
+            try {
+                const token = localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization');
+                if (!token) {
+                    window.location.href = "/login";
+                    return;
+                }
+                const response = await fetch(`/api/v1/auctions/getAuctionHistory/${this.auctionId}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const res_data = await response.json();
+                if (response.status === 200 && res_data.status === "success") {
+                    if (Array.isArray(res_data?.data?.history)) {
+                        this.history = res_data.data.history;
+                    } else if (Array.isArray(res_data?.data)) {
+                        this.history = res_data.data;
+                    } else {
+                        this.history = [];
+                    }
                 }
                 
             } catch (error) {
@@ -93,13 +142,7 @@ document.addEventListener("alpine:init", () => {
                     })
                 });
 
-                console.log(JSON.stringify({
-                        auction_id: this.auctionId,
-                        amount: this.bidAmount
-                    }));
-
                 const res_data = await response.json();
-                console.log("Response data:", res_data);
                 
                 if (response.status === 200 && res_data.status === "success") {
                     this.message = "Offerta effettuata con successo!";
@@ -108,6 +151,7 @@ document.addEventListener("alpine:init", () => {
                 } else {
                     
                     this.message = res_data.data.error || "Errore nell'effettuare l'offerta.";
+                    setTimeout(() => location.reload(), 1500);
                 }
             } catch (error) {
                 console.error("Errore nel fare l'offerta:", error);
@@ -118,142 +162,6 @@ document.addEventListener("alpine:init", () => {
 )
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const timerCard = document.querySelector(".create-auction-timer-card");
-//     const countdownEl = document.getElementById("bidWindowCountdown");
-//     const statusEl = document.getElementById("bidWindowStatus");
-
-//     if (!timerCard || !countdownEl || !statusEl) {
-//         return;
-//     }
-
-//     const parseHourMinute = (timeValue, fallbackHour) => {
-//         if (typeof timeValue !== "string") {
-//             return { hour: fallbackHour, minute: 0 };
-//         }
-
-//         const [hourRaw, minuteRaw] = timeValue.split(":");
-//         const hour = Number.parseInt(hourRaw, 10);
-//         const minute = Number.parseInt(minuteRaw, 10);
-
-//         if (
-//             Number.isInteger(hour) &&
-//             Number.isInteger(minute) &&
-//             hour >= 0 &&
-//             hour <= 23 &&
-//             minute >= 0 &&
-//             minute <= 59
-//         ) {
-//             return { hour, minute };
-//         }
-
-//         return { hour: fallbackHour, minute: 0 };
-//     };
-
-//     const formatDuration = (ms) => {
-//         const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-//         const days = Math.floor(totalSeconds / 86400);
-//         const hours = Math.floor((totalSeconds % 86400) / 3600);
-//         const minutes = Math.floor((totalSeconds % 3600) / 60);
-//         const seconds = totalSeconds % 60;
-
-//         const hh = String(hours).padStart(2, "0");
-//         const mm = String(minutes).padStart(2, "0");
-//         const ss = String(seconds).padStart(2, "0");
-
-//         if (days > 0) {
-//             return `${days}g ${hh}:${mm}:${ss}`;
-//         }
-//         return `${hh}:${mm}:${ss}`;
-//     };
-
-//     //questo non funziona bene, considera sempre l'asta come se fosse attiva anche se creandola il seller 
-//     // inserisce come data di inizio asta un giorno futuro
-//     // dovremmo prendere startTime e endTime dal form di creazione, e da li creare l'oggetto Date per fare i controlli
-//     const computeWindowTarget = (windowStart, windowEnd) => { 
-//         const now = new Date();
-
-//         const startToday = new Date(now);
-        
-//         startToday.setHours(windowStart.hour, windowStart.minute, 0, 0);
-
-//         const endToday = new Date(now);
-//         endToday.setHours(windowEnd.hour, windowEnd.minute, 0, 0);
-
-//         if (endToday <= startToday) {
-//             return {
-//                 status: "Finestra offerte non valida.",
-//                 target: now
-//             };
-//         }
-
-//         if (now < startToday) {
-//             return {
-//                 status: "Le offerte aprono tra:",
-//                 target: startToday
-//             };
-//         }
-
-//         if (now < endToday) {
-//             return {
-//                 status: "Tempo rimanente per fare offerte oggi:",
-//                 target: endToday
-//             };
-//         }
-
-//         const startTomorrow = new Date(startToday);
-//         startTomorrow.setDate(startTomorrow.getDate() + 1);
-
-//         return {
-//             status: "Finestra di oggi chiusa. Le offerte riaprono tra:",
-//             target: startTomorrow
-//         };
-//     };
-
-//     const updateCountdown = (windowStart, windowEnd) => {
-//         const { status, target } = computeWindowTarget(windowStart, windowEnd);
-//         const diff = target.getTime() - Date.now();
-
-//         statusEl.textContent = status;
-//         countdownEl.textContent = formatDuration(diff);
-//     };
-
-//     const initTimer = async () => {
-//         let windowStart = { hour: 8, minute: 0 };
-//         let windowEnd = { hour: 11, minute: 0 };
-
-//         try {
-//             const response = await fetch("/api/v1/bids/allowed_timeframe", {
-//                 method: "GET",
-//                 headers: {
-//                     "Content-Type": "application/json"
-//                 }
-//             });
-
-//             const payload = await response.json();
-
-//             if (response.ok && payload?.status === "success") {
-//                 const apiStart = payload?.data?.allowed_time_start;
-//                 const apiEnd = payload?.data?.allowed_time_end;
-
-//                 windowStart = parseHourMinute(apiStart, 8);
-//                 windowEnd = parseHourMinute(apiEnd, 11);
-
-//                 const hintEl = timerCard.querySelector(".create-auction-timer-hint");
-//                 if (hintEl) {
-//                     hintEl.textContent = `Finestra valida per offerte: ${String(windowStart.hour).padStart(2, "0")}:${String(windowStart.minute).padStart(2, "0")} - ${String(windowEnd.hour).padStart(2, "0")}:${String(windowEnd.minute).padStart(2, "0")}.`;
-//                 }
-//             }
-//         } catch (error) {
-//             console.error("Errore nel recupero della finestra offerte:", error);
-//         }
-
-//         updateCountdown(windowStart, windowEnd);
-//         setInterval(() => updateCountdown(windowStart, windowEnd), 1000);
-//     };
-
-//     initTimer();
-// });
 
 document.addEventListener("DOMContentLoaded", () => {
     const timerCard = document.querySelector(".create-auction-timer-card");
@@ -345,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const updateBlockchainStatus = async (endpoint) => {
         try {
             const token = localStorage.getItem('Authorization') || sessionStorage.getItem('Authorization');
-            console.log(`Chiamata Blockchain: ${endpoint}`);
+            console.debug(`Chiamata Blockchain: ${endpoint}`);
             const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
@@ -354,9 +262,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
             const res_data = await response.json();
-            console.log("Response data from blockchain update:", res_data);
             if (response.ok && res_data.status === "success") {
-                console.log("Stato blockchain aggiornato con successo.");
+                console.debug("Stato blockchain aggiornato con successo.");
                 setTimeout(() => location.reload(), 1500); // Ricarica per far vedere i cambiamenti
             }
         } catch (error) {
@@ -380,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Logica a transizione di stato: invia alla blockchain solo quando c'è un cambiamento reale
         let currentState = closed ? 'closed' : (locked ? 'locked' : 'active');
-        console.log(currentState)
+        console.debug(`Stato asta: ${currentState}`);
         // Se è diventata LOCKED oggi, avvisa il backend
         if (previousState === 'active' && currentState === 'locked') {
             previousState = currentState; 
@@ -389,20 +296,20 @@ document.addEventListener("DOMContentLoaded", () => {
         // Se ha superato la finestra dell'ultimo giorno, chiudila
         else if (previousState !== 'closed' && currentState === 'closed') {
             previousState = currentState;
-            console.log("Asta chiusa, aggiorno blockchain...");
+            console.debug("Asta chiusa, aggiorno blockchain...");
             await updateBlockchainStatus(`/api/v1/auctions/close/${auctionId}`);
         }
         // cambio da locked a active (riapertura finestra giornaliera)
         else if (previousState === 'locked' && currentState === 'active') {
             previousState = currentState;
-            console.log("Riapertura finestra offerte, aggiorno blockchain...");
+            console.debug("Riapertura finestra offerte, aggiorno blockchain...");
             await updateBlockchainStatus(`/api/v1/auctions/active/${auctionId}`);
         }
     };
 
     const initTimer = async () => {
-        let windowStart = { hour: 15, minute: 0 };
-        let windowEnd = { hour: 15, minute: 30};
+        let windowStart = { hour: 13, minute: 0 };
+        let windowEnd = { hour: 13, minute: 45};
 
         try {
             const response = await fetch("/api/v1/bids/allowed_timeframe", {

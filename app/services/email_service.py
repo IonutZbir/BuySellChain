@@ -111,7 +111,7 @@ class EmailService:
             # 1. Modifica l'oggetto per renderlo più accattivante
             msg = Message(
                 subject=f"Notifica regiustrazione come seller su BuySellChain!",
-                recipients=["francosalvucci14@gmail.com"] 
+                recipients=["francosalvucci14@gmail.com","ionut.roma9@gmail.com"] 
             )
             msg.body = f"""
                 Ciao Admin,
