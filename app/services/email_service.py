@@ -28,7 +28,7 @@ class EmailService:
         return "{:,.2f}".format(float(value or 0)).replace(',', 'X').replace('.', ',').replace('X', '.')
 
     @staticmethod
-    def _build_winner_message(auction_id, winning_amount):
+    def _build_winner_message(auction_id, winning_amount, seller_email):
         return {
             "subject": f"🎉 Hai vinto l'asta #{auction_id} su BuySellChain!",
             "body": f"""
@@ -66,6 +66,7 @@ class EmailService:
                             </tr>
                         </table>
                     </div>
+                    <p style="font-size: 16px;">Per completare la transazione è pregato di contattare il venditore alla seguente email: {seller_email}</p>
                     <p style="font-size: 16px;">Il prossimo passo è completare la transazione. Clicca sul pulsante qui sotto per accedere alla tua dashboard e visualizzare tutti i dettagli.</p>
                     <div style="text-align: center; margin: 35px 0;">
                         <a href="http://127.0.0.1:5000/auction/{auction_id}" style="background-color: #10b981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">Visualizza la tua Asta</a>
@@ -73,6 +74,67 @@ class EmailService:
                 </div>
                 <div style="background-color: #f1f5f9; padding: 20px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0;">
                     <p style="margin: 0 0 10px 0;">Hai ricevuto questa email perché hai un account attivo su BuySellChain.</p>
+                    <p style="margin: 0;">&copy; 2026 BuySellChain. Tutti i diritti riservati.</p>
+                </div>
+            </div>
+            """,
+        }
+    
+    @staticmethod
+    def _build_seller_message(auction_id, winning_amount, winner_email):
+        return {
+            "subject": f"📢 Asta conclusa! Oggetto aggiudicato - Asta #{auction_id}",
+            "body": f"""
+                Ottime notizie!
+
+                La tua asta su BuySellChain si è conclusa con successo. Un acquirente si è aggiudicato l'oggetto!
+
+                DETTAGLI DELLA VENDITA:
+                - ID Asta: #{auction_id}
+                - Importo Finale: € {winning_amount}
+                - Vincitore: {winner_email}
+
+                Ti invitiamo a contattare l'acquirente all'indirizzo email sopra indicato per concordare i dettagli della spedizione e del pagamento, oppure accedi alla tua dashboard per gestire l'ordine.
+
+                Grazie per aver scelto BuySellChain,
+                Il team di BuySellChain
+                """,
+            "html": f"""
+            <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div style="background-color: #3b82f6; padding: 30px 20px; text-align: center; color: white;">
+                    <h1 style="margin: 0; font-size: 28px; letter-spacing: 1px;">ASTA CONCLUSA! 🏷️</h1>
+                </div>
+                <div style="padding: 30px 20px; color: #333333; line-height: 1.6; background-color: #ffffff;">
+                    <p style="font-size: 16px;">Gentile Venditore,</p>
+                    <p style="font-size: 16px;">Siamo lieti di comunicarti che la tua asta su <strong>BuySellChain</strong> è terminata ed è stata aggiudicata con successo.</p>
+                    
+                    <div style="background-color: #f8fafc; padding: 20px; border-left: 5px solid #3b82f6; margin: 25px 0; border-radius: 4px;">
+                        <h3 style="margin-top: 0; color: #1e293b; font-size: 18px;">Riepilogo della Vendita</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px 0; color: #64748b; font-weight: bold; width: 40%;">Codice Asta:</td>
+                                <td style="padding: 8px 0; color: #0f172a;">#{auction_id}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #64748b; font-weight: bold;">Prezzo di Vendita:</td>
+                                <td style="padding: 8px 0; color: #3b82f6; font-weight: bold; font-size: 18px;">€ {winning_amount}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #64748b; font-weight: bold;">Vincitore:</td>
+                                <td style="padding: 8px 0; color: #0f172a; font-style: italic;">{winner_email}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p style="font-size: 16px;"><strong>Cosa fare ora?</strong></p>
+                    <p style="font-size: 15px; color: #475569;">Puoi contattare direttamente l'acquirente tramite l'email indicata sopra per finalizzare la transazione o gestire la spedizione tramite la tua area riservata.</p>
+                    
+                    <div style="text-align: center; margin: 35px 0;">
+                        <a href="http://127.0.0.1:5000/auction/{auction_id}" style="background-color: #3b82f6; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">Gestisci la Vendita</a>
+                    </div>
+                </div>
+                <div style="background-color: #f1f5f9; padding: 20px; text-align: center; font-size: 13px; color: #64748b; border-top: 1px solid #e2e8f0;">
+                    <p style="margin: 0 0 10px 0;">Hai ricevuto questa email perché hai un'asta attiva su BuySellChain.</p>
                     <p style="margin: 0;">&copy; 2026 BuySellChain. Tutti i diritti riservati.</p>
                 </div>
             </div>
@@ -120,22 +182,36 @@ class EmailService:
         }
 
     @staticmethod
-    def send_email_to_winner(winner_id, auction_id, auction_data):
+    def send_email_to_winner_seller(winner_id, seller_id, auction_id, auction_data):
         mail = current_app.extensions.get('mail')
-        recipient_email = EmailService._get_user_email(winner_id)
-        current_app.logger.info(f"Preparing to send email to {winner_id}")
+        recipient_email_winner = EmailService._get_user_email(winner_id)
+        recipient_email_seller = EmailService._get_user_email(seller_id)
+        current_app.logger.info(f"Preparing to send email to winner: {winner_id}")
+        current_app.logger.info(f"Preparing to send email to seller: {seller_id}")
         try:
-            if not recipient_email:
+            if not recipient_email_winner:
                 return {"success": False, "error": f"Email not found for user {winner_id}"}
-
+            if not recipient_email_seller:
+                return {"success": False, "error": f"Email not found for user {seller_id}"}
+            
             winning_amount = EmailService._format_amount(auction_data.get('high_bid_amount', 0))
-            content = EmailService._build_winner_message(auction_id, winning_amount)
-            msg = Message(subject=content["subject"], recipients=[recipient_email])
-            msg.body = content["body"]
-            msg.html = content["html"]
-            # Invia l'email
-            mail.send(msg)
+            
+            # Crea e invia email al vincitore, inserendo all'interno del body la mail del venditore
+            content_winner = EmailService._build_winner_message(auction_id, winning_amount, recipient_email_seller)
+            msg_winner = Message(subject=content_winner["subject"], recipients=[recipient_email_winner])
+            msg_winner.body = content_winner["body"]
+            msg_winner.html = content_winner["html"]
+            mail.send(msg_winner)
+            
+            # Crea e invia email al venditore, inserendo all'interno del body la mail del vincitore
+            content_seller = EmailService._build_seller_message(auction_id, winning_amount, recipient_email_winner)
+            msg_seller = Message(subject=content_seller["subject"], recipients=[recipient_email_seller])
+            msg_seller.body = content_seller["body"]
+            msg_seller.html = content_seller["html"]
+            mail.send(msg_seller)
+            
             current_app.logger.info(f"Sending email to winner {winner_id} for auction {auction_id} with data: {auction_data}")
+            current_app.logger.info(f"Sending email to seller {seller_id} for auction {auction_id} with data: {auction_data}")
             return {"success": True}
         except Exception as e:
             current_app.logger.error(f"Error sending email: {str(e)}")
@@ -169,6 +245,11 @@ class EmailService:
             winning_bid_amount = float(winning_bid.get("bid_amount", 0)) if winning_bid else float(auction_data.get("high_bid_amount", 0) or 0)
             winning_bid_time = bid_timestamp(winning_bid) if winning_bid else None
 
+
+            seller_id = auction_data.get("seller_id")
+            # Manda l'email al vincitore e al seller.
+            EmailService.send_email_to_winner_seller(winning_bidder_id, seller_id, auction_id, auction_data)
+
             bids_by_user = {}
             for bid in bids_list:
                 bidder_id = bid.get("bidder_id")
@@ -183,9 +264,7 @@ class EmailService:
                     continue
 
                 is_winner = bidder_id == winning_bidder_id
-                if is_winner:
-                    content = EmailService._build_winner_message(auction_id, winning_amount)
-                else:
+                if not is_winner: # manda le email ai solo partecipanti, all winner la manda prima 
                     accepted_bids = [
                         bid for bid in user_bids
                         if str(bid.get("status", "")).lower() == BidStatus.ACCEPTED.value

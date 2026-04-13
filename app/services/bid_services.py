@@ -11,7 +11,7 @@ import json
 class BidService:
     BID_CLASS = "Bids"
     BID_ALLOWED_TIME_START = datetime.time(9, 0)
-    BID_ALLOWED_TIME_END = datetime.time(11, 39)
+    BID_ALLOWED_TIME_END = datetime.time(22, 41)
 
     """Service for managing bid operations"""
 
