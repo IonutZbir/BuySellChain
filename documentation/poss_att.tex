@@ -39,6 +39,29 @@ Il backend Flask agisce come \textit{Security Gateway} e richiede protezioni rig
     Viene implementata la libreria \texttt{Flask-Limiter} per applicare politiche di \textit{Rate Limiting} basate sull'indirizzo IP del richiedente. Endpoint critici come \texttt{/auth/login} accettano un massimo di 5 tentativi al minuto. Superata tale soglia, l'account o l'IP subiscono un \textit{lockout} temporaneo.
 \end{itemize}
 
+\subsection*{Contromisure Prioritarie su Endpoint Critici (STRIDE)}
+In aggiunta alle difese generali, la \cref{tab:stride-mitigations} sintetizza le mitigazioni operative da applicare agli endpoint a maggiore esposizione.
+
+\begin{table}[!htbp]
+    \centering
+    \small
+    \begin{tabular}{@{}p{0.32\textwidth}p{0.20\textwidth}p{0.34\textwidth}p{0.10\textwidth}@{}}
+        \toprule
+        \textbf{Endpoint} & \textbf{Categoria STRIDE} & \textbf{Contromisura consigliata} & \textbf{Priorita} \\
+        \midrule
+        \url{/api/v1/auth/login} (POST) & Spoofing, DoS & rate limiting + lockout progressivo + logging IP & Alta \\
+        \url{/api/v1/bids} (POST) & Tampering, DoS & validazione server-side rigorosa + anti flood per asta & Alta \\
+        \url{/api/v1/auctions/getAuctionHistory/\{id\}} (GET) & Repudiation, Disclosure & audit log immutabile + filtri ruolo/stato & Alta \\
+        \url{/api/v1/auth/profile} (GET/PUT) & Disclosure, Tampering & whitelist campi + validazione formati + JWT valido & Media-Alta \\
+        \url{/api/v1/admin/*} & Elevation of Privilege & enforcement RBAC stretto + alert su accessi anomali & Critica \\
+        \bottomrule
+    \end{tabular}
+    \caption{Mitigazioni endpoint-centric basate su STRIDE}
+    \label{tab:stride-mitigations}
+\end{table}
+
+Per gli endpoint di stato asta (\url{/api/v1/auctions/lock/\{id\}} e \url{/api/v1/auctions/close/\{id\}}) e inoltre consigliata una policy di invocazione autenticata e autorizzata, con tracciamento completo dei chiamanti, poiche tali operazioni influenzano direttamente l'integrita del risultato d'asta.
+
 \section{Protezione del Database Off-Chain e dell'Ambiente Docker}
 
 Il database PostgreSQL conserva dati sensibili e necessita di isolamento sia a livello applicativo che di sistema operativo.

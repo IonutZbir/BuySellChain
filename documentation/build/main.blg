@@ -7,8 +7,6 @@ A level-1 auxiliary file: sup_attack.aux
 A level-1 auxiliary file: poss_att.aux
 The style file: ieeetr.bst
 Database file #1: refs.bib
-Warning--entry type for "pallets_flask" isn't style-file defined
---line 33 of file refs.bib
 You've used 9 entries,
             1876 wiz_defined-function locations,
             532 strings with 4781 characters,
@@ -50,4 +48,3 @@ warning$ -- 0
 while$ -- 9
 width$ -- 10
 write$ -- 88
-(There was 1 warning)

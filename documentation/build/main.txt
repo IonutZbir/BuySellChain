@@ -1,0 +1,15 @@
+BuySellChain - Documento di Progettazione e Analisi di Sicurezza
+Aggiornamento documentazione: Aprile 2026
+
+Aggiornamenti inseriti senza modificare la struttura generale del documento:
+- Integrazione delle ultime funzionalita applicative nella sezione architettura/backend.
+- Aggiunta route recente: GET /api/v1/auctions/getAuctionHistory/{auction_id}.
+- Aggiunte note su notifiche email in chiusura asta (winner/seller/partecipanti non vincitori).
+- Aggiunta tabella riepilogativa API REST (metodo, endpoint, note operative).
+- Aggiornate note operative su endpoint lock/close auction e metriche bid total.
+- Nella sezione Perimetro/Superficie di Attacco: aggiunta tabella endpoint critici secondo STRIDE.
+- Nella sezione Possibili Attacchi e Contromisure: aggiunta tabella mitigazioni endpoint-centric basate su STRIDE.
+
+Nota operativa:
+- Questo file e un riepilogo testuale.
+- Per avere il PDF coerente con queste modifiche va rieseguita la compilazione LaTeX su documentation/main.tex.
