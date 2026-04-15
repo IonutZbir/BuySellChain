@@ -324,9 +324,33 @@ I principali endpoint sono:
     \item[\texttt{GET /admin/stats}] 
     Fornisce metriche aggregate del sistema, come il numero totale di aste concluse, il volume delle transazioni e il numero di asset registrati, invocando \texttt{GetNumKeys} sulle diverse classi.
 
-    \item[\texttt{GET /admin/history/\{key\}}] 
-    Endpoint di auditing che espone la cronologia immutabile di una specifica chiave (asset o asta), invocando la primitiva \texttt{GetKeyHistory} del chaincode.
 \end{description}
+
+Per mantenere una vista compatta delle route principali e delle ultime estensioni implementate, si riporta anche una sintesi tabellare.
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{@{}p{0.10\textwidth}p{0.34\textwidth}p{0.48\textwidth}@{}}
+        \toprule
+        \textbf{Metodo} & \textbf{Endpoint} & \textbf{Note operative} \\
+        \midrule
+        POST & \url{/api/v1/auth/signin} & Registrazione utente (bidder/seller), validazione email e CF seller \\
+        POST & \url{/api/v1/auth/login} & Login e rilascio JWT \\
+        GET/PUT & \url{/api/v1/auth/profile} & Lettura/aggiornamento profilo autenticato \\
+        POST & \url{/api/v1/assets} & Creazione asset con upload immagine \\
+        GET & \url{/api/v1/assets/user} & Asset posseduti dall'utente autenticato \\
+        POST & \url{/api/v1/auctions} & Creazione asta con lock dell'asset \\
+        POST & \url{/api/v1/auctions/lock/\{auction\_id\}} & Transizione stato a \texttt{LOCKED} \\
+        POST & \url{/api/v1/auctions/close/\{auction\_id\}} & Chiusura asta e determinazione vincitore \\
+        GET & \url{/api/v1/auctions/getAuctionHistory/\{auction\_id\}} & Storico offerte filtrato per ruolo/stato asta \\
+        POST & \url{/api/v1/bids} & Inserimento offerta con validazioni importo/tempo/stato \\
+        GET & \url{/api/v1/bids/total/\{auction\_id\}} & Totali offerte: complessive, valide e rifiutate \\
+        GET & \url{/api/v1/admin/stats} & Metriche aggregate dashboard admin \\
+        \bottomrule
+    \end{tabular}
+    \caption{Sintesi API REST principali (aggiornata alle ultime funzionalita)}
+\end{table}
 
 \newpage
 
@@ -371,7 +395,7 @@ I principali endpoint sono:
         ||"title"||: "Villa"
     }
 \end{lstlisting}
-
+\newpage
 \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per creare un'asta}]
 {
     ||"cmd"||: "AddKV",
@@ -400,7 +424,6 @@ I principali endpoint sono:
 }
 \end{lstlisting}
 
-\newpage
 \begin{lstlisting}[language=json, caption={Esempio di richiesta AddKV per aggiungere un'offerta (Bid)}]
 {
     ||"cmd"||: "AddKV",
@@ -421,7 +444,7 @@ I principali endpoint sono:
     }
 }
 \end{lstlisting}
-
+\newpage
 
 \subsection{Logica di Bussiness}
 
@@ -431,17 +454,17 @@ La piattaforma implementa un modello di gestione degli attori e delle aste artic
 Un utente che desideri partecipare alle aste come venditore deve completare una procedura di registrazione qualificata. Oltre alle informazioni anagrafiche standard (nome, cognome, email, numero di telefono), il sistema richiede l'inserimento del codice fiscale, necessario per garantire l'identificazione univoca e conforme alle normative sulla tracciabilità delle operazioni immobiliari. Una volta sottomessa la richiesta, un messaggio di notifica viene inviato agli amministratori del sistema, i quali hanno la responsabilità di validare l'identità del richiedente e approvare o rifiutare l'iscrizione al ruolo di venditore.
 
 \paragraph{Struttura Temporale delle Aste}
-Ogni asta è caratterizzata da un intervallo temporale definito dal venditore, durante il quale gli offerenti possono partecipare. Tale intervallo è suddiviso logicamente in finestre temporali di durata predeterminata, al fine di implementare meccanismi anti-frontrunning e garantire equità nella partecipazione.
+Ogni asta è caratterizzata da un intervallo temporale, espresso in giorni, definito dal venditore in fase di creazione dell'asta. Durante questo intervallo temporale, gli offerenti possono partecipare ed inviare offerte. Tale intervallo è suddiviso logicamente in finestre temporali di durata predeterminata, al fine di implementare meccanismi anti-frontrunning e garantire equità nella partecipazione.
 
 \paragraph{Vincoli sulle Offerte}
-Per ogni finestra temporale, ciascun offerente può inviare al massimo una sola offerta. Questa limitazione impedisce comportamenti speculativi e riduce la complessità computazionale del sistema. Le offerte rimangono nascoste agli altri partecipanti fino al termine della relativa finestra temporale, garantendo così l'anonimato del processo di bidding.
+Per ogni finestra temporale, ciascun offerente può inviare un numero predefinito di offerte, preimpostato da sistema. Questa limitazione impedisce comportamenti speculativi e riduce la complessità computazionale del sistema. Le offerte rimangono nascoste agli altri partecipanti fino al termine della relativa finestra temporale, garantendo così l'anonimato del processo di bidding.
 
 \paragraph{Aggiornamento dello Stato dell'Asta}
 Al termine di ogni finestra temporale, il sistema esegue automaticamente un'operazione di consolidamento dello stato dell'asta:
 \begin{itemize}
-    \item Vengono valutate tutte le offerte ricevute durante la finestra.
-    \item I campi \texttt{highestBidAmount} e \texttt{bidsCount} vengono aggiornati per riflettere l'offerta vincente e il conteggio totale.
     \item Lo stato dell'asta transisce in \texttt{LOCKED}, impedendo temporaneamente l'invio di nuove offerte.
+    \item Vengono valutate tutte le offerte ricevute durante la finestra.
+    \item I campi \texttt{highestBidAmount}, \texttt{bidsCount} e \texttt{highBidId} vengono aggiornati per riflettere l'offerta vincente al momento e il conteggio totale delle offerte effettuate.
     \item Il venditore acquisisce la possibilità di modificare il parametro \texttt{minIncrement}, adattando dinamicamente il valore richiesto per i successivi rilanci.
 \end{itemize}
 Una volta completato l'aggiornamento, l'asta ritorna allo stato \texttt{ACTIVE}, rendendo di nuovo disponibile la partecipazione per la finestra temporale successiva.
@@ -449,6 +472,30 @@ Una volta completato l'aggiornamento, l'asta ritorna allo stato \texttt{ACTIVE},
 La finestra temporale dell'asta viene definita dagli admin, ed è preimpostata a 12 ore (dalle 8.00 AM fino alle 20.00 PM).
 
 Questo meccanismo garantisce una distribuzione equa degli intervalli di partecipazione e facilita l'implementazione di politiche anti-frontrunning, in quanto ogni finestra temporale costituisce un perimetro di validazione indipendente per le offerte ricevute.
+
+\paragraph{Storico Offerte con Visibilita per Ruolo}
+Tra le ultime modifiche introdotte e stata aggiunta la route \texttt{/api/v1/auctions/getAuctionHistory/\{auction\_id\}}, che espone la cronologia delle offerte usando \texttt{GetKeyHistory} e applica filtri lato backend:
+\begin{itemize}
+    \item il venditore visualizza tutte le offerte (incluse quelle \texttt{REJECTED});
+    \item gli altri utenti, durante lo stato \texttt{ACTIVE}, visualizzano solo le proprie offerte;
+    \item quando l'asta transisce in \texttt{LOCKED}/\texttt{CLOSED}, gli utenti non venditori vedono anche le offerte altrui (solamente quelle validate, non le rifiutate.)
+\end{itemize}
+
+\paragraph{Chiusura dell'Asta e calcolo del Vincitore}
+Alla chiusura dell'intervallo temporale definito per l'Asta, il sistema esegue le seguenti operazioni:
+\begin{itemize}
+    \item Lo stato dell'asta transisce in \texttt{CLOSED}, chiudendo definitivamente l'invio di nuove offerte
+    \item Viene calcolato il vincitore dell'asta (calcolato come offerta più alta registrata a sistema)
+    \item \textbf{In caso di contenzioso} ogni partecipante potrà vedere, sulla pagina principale dell'asta, lo storico di \texttt{tutte} le offerte inserite a sistema con relativo \textbf{timestamp}, che va ad indicare esattamente quando l'offerta è stata registrata sulla Blockchain
+\end{itemize}
+
+\paragraph{Notifiche Email di Esito Asta}
+Alla chiusura dell'asta (route \url{/api/v1/auctions/close/\{auction\_id\}}), il backend invia notifiche email:
+\begin{itemize}
+    \item email al vincitore con importo finale e contatto del venditore;
+    \item email al venditore con dettaglio aggiudicazione;
+    \item email ai partecipanti non vincitori con motivazione sintetica di mancata aggiudicazione.
+\end{itemize}
 
 \newpage
 \section{Blockchain Layer}

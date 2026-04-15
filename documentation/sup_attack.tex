@@ -21,6 +21,28 @@ Il server applicativo basato su Flask svolge il ruolo di middleware e Policy Enf
     \item \textbf{Abuso delle API e Denial of Service (DoS):} L'assenza esplicita di meccanismi di \textit{Rate Limiting} sugli endpoint pubblici (come \texttt{/api/v1/auth/login} o \texttt{/api/v1/bids}) permette ad attaccanti di sferrare attacchi di tipo Brute Force contro gli account degli utenti, o di inondare il sistema di offerte fasulle saturando le risorse di calcolo del Security Gateway e rallentando il consenso della blockchain.
 \end{itemize}
 
+\subsection*{Endpoint Critici secondo STRIDE}
+Per focalizzare il perimetro applicativo sulle superfici piu sensibili, la \cref{tab:stride-endpoints} mappa gli endpoint piu critici rispetto alle categorie STRIDE.
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{@{}p{0.14\textwidth}p{0.33\textwidth}p{0.31\textwidth}p{0.14\textwidth}@{}}
+        \toprule
+        \textbf{STRIDE} & \textbf{Endpoint} & \textbf{Rischio principale} & \textbf{Impatto} \\
+        \midrule
+        Spoofing & \url{/api/v1/auth/login} (POST) & Credential stuffing/bruteforce & Accesso account \\
+        Tampering & \url{/api/v1/bids} (POST) & Manipolazione payload offerta & Alterazione esito asta \\
+        Repudiation & \url{/api/v1/auctions/getAuctionHistory/\{id\}} (GET) & Contestazione azioni se logging incompleto & Audit debole \\
+        Information Disclosure & \url{/api/v1/auth/profile} (GET) & Esposizione dati personali & Violazione privacy \\
+        Denial of Service & \url{/api/v1/bids} (POST), \url{/api/v1/auth/login} (POST) & Flood richieste & Degrado disponibilita \\
+        Elevation of Privilege & \url{/api/v1/admin/stats} (GET), \url{/api/v1/admin/users} (GET) & Bypass controlli ruolo admin & Accesso privilegiato \\
+        \bottomrule
+    \end{tabular}
+    \caption{Endpoint maggiormente esposti rispetto al modello STRIDE}
+    \label{tab:stride-endpoints}
+\end{table}
+
 \section{Livello Dati Off-Chain (Database PostgreSQL)}
 Il database PostgreSQL containerizzato gestisce dati anagrafici sensibili (GDPR) e credenziali:
 

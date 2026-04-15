@@ -795,6 +795,10 @@ INPUT ./images/er_blockchain.png
 INPUT images/er_blockchain.png
 INPUT ./images/er_blockchain.png
 INPUT ./images/er_blockchain.png
+INPUT /usr/share/texmf/fonts/tfm/public/lm/rm-lmr10.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/lm/lmmi10.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/lm/lmsy10.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/lm/ec-lmtt10.tfm
 INPUT ./images/make_bid_seq.png
 INPUT ./images/make_bid_seq.png
 INPUT images/make_bid_seq.png
