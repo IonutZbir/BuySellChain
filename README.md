@@ -192,3 +192,7 @@ L'idea è di estendere la piattaforma, implementando anche un sistema *finanziar
 1. Autenticazione su blockchain. Se consideriamo di estenderla usando una crypto currency (BTC, ETH, qualsiasi altra), l'autenticazione la possiamo gestire con il wallet della cryptocurrency scelta, Mantenendo nella nostra blockchain la chiave pubblica del utente. Estendere il sistema rendendolo distribuito, ciascun venditore/compratore dovrà scaricarsi la blockchain in locale. Questo ci permette di eliminare la `centralizzazione del Server Gateway`, togliendo anche la necessità di avere `admin di sistema`.
 2. Tabella Alert-Log
 3. Modificare la documentazione, definendo bene il threat model del nostro sistem. Rendendolo distribuito, ora abbiamo degli asset da aggiungere.
+
+## Eserctiazione Threat Model
+
+- Asset: Docuementi critici degli utenti, un riconoscitore che legge dei badge (?? Zona Field). Certificazione tramite ente esterno dell'esistenza degli immobili. Verificare che realmente le case sono messe in vendità. Considerare il catasto `https://catastomappe.it/api_catasto`.

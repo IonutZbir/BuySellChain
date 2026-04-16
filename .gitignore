@@ -12,3 +12,4 @@ app/routes/assets/__pycache__/
 app/routes/auctions/__pycache__/
 app/routes/bids/__pycache__/
 logs/
+app/static/uploads/assets/
