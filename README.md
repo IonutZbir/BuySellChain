@@ -193,6 +193,15 @@ L'idea è di estendere la piattaforma, implementando anche un sistema *finanziar
 2. Tabella Alert-Log
 3. Modificare la documentazione, definendo bene il threat model del nostro sistem. Rendendolo distribuito, ora abbiamo degli asset da aggiungere.
 
+## Init modifiche parte 2
+
+- Definire **baseline**, **deviazioni** e **contromisure** -> diretto su doc
+
+- Definire campi dei log e cifrare campi sensibili
+- Sistemare livelli dei log
+- Definire cosa scrivere su blockchain e cosa lasciare su file
+
+
 ## Eserctiazione Threat Model
 
 - Asset: Docuementi critici degli utenti, un riconoscitore che legge dei badge (?? Zona Field). Certificazione tramite ente esterno dell'esistenza degli immobili. Verificare che realmente le case sono messe in vendità. Considerare il catasto `https://catastomappe.it/api_catasto`.

@@ -1,14 +1,11 @@
-import os
-
 from flask import Blueprint, current_app
 from flask_jwt_extended import get_current_user, jwt_required
-from sqlalchemy import select
 
-from app import db
-from app.models.models import User
 from app.services.auction_services import AuctionService
 from app.services.guile_services import GuileService
 from app.services.jsend import jsend_response
+from app.services.log_services import LogService
+from app.services.user_services import UserService
 
 api_admin = Blueprint("api_admin", __name__)
 
@@ -39,11 +36,12 @@ def get_users():
     if error:
         return error
 
-    query = select(User).order_by(User.created_at.desc())
-    users_db = db.session.execute(query).scalars().all()
+    users_result = UserService.list_users()
+    if not users_result.get("success"):
+        return jsend_response("fail", data={"error": users_result.get("error", "Errore nel recupero utenti")}, code=500)
 
     users = []
-    for user in users_db:
+    for user in users_result.get("users", []):
         users.append(
             {
                 "id": user.blockChainId,
@@ -74,6 +72,7 @@ def get_stats():
     total_auctions = GuileService.GetNumKeys(Class="Auctions")
     total_assets = GuileService.GetNumKeys(Class="Assets")
     total_bids = GuileService.GetNumKeys(Class="Bids")
+    users_result = UserService.list_users()
 
     auctions_count = _safe_numkeys(total_auctions)
     assets_count = _safe_numkeys(total_assets)
@@ -103,7 +102,7 @@ def get_stats():
         "total_bids": bids_count,
         "active_auctions": active_auctions,
         "closed_auctions": closed_auctions,
-        "total_users": len(db.session.execute(select(User.blockChainId)).all()),
+        "total_users": len(users_result.get("users", [])) if users_result.get("success") else 0,
         "total_volume": round(total_volume, 2),
     }
 
@@ -148,21 +147,9 @@ def get_admin_logs():
     if error:
         return error
 
-    log_path = os.path.join("logs", "app.log")
-    if not os.path.exists(log_path):
-        return jsend_response("success", data={"logs": []}, code=200)
-
-    try:
-        with open(log_path, "r", encoding="utf-8", errors="replace") as log_file:
-            lines = [line.rstrip("\n") for line in log_file if line.strip()]
-    except OSError as exc:
-        current_app.logger.error("Errore nella lettura del file di log: %s", exc)
+    result = LogService.list_logs(limit=120)
+    if not result.get("success"):
+        current_app.logger.error("Errore nella lettura dei log da blockchain: %s", result.get("error"))
         return jsend_response("error", message="Errore nella lettura dei log", code=500)
 
-    tail_lines = lines[-120:]
-    logs = []
-    for index, line in enumerate(tail_lines, 1):
-        logs.append({"id": index, "message": line})
-
-    return jsend_response("success", data={"logs": logs}, code=200)
-
+    return jsend_response("success", data={"logs": result.get("logs", [])}, code=200)

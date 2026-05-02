@@ -101,6 +101,7 @@ def create_app():
     from app.routes.admin.api_admin import api_admin
     from app.routes.auth.api import api_auth
     from app.routes.frontend.routes import frontend_bp
+    from app.routes.test_ip import api_test_ip
 
     app.register_blueprint(frontend_bp, url_prefix="/")
     app.register_blueprint(api_auth, url_prefix="/api/v1/auth")
@@ -110,15 +111,7 @@ def create_app():
     app.register_blueprint(api_admin, url_prefix="/api/v1/admin")
     app.register_blueprint(api_admin_asset, url_prefix="/api/v1/admin")
     app.register_blueprint(api_admin_auctions, url_prefix="/api/v1/admin")
-
-    # Database Upgrade automatico
-    from flask_migrate import upgrade
-
-    with app.app_context():
-        try:
-            upgrade()
-            app.logger.info("Database migrato/aggiornato con successo!")
-        except Exception as e:
-            app.logger.error(f"Errore durante l'upgrade del database: {e}")
+    app.register_blueprint(api_test_ip,url_prefix="/api/v1/")
+    
 
     return app

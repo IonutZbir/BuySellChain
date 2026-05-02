@@ -138,11 +138,30 @@
 			<p aria-busy="true">Caricamento log...</p>
 		</template>
 
-		<div class="admin-logs" x-show="!loading.logs">
-			<template x-for="entry in logs" :key="entry.id">
-				<code x-text="entry.message"></code>
-			</template>
-			<p x-show="logs.length === 0">Nessun log disponibile.</p>
+		<div class="admin-table-wrap" x-show="!loading.logs">
+			<table>
+				<thead>
+					<tr>
+						<th>Livello</th>
+						<th>IP</th>
+						<th>Data</th>
+						<th>Messaggio</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template x-for="entry in logs" :key="entry.id">
+						<tr>
+							<td><mark x-text="entry.level"></mark></td>
+							<td x-text="entry.from_ip || '-' "></td>
+							<td x-text="formatDateTime(entry.created_at)"></td>
+							<td class="admin-cell-truncate" x-text="entry.message"></td>
+						</tr>
+					</template>
+					<tr x-show="logs.length === 0">
+						<td colspan="4">Nessun log disponibile.</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</article>
 </section>

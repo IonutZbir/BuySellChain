@@ -138,7 +138,10 @@ document.addEventListener("alpine:init", () => {
                 const payload = await response.json();
 
                 if (response.ok && payload?.status === "success") {
-                    this.logs = payload?.data?.logs || [];
+                    this.logs = (payload?.data?.logs || []).map((entry) => ({
+                        ...entry,
+                        level: String(entry.level || "ok").toUpperCase(),
+                    }));
                     return;
                 }
 

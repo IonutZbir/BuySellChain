@@ -13,3 +13,5 @@ app/routes/auctions/__pycache__/
 app/routes/bids/__pycache__/
 logs/
 app/static/uploads/assets/
+venv/
+.git_old/

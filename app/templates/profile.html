@@ -71,6 +71,7 @@
             </label>
 
             <button type="submit" :aria-busy="saving" :disabled="saving">Salva modifiche</button>
+            <button type="button" @click="promoteToAdmin()" :disabled="saving || String(form.role || '').toLowerCase() === 'admin'" style="margin-left: 1rem;">Diventa Admin (test)</button>
         </form>
     </article>
 </section>

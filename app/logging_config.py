@@ -1,6 +1,53 @@
 import logging
 import logging.config
 import os
+from logging import Handler
+
+from flask import has_request_context, request
+
+
+class RequestContextFilter(logging.Filter):
+    def filter(self, record):
+        if has_request_context():
+            forwarded_for = request.headers.get("X-Forwarded-For", "")
+            real_ip = request.headers.get("X-Real-IP", "")
+            if forwarded_for:
+                request_ip = forwarded_for.split(",")[0].strip()
+            elif real_ip:
+                request_ip = real_ip.strip()
+            else:
+                request_ip = request.remote_addr or "system"
+
+            record.request_ip = request_ip
+            record.request_method = request.method
+            record.request_path = request.path
+        else:
+            record.request_ip = "system"
+            record.request_method = "-"
+            record.request_path = "-"
+
+        return True
+
+
+class BlockchainLogHandler(Handler):
+    def emit(self, record):
+        try:
+            if not has_request_context():
+                return
+
+            from app.services.log_services import LogService
+
+            request_ip = getattr(record, "request_ip", "system")
+            request_method = getattr(record, "request_method", "-")
+            request_path = getattr(record, "request_path", "-")
+            message = record.getMessage()
+
+            if request_method != "-" and request_path != "-":
+                message = f"[{request_method} {request_path}] {message}"
+
+            LogService.record_log(message=message, levelno=int(record.levelno), from_ip=request_ip)
+        except Exception:
+            self.handleError(record)
 
 
 class ColorFormatter(logging.Formatter):
@@ -26,15 +73,11 @@ class ColorFormatter(logging.Formatter):
 
 
 def setup_logging(app_name):
-
-    # --- GESTIONE CARTELLA LOG ---
     log_dir = "logs"
     log_file = os.path.join(log_dir, "app.log")
 
-    # Crea la cartella se non esiste
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
-    # -----------------------------
 
     file_format = "%(levelname)s [%(name)s] [%(filename)s] [%(asctime)s] %(message)s"
     werkzeug_format = "%(levelname)s [%(name)s] %(message)s"
@@ -59,14 +102,17 @@ def setup_logging(app_name):
                     "stream": "ext://sys.stdout",
                     "formatter": "colored",
                 },
-                # Handler File per tutto (Senza colori)
                 "file_handler": {
                     "class": "logging.handlers.RotatingFileHandler",
                     "filename": log_file,
-                    "maxBytes": 10485760,  # 10MB
+                    "maxBytes": 10485760,
                     "backupCount": 5,
                     "formatter": "plain",
                     "encoding": "utf8",
+                },
+                # Handler blockchain per tutti i log applicativi
+                "blockchain_handler": {
+                    "()": BlockchainLogHandler,
                 },
                 # Handler Console per Werkzeug (Standard)
                 "console_werkzeug": {
@@ -78,14 +124,21 @@ def setup_logging(app_name):
             "loggers": {
                 app_name: {
                     "level": "DEBUG",
-                    "handlers": ["console_app", "file_handler"],
+                    "handlers": ["console_app", "file_handler", "blockchain_handler"],
+                    "filters": ["request_context"],
                     "propagate": False,
                 },
                 "werkzeug": {
                     "level": "INFO",
-                    "handlers": ["console_werkzeug", "file_handler"],
+                    "handlers": ["console_werkzeug", "file_handler", "blockchain_handler"],
+                    "filters": ["request_context"],
                     "propagate": False,
                 },
+            },
+            "filters": {
+                "request_context": {
+                    "()": RequestContextFilter,
+                }
             },
         }
     )

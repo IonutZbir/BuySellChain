@@ -56,66 +56,99 @@ class AssetStatus(enum.Enum):
     LOCKED = "locked"  # asset bloccato, non più disponibile per essere messo all'asta, ma non ancora venduto (es: asset in asta, ma asta non ancora conclusa)
     SOLD = "sold"
 
+class LogType(enum.Enum):
+    ALERT = "ALERT"
+    WARNING = "WARNING"
+    INFO = "INFO"
 
-class User(db.Model):
 
-    # In questa classe sto definendo lo schem per la tabella User. Sto usando un ORM (SQL Alchemy), invece
-    # di usare SQL puro (è piu semplice e pulito :) ).
+class User:
+    """Classe che rappresenta un utente memorizzato nella blockchain."""
 
-    # Nota: usando bcrypt, lui concatena il salt direttamente all'hash della password, non è quindi
-    # necessario definire una colonna apposita per il salt.
-    # Il formato bcrypt è $<id>$<cost>$<salt><digest> dove
-    # $<id>$: l'algoritmo
-    # $<cost>$: il costo per la creazione dell'hash
-    # La lunghezza totale è di 60 byte
+    def __init__(
+        self,
+        name: str,
+        surname: str,
+        email: str,
+        birthday,
+        cellularNumber: str,
+        passwordHash: str,
+        codiceFiscale: str = None,
+        role: UserRoles = UserRoles.BIDDER,
+        blockChainId: str = None,
+        lastLoginAt=None,
+        created_at=None,
+    ):
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.birthday = birthday
+        self.cellularNumber = cellularNumber
+        self.passwordHash = passwordHash
+        self.codiceFiscale = codiceFiscale
+        self.role = role if isinstance(role, UserRoles) else UserRoles(role)
+        self.created_at = created_at or datetime.now()
+        self.lastLoginAt = lastLoginAt or datetime.now()
+        self.blockChainId = blockChainId or self._generate_blockchain_id()
 
-    # Da questa definizione, usando flask migrate, viene creata in automatico la tabella user in postgres.
-
-    # Per aggiungere utenti all'intenro del db:
-    # user = User(...)
-    # db.session.add(user)
-    # db.session.commit()
-    # Questo farà il comando SQL: INSERTO INTO user (...) VALUES (...)
-
-    # blockChainId è un identificativo univoco che viene generato al momento della registrazione dell'utente, e viene usato per identificare l'utente all'interno della blockchain.
-    # Viene generato come hash dei dati dell'utente (es: email) + un valore random (es: uuid4), in modo da garantire l'unicità e la sicurezza dell'identificativo.
-
-    __tablename__ = "user"
-
-    # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    codiceFiscale: Mapped[str] = mapped_column(String(16), unique=True, nullable=True)
-    blockChainId: Mapped[str] = mapped_column(
-        String(64), primary_key=True, unique=True, nullable=False
-    )
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
-    surname: Mapped[str] = mapped_column(String(50), nullable=False)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    birthday: Mapped[Date] = mapped_column(Date, nullable=False)
-    cellularNumber: Mapped[str] = mapped_column(String(16), nullable=False)
-    role: Mapped[UserRoles] = mapped_column(
-        Enum(UserRoles), default=UserRoles.BIDDER, nullable=False
-    )
-    passwordHash: Mapped[str] = mapped_column(String(60), nullable=False)
-    lastLoginAt: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Genera un blockChainId unico per l'utente, usando email + uuid4
+    def _generate_blockchain_id(self) -> str:
         unique_string = f"{self.email}-{uuid4()}"
-        self.blockChainId = hmac.new(
+        return hmac.new(
             os.getenv("HMAC_SECRET_KEY").encode(), unique_string.encode(), sha256
         ).hexdigest()
 
-# DA CAPIRE COME IMPOSTARE L'ADMIN, SE CREARE UNA TABELLA A PARTE O GESTIRLO COME UN RUOLO DELL'UTENTE (ES: USER CON ROLE=ADMIN) --- IGNORE ---
-# class Admin(db.Model):
-#     __tablename__ = "admin"
+    @classmethod
+    def from_json(cls, data: dict):
+        birthday = data.get("birthday")
+        created_at = data.get("created_at")
+        last_login_at = data.get("lastLoginAt")
 
-#     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-#     user_id: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+        if isinstance(birthday, str):
+            try:
+                birthday = datetime.fromisoformat(birthday).date()
+            except ValueError:
+                pass
 
-#     def __init__(self, user_id: str):
-#         self.user_id = user_id
+        if isinstance(created_at, str):
+            try:
+                created_at = datetime.fromisoformat(created_at)
+            except ValueError:
+                pass
+
+        if isinstance(last_login_at, str):
+            try:
+                last_login_at = datetime.fromisoformat(last_login_at)
+            except ValueError:
+                pass
+
+        return cls(
+            name=data.get("name"),
+            surname=data.get("surname"),
+            email=data.get("email"),
+            birthday=birthday,
+            cellularNumber=data.get("cellularNumber"),
+            passwordHash=data.get("passwordHash"),
+            codiceFiscale=data.get("codiceFiscale"),
+            role=UserRoles(data.get("role", UserRoles.BIDDER.value)),
+            blockChainId=data.get("blockChainId"),
+            lastLoginAt=last_login_at,
+            created_at=created_at,
+        )
+
+    def to_json(self) -> dict:
+        return {
+            "blockChainId": self.blockChainId,
+            "name": self.name,
+            "surname": self.surname,
+            "email": self.email,
+            "birthday": self.birthday.isoformat() if self.birthday else None,
+            "cellularNumber": self.cellularNumber,
+            "codiceFiscale": self.codiceFiscale,
+            "role": self.role.value,
+            "passwordHash": self.passwordHash,
+            "lastLoginAt": self.lastLoginAt.isoformat() if self.lastLoginAt else None,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
 
 class Auction:
     """Classe che rappresenta un'asta memorizzata nella blockchain"""
@@ -296,4 +329,49 @@ class Asset:
             "status": self.status.value,
             "current_auction_id": self.current_auction_id,
             "picture": self.picture.filename if self.picture else None,
+        }
+
+class Log:
+    """Classe che definisce un Log presente nella Blockchain"""
+
+    def __init__(
+        self,
+        from_ip: str,
+        level: LogType,
+        description: str,
+        user_agent: str,
+    ):
+        self.id = self._generate_id(description, from_ip, level, user_agent)
+        self.description = description
+        self.created_at = datetime.now()
+        self.level = level if isinstance(level, LogType) else LogType.OK
+        self.from_ip = from_ip
+        self.user_agent = user_agent
+
+    def _generate_id(
+        self,
+        description: str,
+        from_ip: str,
+        level: LogType,
+        user_agent: str,
+    ) -> str:
+        combined_string = f"{description}-{level.value}-{from_ip}-{user_agent}-{uuid4()}"
+        return hmac.new(
+            os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256
+        ).hexdigest()
+
+    def get_id(self) -> str:
+        return self.id
+
+    def __repr__(self) -> str:
+        return f"Log(id={self.id}, description={self.description}, from_ip={self.from_ip}, level={self.level.value})"
+
+    def to_json(self) -> dict:
+        return {
+            "id": self.id,
+            "description": self.description,
+            "created_at": self.created_at.isoformat(),
+            "level": self.level.value,
+            "from_ip": self.from_ip,
+            "user_agent": self.user_agent,
         }

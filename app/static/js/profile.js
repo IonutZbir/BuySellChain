@@ -127,5 +127,38 @@ document.addEventListener("alpine:init", () => {
                 this.saving = false;
             }
         },
+        async promoteToAdmin() {
+            this.saving = true;
+            this.message = "";
+            this.isError = false;
+
+            try {
+                const headers = this.getAuthHeaders();
+                if (!headers) return;
+
+                const response = await fetch("/api/v1/auth/profile/promote", {
+                    method: "POST",
+                    headers,
+                });
+
+                const payload = await response.json();
+
+                if (response.ok && payload?.status === "success") {
+                    const data = payload.data || {};
+                    this.form.role = data.role || "admin";
+                    this.message = "Sei stato promosso a amministratore (test).";
+                    this.isError = false;
+                } else {
+                    this.isError = true;
+                    this.message = payload?.data?.message || "Promozione non riuscita.";
+                }
+            } catch (error) {
+                console.error(error);
+                this.isError = true;
+                this.message = "Errore di rete durante la promozione.";
+            } finally {
+                this.saving = false;
+            }
+        },
     }));
 });
