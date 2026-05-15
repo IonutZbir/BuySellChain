@@ -226,6 +226,10 @@ Da loggare su BL:
 - invio offerte effettuate
 
 
+- Aggiungere campo payoad size
+- definire delle api per accedere ai log come admin
+- aggiungere id utente, asset, asta, offerta quando inserita nella blockchain
+
 **Esempio Log da API**
 ```
 "data": {

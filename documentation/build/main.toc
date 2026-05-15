@@ -20,12 +20,18 @@
 \contentsline {paragraph}{Notifiche Email di Esito Asta}{17}{section*.20}%
 \contentsline {section}{\numberline {2.5}Blockchain Layer}{18}{section.2.5}%
 \contentsline {section}{\numberline {2.6}Database Off-Chain}{19}{section.2.6}%
-\contentsline {chapter}{\numberline {3}Superficie osservabile e Perimetro di Attacco}{20}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Livello Client (Frontend)}{20}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Livello Application / Security Gateway (Backend)}{21}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Livello Dati Off-Chain (Database PostgreSQL)}{22}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Possibili Attacchi e Contromisure}{23}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Difesa del Frontend e Gestione Sicura delle Sessioni}{23}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Hardening del Security Gateway (Backend)}{24}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Protezione del Database Off-Chain e dell'Ambiente Docker}{25}{section.4.3}%
-\contentsline {chapter}{Bibliografia}{26}{section.4.3}%
+\contentsline {chapter}{\numberline {3}Definizione dell'infrastruttura e delle Zone di Sicurezza}{20}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Zona DMZ (Demilitarized Zone)}{20}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Zona IT / Enterprise (Restricted Zone)}{21}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Asset Inventory e Analisi delle Criticità}{22}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Endpoint del Security Gateway}{22}{subsection.3.3.1}%
+\contentsline {section}{\numberline {3.4}Superficie Osservabile, Inferenza e Vettori di Attacco}{23}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Grafo dell'Infrastruttura e Flussi di Comunicazione}{24}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Dall'Architettura alla Baseline Comportamentale (Operating Envelope)}{26}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Definizione della Baseline Qualitativa}{26}{subsection.3.6.1}%
+\contentsline {chapter}{\numberline {4}Logger}{27}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Definizione Sistema di Logging}{27}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Esempi di Log e Analisi Comportamentale}{29}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}User Agent Metadata Role}{30}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Monitoraggio Autenticazione \& Admin}{30}{section.4.3}%
+\contentsline {chapter}{Bibliografia}{32}{section.4.3}%
