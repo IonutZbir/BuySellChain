@@ -6,6 +6,11 @@ from sqlalchemy import String, Date, DateTime, Enum
 from sqlalchemy.orm import Mapped, mapped_column
 import hmac
 import os
+from base64 import b64encode, b64decode
+from string import hexdigits
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from flask import current_app
 
 # Importa l'istanza db che hai creato in app/__init__.py
 from app import db
@@ -58,7 +63,6 @@ class AssetStatus(enum.Enum):
 
 class LogType(enum.Enum):
     ALERT = "ALERT"
-    WARNING = "WARNING"
     INFO = "INFO"
 
 
@@ -331,22 +335,81 @@ class Asset:
             "picture": self.picture.filename if self.picture else None,
         }
 
-class Log:
-    """Classe che definisce un Log presente nella Blockchain"""
+class Messages(enum.Enum):
+    ACCESSO_NEGATO = "Accesso negato"
+    ACCESSO_RIUSCITO = "Accesso riuscito"
+    PREFIX_ACCESSO_NON_AUTORIZZATO = "Accesso non autorizzato -> "
+    ECCESSO_RICHIESTE_LOGIN = "Eccesso di richieste di login" # DA IMPLEMENTARE CON SISTEMA DI RATE LIMITING (FORSE)
+    NUOVO_UTENTE_REGISTRATO = "Nuovo utente registrato"
+    REGISTRAZIONE_ASTA_BL = "Asta registrata su Blockchain"
+    REGISTRAZIONE_ASSET_BL = "Asset registrato su Blockchain"
+    OFFERTA_REGISTRATA_BL = "Offerta registrata su Blockchain"
+    PREFIX_GET_ADMIN_ROUTE = "Accesso a route admin -> "
 
+class Log:
+    """Classe che definisce un Log presente nella Blockchain con cifratura AES-GCM"""
+
+    @staticmethod
+    def _get_aes_key() -> bytes:
+        """Restituisce una chiave AES valida a partire dalla configurazione."""
+        raw_key = current_app.config.get("AES_SECRET_KEY")
+
+        if not raw_key:
+            raise ValueError("AES_SECRET_KEY non configurata")
+
+        if isinstance(raw_key, bytes):
+            key_bytes = raw_key
+        else:
+            raw_key = str(raw_key).strip()
+            if len(raw_key) % 2 == 0 and all(char in hexdigits for char in raw_key):
+                key_bytes = bytes.fromhex(raw_key)
+            else:
+                key_bytes = raw_key.encode()
+
+        if len(key_bytes) in (16, 24, 32):
+            return key_bytes
+
+        return sha256(key_bytes).digest()
+    
+    @staticmethod
+    def _encrypt_field(data: str) -> str:
+        """Cifra un campo usando AES-GCM con nonce casuale e ritorna base64"""
+        key = Log._get_aes_key()
+        nonce = get_random_bytes(16)
+        cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+        ciphertext, tag = cipher.encrypt_and_digest(data.encode())
+        # Concatena nonce + ciphertext + tag e converti a base64
+        encrypted_data = nonce + ciphertext + tag
+        return b64encode(encrypted_data).decode('utf-8')
+    
+    @staticmethod
+    def decrypt_field(encrypted_data_b64: str) -> str:
+        """Decifra un campo da base64 usando AES-GCM"""
+        encrypted_data = b64decode(encrypted_data_b64.encode('utf-8'))
+        key = Log._get_aes_key()
+        # Estrai nonce (primi 16 bytes), ciphertext (tutto tranne ultimi 16), tag (ultimi 16)
+        nonce = encrypted_data[:16]
+        ciphertext = encrypted_data[16:-16]
+        tag = encrypted_data[-16:]
+        cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+        plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+        return plaintext.decode()
+    
     def __init__(
         self,
         from_ip: str,
         level: LogType,
-        description: str,
+        method: str,
+        description: Messages | str,
         user_agent: str,
     ):
-        self.id = self._generate_id(description, from_ip, level, user_agent)
-        self.description = description
+        self.id = self._generate_id(description, from_ip, level, user_agent, method)
+        self.description = description.value if isinstance(description, Messages) else description
+        self.method = method
         self.created_at = datetime.now()
-        self.level = level if isinstance(level, LogType) else LogType.OK
-        self.from_ip = from_ip
-        self.user_agent = user_agent
+        self.level = level.value
+        self.from_ip = self._encrypt_field(from_ip)
+        self.user_agent = self._encrypt_field(user_agent)
 
     def _generate_id(
         self,
@@ -354,24 +417,25 @@ class Log:
         from_ip: str,
         level: LogType,
         user_agent: str,
+        method: str,
     ) -> str:
-        combined_string = f"{description}-{level.value}-{from_ip}-{user_agent}-{uuid4()}"
+        combined_string = f"{description}-{level.value}-{from_ip}-{user_agent}-{method}-{uuid4()}"
         return hmac.new(
             os.getenv("HMAC_SECRET_KEY").encode(), combined_string.encode(), sha256
         ).hexdigest()
-
+    
     def get_id(self) -> str:
         return self.id
 
-    def __repr__(self) -> str:
-        return f"Log(id={self.id}, description={self.description}, from_ip={self.from_ip}, level={self.level.value})"
-
     def to_json(self) -> dict:
+        #from_ip_decrypted = self._decrypt_field(self.from_ip)
+        #user_agent_decrypted = self._decrypt_field(self.user_agent)
         return {
             "id": self.id,
             "description": self.description,
             "created_at": self.created_at.isoformat(),
-            "level": self.level.value,
+            "level": self.level,
             "from_ip": self.from_ip,
             "user_agent": self.user_agent,
+            "method": self.method,
         }

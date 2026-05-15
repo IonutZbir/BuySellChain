@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request, current_app
 from flask_jwt_extended import jwt_required, get_current_user
 
-from app.models.models import AssetType
+from app.models.models import AssetType, Messages, LogType
 from app.services.asset_services import AssetService
-
+from app.services.log_services import LogService
 from app.services.jsend import jsend_response
 
 api_assets = Blueprint("api_assets", __name__)
@@ -17,6 +17,11 @@ api_assets = Blueprint("api_assets", __name__)
 def post_assets():
     user = get_current_user()
     owner_id = user["id"]
+
+    role = user.get("role")
+    if role != "seller":
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /assets POST", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+        return jsonify({"error": "Accesso negato"}), 403
 
     title = request.form.get("title")
     descr = request.form.get("descr")
@@ -55,6 +60,8 @@ def post_assets():
     result = AssetService.create_asset(
         owner_id, title, descr, asset_type, size, price, locat, picture
     )
+    if result:
+        LogService.record_log(message=Messages.REGISTRAZIONE_ASSET_BL, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
 
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
@@ -100,5 +107,7 @@ def get_assets_by_user():
 
     if not result.get("success"):
         return jsend_response("fail", data={"error": result.get("error")}, code=404)
+    
+    LogService.record_log(message=f"Visione degli asset di utente {user_id}", level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
 
     return jsend_response("success", data={"assets": result.get("assets")})

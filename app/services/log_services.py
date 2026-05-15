@@ -1,6 +1,7 @@
 from datetime import datetime
+import enum
 
-from app.models.models import Log, LogType
+from app.models.models import Log, LogType, Messages
 from app.services.guile_services import GuileService
 
 
@@ -35,20 +36,10 @@ class LogService:
             return value
         return None
 
-    @staticmethod
-    def _map_level(levelno: int) -> LogType:
-        levelno = int(levelno)
-        if levelno >= 50:
-            return LogType.ALERT
-        if levelno >= 40:
-            return LogType.ALERT
-        if levelno >= 30:
-            return LogType.WARNING
-        return LogType.INFO
 
     @staticmethod
-    def record_log(message: str, levelno: int, from_ip: str,user_agent: str):
-        log = Log(from_ip=from_ip, level=LogService._map_level(levelno), description=message, user_agent=user_agent)
+    def record_log(message: str | Messages, level: LogType, from_ip: str,user_agent: str,method: str):
+        log = Log(from_ip=from_ip, level=level, description=message, user_agent=user_agent, method=method)
         result = GuileService.AddKV(Class=LogService.LOGS_CLASS, key=log.get_id(), value=log.to_json())
         return result
 
@@ -88,9 +79,10 @@ class LogService:
                     "id": log.get("id", index),
                     "message": log.get("description", ""),
                     "level": log.get("level", "ok"),
-                    "from_ip": log.get("from_ip", "system"),
+                    "from_ip": Log.decrypt_field(log.get("from_ip", "system")),
                     "created_at": log.get("created_at"),
-                    "user_agent": log.get("user_agent", "unknown"),
+                    "user_agent": Log.decrypt_field(log.get("user_agent", "unknown")),
+                    "method": log.get("method", "-"),
                 }
             )
 

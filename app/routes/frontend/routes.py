@@ -9,10 +9,13 @@ Contiene i percorsi per:
 from glob import glob
 import os
 
-from flask import Blueprint, current_app, redirect, render_template, session, url_for
+from flask import Blueprint, current_app, redirect, render_template, request, session, url_for
 
+from app.models.models import LogType, LogType, Messages
 from app.services.asset_services import AssetService
 from app.services.auction_services import AuctionService
+from app.services.log_services import LogService
+from app.services.log_services import LogService
 
 frontend_bp = Blueprint("frontend", __name__)
 
@@ -85,14 +88,17 @@ Meccanismo di protezione per la pagina di creazione aste:
 def click_create_auction():
     if "user_id" not in session:
         return redirect(url_for("frontend.login"))
-
+    if session.get("role") != "seller":
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + "/click-create-auction", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
+        return redirect(url_for("frontend.index"))
     session["allowed_navigation"] = True
     return redirect(url_for("frontend.create_auction_page"))
 
 
 @frontend_bp.route("/auctions/create")
 def create_auction_page():
-    if not session.get("allowed_navigation", None):
+    if not session.get("allowed_navigation", None) or session.get("role") != "seller":
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + "/auctions/create", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
         return redirect(url_for("frontend.index"))
 
     return render_template("create_auction.html")

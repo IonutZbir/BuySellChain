@@ -5,12 +5,13 @@ import glob
 from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 
-from app.models.models import AuctionStatus, BidStatus
+from app.models.models import AuctionStatus, BidStatus, LogType, Messages
 from app.services.asset_services import AssetService
 from app.services.bid_services import BidService
 from app.services.auction_services import AuctionService
 from app.services.email_service import EmailService
 from app.services.jsend import jsend_response
+from app.services.log_services import LogService
 
 api_auctions = Blueprint("api_auctions", __name__)
 
@@ -31,6 +32,11 @@ def create_auction():
     endTime = data.get("endTime")
     startingPrice = data.get("startingPrice")
     minIncr = data.get("minIncr")
+
+    role = user.get("role")
+    if role != "seller":
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /auctions POST", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+        return jsonify({"error": "Accesso negato"}), 403
 
     # Validate required fields
     if not all([startTime, endTime, startingPrice, minIncr]):
@@ -62,7 +68,8 @@ def create_auction():
     result = AuctionService.create_auction(
         assetId, sellerId, startTime, endTime, startingPrice, minIncr
     )
-    
+    if result:
+        LogService.record_log(message=Messages.REGISTRAZIONE_ASTA_BL, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
 
@@ -167,19 +174,6 @@ def get_auction_by_id(auction_id):
 
     asset_data = result.get("auction_data", {})
     return jsend_response("success", data=asset_data)
-
-
-@api_auctions.route("/auctions/<string:auction_id>", methods=["DELETE"])
-@jwt_required()
-def delete_auction(auction_id):
-    user = get_current_user()
-    sellerId = user.get("id")
-    result = AuctionService.cancel_auction(auction_id)
-    if not result:
-        return jsend_response(
-            "fail", data={"error": "Errore durante l'eliminazione dell'asta"}, code=500
-        )
-    return jsend_response("success", code=200)
 
 
 @api_auctions.route("/auctions/bids/<string:auction_id>", methods=["GET"])

@@ -205,3 +205,184 @@ L'idea è di estendere la piattaforma, implementando anche un sistema *finanziar
 ## Eserctiazione Threat Model
 
 - Asset: Docuementi critici degli utenti, un riconoscitore che legge dei badge (?? Zona Field). Certificazione tramite ente esterno dell'esistenza degli immobili. Verificare che realmente le case sono messe in vendità. Considerare il catasto `https://catastomappe.it/api_catasto`.
+
+Mettere contenuto Profile dentro dashboard, solo nome e cognome utente
+
+
+# LogService
+
+formato:
+- timestamp di quando avviene la richiesta
+- from ip (cifrato)
+- livello criticità (ALERT, INFO)
+- metodo (es. GET, POST)
+- msg (no msg ambigui/con troppe info)
+- user_agent
+
+Da loggare su BL:
+- quando avviene login e registrazione user
+- creazione asta
+- creazione asset
+- invio offerte effettuate
+
+
+**Esempio Log da API**
+```
+"data": {
+        "logs": [
+            {
+                "created_at": "2026-05-15T11:47:53.512788",
+                "from_ip": "127.0.0.1",
+                "id": "6a8e249114664e905f84d83d7c992a860e950f5baf04894679581a05bd69d9e1",
+                "level": "INFO",
+                "message": "Nuovo utente registrato",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0"
+            }
+        ]
+    },
+"status": "success"
+```
+
+**Stesso Esempio ma da GetKV**
+```
+{
+    "success": true,
+    "message": "Ok",
+    "answer": {
+        "value": {
+            "id": "6a8e249114664e905f84d83d7c992a860e950f5baf04894679581a05bd69d9e1",
+            "description": "Nuovo utente registrato",
+            "created_at": "2026-05-15T11:47:53.512788",
+            "level": "INFO",
+            "from_ip": "lIBpH+5m+OHAsrUVwVV1l9i0Yvu2KSqVGk8zxymgJpVQqOFKP70dRgg=",
+            "user_agent": "2j0pqAPMUAad5KVGvUzR8gc9ZhmmWz3uYKvFNLeMaCe0mSQeuoY9ykcAcUAIenUC4xX/qShoxtY44qW5O00lRvxQM+zlcsGzkyxLxAhur5JX52232UPxn0DlWBjBY22ZU2XownYE",
+            "method": "POST"
+        },
+        "key": [
+            "6a8e249114664e905f84d83d7c992a860e950f5baf04894679581a05bd69d9e1"
+        ],
+        "class": "Logs"
+    }
+}
+```
+
+# Loggin Session
+
+```
+{
+    "data": {
+        "logs": [
+            {
+                "created_at": "2026-05-15T12:41:24.896036",
+                "from_ip": "127.0.0.1",
+                "id": "9f1b99fc04ee6a489da4901ab9eb226cfdbf930877f7422752c21a609a7d581a",
+                "level": "ALERT",
+                "message": "Accesso non autorizzato /auctions/create",
+                "method": "GET",
+                "user_agent": "curl/8.15.0"
+            },
+            {
+                "created_at": "2026-05-15T12:35:00.391180",
+                "from_ip": "127.0.0.1",
+                "id": "d44f5dcabb1f6d678ee5e0d2f89db117ec409a8e31259fc99d31f1c322a36a57",
+                "level": "ALERT",
+                "message": "Accesso non autorizzato /assets POST",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+            },
+            {
+                "created_at": "2026-05-15T12:33:42.144222",
+                "from_ip": "127.0.0.1",
+                "id": "c82cb1c7ceb5243b73ea93a5a43f97898f280d7e3e740b6752b36d3cb1f8022c",
+                "level": "INFO",
+                "message": "Nuovo utente registrato",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+            },
+            {
+                "created_at": "2026-05-15T12:27:17.482174",
+                "from_ip": "127.0.0.1",
+                "id": "34ffbc9f9214358f44690465e7a4a0940c2cea55d04888a33ed867bab3ecb98d",
+                "level": "INFO",
+                "message": "Accesso riuscito",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+            },
+            {
+                "created_at": "2026-05-15T12:14:15.482957",
+                "from_ip": "127.0.0.1",
+                "id": "c7c01050949504bb6eee58cdaefa460c7c4ba37d47f416dc881ce79e7a7a8791",
+                "level": "INFO",
+                "message": "Accesso a route admin ->/logs",
+                "method": "GET",
+                "user_agent": "PostmanRuntime/7.49.1"
+            },
+            {
+                "created_at": "2026-05-15T12:13:43.605970",
+                "from_ip": "127.0.0.1",
+                "id": "f40310a42a01888922e71c4f4a5e7f10eff7210c5aed5837b3037718546a1f7a",
+                "level": "INFO",
+                "message": "Accesso a route admin ->/logs",
+                "method": "GET",
+                "user_agent": "PostmanRuntime/7.49.1"
+            },
+            {
+                "created_at": "2026-05-15T12:13:11.931754",
+                "from_ip": "127.0.0.1",
+                "id": "73fd08fcf43f93c8e03a5761ac7352ca6561f6c1992b1bd570065515a6fc5101",
+                "level": "INFO",
+                "message": "Accesso a route admin ->/logs",
+                "method": "GET",
+                "user_agent": "PostmanRuntime/7.49.1"
+            },
+            {
+                "created_at": "2026-05-15T12:13:08.651665",
+                "from_ip": "127.0.0.1",
+                "id": "bbebb6d67fdd1886ae6a9a3e48df56e9784cff3b346ccd00620d43b7a9de56c5",
+                "level": "ALERT",
+                "message": "Accesso non autorizzato/auctions/create",
+                "method": "GET",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0"
+            },
+            {
+                "created_at": "2026-05-15T12:12:50.066125",
+                "from_ip": "127.0.0.1",
+                "id": "64249809d3fcec6bec1f5d6e173d2ea1888e7c88c0579e232925a50ccbf30e77",
+                "level": "INFO",
+                "message": "Accesso a route admin ->/logs",
+                "method": "GET",
+                "user_agent": "PostmanRuntime/7.49.1"
+            },
+            {
+                "created_at": "2026-05-15T12:12:46.858909",
+                "from_ip": "127.0.0.1",
+                "id": "2dc53a7dc4cd5f492dabb7d89c4a5c42ee276b21b569006268350ba226f3b666",
+                "level": "INFO",
+                "message": "Accesso riuscito",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0"
+            },
+            {
+                "created_at": "2026-05-15T12:12:00.374480",
+                "from_ip": "127.0.0.1",
+                "id": "6435ba6d5e8a1ec0b2741c31be307bdd073aeeaa0a6c94dcf810cb1799bef8e8",
+                "level": "INFO",
+                "message": "Accesso riuscito",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0"
+            },
+            {
+                "created_at": "2026-05-15T11:47:53.512788",
+                "from_ip": "127.0.0.1",
+                "id": "6a8e249114664e905f84d83d7c992a860e950f5baf04894679581a05bd69d9e1",
+                "level": "INFO",
+                "message": "Nuovo utente registrato",
+                "method": "POST",
+                "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0"
+            }
+        ]
+    },
+    "status": "success"
+}
+```

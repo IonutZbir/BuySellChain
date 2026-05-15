@@ -77,12 +77,14 @@
 					Al momento non ci sono immobili all'asta. Torna a trovarci
 					presto o crea la tua prima inserzione!
 				</p>
+				{% if session.get('role') == 'seller' %}
 				<a
 					href="{{ url_for('frontend.click_create_auction') }}"
 					role="button"
 					class="secondary"
 					>Crea Asta</a
 				>
+				{% endif %}
 			</div>
 		</article>
 	</template>

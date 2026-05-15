@@ -1,8 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_current_user
 
+from app.models.models import LogType, Messages
 from app.services.bid_services import BidService
 from app.services.jsend import jsend_response
+from app.services.log_services import LogService
 
 api_bids = Blueprint("api_bids", __name__)
 
@@ -11,9 +13,11 @@ api_bids = Blueprint("api_bids", __name__)
 @jwt_required()
 def create_bid():
     data = request.json
-    bidder_id = get_current_user()["id"]
+    user = get_current_user()
+    bidder_id = user["id"]
     auction_id = data.get("auction_id")
     amount = data.get("amount")
+
 
     if not all([auction_id, amount]):
         return jsend_response("fail", data={"error": "Missing required fields"}, code=400)
@@ -34,6 +38,7 @@ def create_bid():
         if not result.get("validate_success"):
             return jsend_response("fail", data={"error": result.get("Bid_status_reason")}, code=400)
 
+    LogService.record_log(message=Messages.OFFERTA_REGISTRATA_BL, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
     return jsend_response("success", code=200)
 
 

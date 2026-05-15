@@ -25,43 +25,47 @@
             <div class="grid">
                 <label>
                     Nome
-                    <input type="text" x-model="form.name" required />
+                    <input type="text" x-model="form.name" required disabled/>
                 </label>
 
                 <label>
                     Cognome
-                    <input type="text" x-model="form.surname" required />
+                    <input type="text" x-model="form.surname" required disabled/>
                 </label>
             </div>
 
             <div class="grid">
                 <label>
                     Email
-                    <input type="email" x-model="form.email" required />
+                    <input type="email" x-model="form.email" required disabled />
                 </label>
 
-                <label>
+                <!-- <label>
                     Numero di cellulare
                     <input type="text" x-model="form.cellularNumber" />
-                </label>
-            </div>
-
-            <div class="grid">
-                <label>
-                    Data di nascita
-                    <input type="date" x-model="form.birthday" required />
-                </label>
-
+                </label> -->
                 <label>
                     Ruolo
                     <input type="text" x-model="form.role" disabled />
                 </label>
             </div>
 
+            <!-- <div class="grid">
+                <label>
+                    Data di nascita
+                    <input type="date" x-model="form.birthday" required disabled/>
+                </label> -->
+
+                <!-- <label>
+                    Ruolo
+                    <input type="text" x-model="form.role" disabled />
+                </label> -->
+            </div> 
+
             <template x-if="String(form.role || '').toLowerCase() === 'seller'">
                 <label>
                     Codice fiscale
-                    <input type="text" x-model="form.taxCode" maxlength="16" />
+                    <input type="text" x-model="form.taxCode" maxlength="16" disabled />
                 </label>
             </template>
 
@@ -70,8 +74,6 @@
                 <input type="text" x-model="form.id" disabled />
             </label>
 
-            <button type="submit" :aria-busy="saving" :disabled="saving">Salva modifiche</button>
-            <button type="button" @click="promoteToAdmin()" :disabled="saving || String(form.role || '').toLowerCase() === 'admin'" style="margin-left: 1rem;">Diventa Admin (test)</button>
         </form>
     </article>
 </section>

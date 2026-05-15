@@ -2,13 +2,12 @@ import re
 from datetime import datetime
 
 from email_validator import EmailNotValidError, validate_email
-from flask import current_app, request, request
+from flask import current_app
 
 from app import bcrypt
 from app.models.models import UserRoles, User
 from app.services.email_service import EmailService
 from app.services.guile_services import GuileService
-from app.services.log_services import LogService
 
 class UserService:
     USERS_CLASS = "Users"
@@ -225,7 +224,6 @@ class UserService:
             EmailService.send_email_to_admin()
 
         current_app.logger.info(f"USER CREATED ON CHAIN: {email=}, {user.blockChainId=}, {user.role=}")
-        log = LogService.record_log("Utente registrato", 20, request.remote_addr, user_agent=request.headers.get("User-Agent", "unknown"))
         auth_payload = UserService._build_auth_payload(user)
         return {
             "success": True,
@@ -273,8 +271,9 @@ class UserService:
             value=user.to_json(),
         )
 
-        current_app.logger.info(f"USER LOGGED IN FROM CHAIN: {email=}, {user.blockChainId=}, {user.role=}")
-        LogService.record_log("Utente autenticato", 20, request.remote_addr, user_agent=request.headers.get("User-Agent", "unknown"))
+        #current_app.logger.info(f"USER LOGGED IN FROM CHAIN: {email=}, {user.blockChainId=}, {user.role=}")  #log in locale
+        #LogService.record_log(message=f"User {email} logged in", levelno=20, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"))
+
         auth_payload = UserService._build_auth_payload(user)
         return {
             "success": True,

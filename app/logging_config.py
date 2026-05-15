@@ -6,6 +6,63 @@ from logging import Handler
 from flask import has_request_context, request
 
 
+MAIN_GET_PATHS = {
+    "/",
+    "/login",
+    "/signin",
+    "/faq",
+    "/dashboard",
+    "/profile",
+    "/click-create-auction",
+    "/auctions/create",
+    "/api/v1/auth/profile",
+    "/api/v1/assets",
+    "/api/v1/assets/user",
+    "/api/v1/auctions",
+    "/api/v1/bids",
+    "/api/v1/bids/user/",
+    "/api/v1/bids/allowed_timeframe",
+    "/api/v1/admin/users",
+    "/api/v1/admin/stats",
+    "/api/v1/admin/auctions",
+    "/api/v1/admin/logs",
+}
+
+
+MAIN_GET_PREFIXES = (
+    "/auction/",
+    "/api/v1/assets/",
+    "/api/v1/auctions/status/",
+    "/api/v1/auctions/bids/",
+    "/api/v1/auctions/getAuctionHistory/",
+    "/api/v1/admin/history/asset/",
+    "/api/v1/admin/history/auctions/",
+)
+
+
+IGNORED_GET_PREFIXES = (
+    "/static/",
+    "/uploads/",
+    "/favicon",
+)
+
+
+def should_log_request_to_blockchain(method: str, path: str) -> bool:
+    if method == "POST":
+        return True
+
+    if method != "GET":
+        return False
+
+    if any(path.startswith(prefix) for prefix in IGNORED_GET_PREFIXES):
+        return False
+
+    if path in MAIN_GET_PATHS:
+        return True
+
+    return any(path.startswith(prefix) for prefix in MAIN_GET_PREFIXES)
+
+
 class RequestContextFilter(logging.Filter):
     def filter(self, record):
         if has_request_context():
@@ -32,7 +89,7 @@ class RequestContextFilter(logging.Filter):
 class BlockchainLogHandler(Handler):
     def emit(self, record):
         try:
-            if not has_request_context():
+            if not has_request_context() or record.name != "werkzeug":
                 return
 
             from app.services.log_services import LogService
@@ -40,12 +97,21 @@ class BlockchainLogHandler(Handler):
             request_ip = getattr(record, "request_ip", "system")
             request_method = getattr(record, "request_method", "-")
             request_path = getattr(record, "request_path", "-")
+
+            if not should_log_request_to_blockchain(request_method, request_path):
+                return
+
             message = record.getMessage()
 
             if request_method != "-" and request_path != "-":
                 message = f"[{request_method} {request_path}] {message}"
 
-            LogService.record_log(message=message, levelno=int(record.levelno), from_ip=request_ip)
+            LogService.record_log(
+                message=message,
+                levelno=int(record.levelno),
+                from_ip=request_ip,
+                user_agent=request.headers.get("User-Agent", "unknown"),
+            )
         except Exception:
             self.handleError(record)
 
@@ -110,7 +176,7 @@ def setup_logging(app_name):
                     "formatter": "plain",
                     "encoding": "utf8",
                 },
-                # Handler blockchain per tutti i log applicativi
+                # Handler blockchain solo per le richieste HTTP rilevanti
                 "blockchain_handler": {
                     "()": BlockchainLogHandler,
                 },
@@ -124,7 +190,7 @@ def setup_logging(app_name):
             "loggers": {
                 app_name: {
                     "level": "DEBUG",
-                    "handlers": ["console_app", "file_handler", "blockchain_handler"],
+                    "handlers": ["console_app", "file_handler"],
                     "filters": ["request_context"],
                     "propagate": False,
                 },

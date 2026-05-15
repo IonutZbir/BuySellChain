@@ -5,6 +5,8 @@ from flask_jwt_extended import create_access_token, get_current_user, jwt_requir
 
 from app.services.user_services import UserService
 from app.services.log_services import LogService
+from app.models.models import Messages, LogType
+
 api_auth = Blueprint("api", __name__)
 
 
@@ -63,30 +65,32 @@ Endpoint per la registrazione e il login degli utenti. Utilizza JWT per l'autent
 
 @api_auth.route("/signin", methods=["POST"])
 def signin():
-    LogService.record_log("Tentativo di registrazione", 20, request.remote_addr, request.headers.get("User-Agent", "unknown"))
+    
     payload = request.get_json(silent=True) or {}
     result = UserService.register_user(payload)
 
     if not result.get("success"):
         return jsonify({"status": "fail", "data": {"message": result.get("message")}}), result.get("status_code", 400)
-
+    LogService.record_log(message=Messages.NUOVO_UTENTE_REGISTRATO, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+    
     return _auth_response(result)
 
 
 @api_auth.route("/login", methods=["POST"])
 def login():
-    LogService.record_log("Tentativo di accesso", 20, request.remote_addr, request.headers.get("User-Agent", "unknown"))
     payload = request.get_json(silent=True) or {}
     remember = bool(payload.get("remember", False))
     result = UserService.login_user(payload)
 
     if not result.get("success"):
-        LogService.record_log("Accesso fallito", 45, request.remote_addr, request.headers.get("User-Agent", "unknown"))
+        LogService.record_log(message=Messages.ACCESSO_NEGATO, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
         return jsonify({"status": "fail", "data": {"message": result.get("message")}}), result.get("status_code", 401)
 
     expires = timedelta(days=30) if remember else timedelta(hours=2)
     if remember:
         current_app.permanent_session_lifetime = timedelta(days=30)
+
+    LogService.record_log(message=Messages.ACCESSO_RIUSCITO, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
 
     return _auth_response(result, expires_delta=expires)
 
@@ -114,46 +118,6 @@ def get_profile():
         return jsonify({"status": "fail", "data": {"message": "Utente non trovato"}}), 404
 
     user = result.get("user")
-
-    return jsonify(
-        {
-            "status": "success",
-            "data": {
-                "id": user.blockChainId,
-                "name": user.name,
-                "surname": user.surname,
-                "email": user.email,
-                "birthday": user.birthday.isoformat() if user.birthday else None,
-                "cellularNumber": user.cellularNumber,
-                "role": user.role.value,
-                "taxCode": user.codiceFiscale,
-            },
-        }
-    ), 200
-
-
-@api_auth.route("/profile", methods=["PUT"])
-@jwt_required()
-def update_profile():
-    current_user = get_current_user() or {}
-    user_id = current_user.get("id")
-
-    if not user_id:
-        return jsonify({"status": "fail", "data": {"message": "Utente non autenticato"}}), 401
-
-    payload = request.get_json(silent=True) or {}
-    result = UserService.update_profile(user_id, payload)
-    if not result.get("success"):
-        return jsonify({"status": "fail", "data": {"message": result.get("message", "Utente non trovato")}}), result.get("status_code", 404)
-
-    user = result.get("user")
-
-    session["user_id"] = user.blockChainId
-    session["role"] = user.role.value
-    if user.role.value == "seller":
-        session["taxCode"] = user.codiceFiscale
-    else:
-        session.pop("taxCode", None)
 
     return jsonify(
         {
