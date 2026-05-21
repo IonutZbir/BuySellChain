@@ -572,6 +572,14 @@
 	white-space: nowrap;
 }
 
+.admin-log-message,
+.admin-log-useragent {
+	max-width: 360px;
+	white-space: pre-wrap;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
 .admin-logs {
 	max-height: 360px;
 	overflow: auto;

@@ -142,8 +142,11 @@
 			<table>
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Livello</th>
 						<th>IP</th>
+						<th>Metodo</th>
+						<th>User Agent</th>
 						<th>Data</th>
 						<th>Messaggio</th>
 					</tr>
@@ -151,14 +154,17 @@
 				<tbody>
 					<template x-for="entry in logs" :key="entry.id">
 						<tr>
+							<td class="admin-cell-truncate" x-text="entry.id"></td>
 							<td><mark x-text="entry.level"></mark></td>
 							<td x-text="entry.from_ip || '-' "></td>
+							<td x-text="entry.method || '-' "></td>
+							<td class="admin-log-useragent" x-text="entry.user_agent || '-' "></td>
 							<td x-text="formatDateTime(entry.created_at)"></td>
-							<td class="admin-cell-truncate" x-text="entry.message"></td>
+							<td class="admin-log-message" x-text="entry.message"></td>
 						</tr>
 					</template>
 					<tr x-show="logs.length === 0">
-						<td colspan="4">Nessun log disponibile.</td>
+						<td colspan="7">Nessun log disponibile.</td>
 					</tr>
 				</tbody>
 			</table>

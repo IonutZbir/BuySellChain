@@ -54,7 +54,7 @@ def get_users():
                 "last_login_at": user.lastLoginAt.isoformat() if user.lastLoginAt else None,
             }
         )
-    LogService.record_log(message=Messages.PREFIX_GET_ADMIN_ROUTE + "/users", level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
+    LogService.record_log(message=Messages.PREFIX_GET_ADMIN_ROUTE.value + "/users", level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
     return jsend_response("success", data={"users": users}, code=200)
 
 
