@@ -130,8 +130,21 @@
 
 	<article>
 		<header class="admin-section-header">
-			<h3>Log Applicazione</h3>
-			<small x-text="logs.length + ' righe'">0 righe</small>
+			<div class="admin-section-title">
+				<h3>Log Applicazione</h3>
+				<button type="button" class="secondary" @click="analyzeLogs()" :disabled="analysisLoading || selectedCount() === 0">
+					<span x-text="analysisLoading ? 'Analisi in corso...' : 'Analizza log selezionati'"></span>
+				</button>
+			</div>
+			<div class="admin-log-filters">
+				<select x-model="filterSeverity" aria-label="Filtra per criticità">
+					<option value="">Tutte le criticità</option>
+					<option value="INFO">INFO</option>
+					<option value="ALERT">ALERT</option>
+				</select>
+				<input type="text" placeholder="Filtra per testo messaggio" x-model.debounce.300ms="filterText" aria-label="Filtra per testo del log" />
+			</div>
+			<small x-text="filteredLogs().length + ' righe filtrate - ' + selectedCount() + ' selezionate'">0 righe</small>
 		</header>
 
 		<template x-if="loading.logs">
@@ -142,6 +155,9 @@
 			<table>
 				<thead>
 					<tr>
+						<th>
+							<input type="checkbox" x-model="selectAllLogs" @change="toggleSelectAll()" aria-label="Seleziona tutti i log visibili" />
+						</th>
 						<th>ID</th>
 						<th>Livello</th>
 						<th>IP</th>
@@ -152,8 +168,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<template x-for="entry in logs" :key="entry.id">
-						<tr>
+					<template x-for="entry in filteredLogs()" :key="entry.id">
+						<tr :class="selectedLogIds.includes(entry.id) ? 'selected-log' : ''">
+							<td>
+								<input type="checkbox" x-model="selectedLogIds" :value="entry.id" @change="syncSelectAllState()" aria-label="Seleziona log" />
+							</td>
 							<td class="admin-cell-truncate" x-text="entry.id"></td>
 							<td><mark x-text="entry.level"></mark></td>
 							<td x-text="entry.from_ip || '-' "></td>
@@ -164,11 +183,78 @@
 						</tr>
 					</template>
 					<tr x-show="logs.length === 0">
-						<td colspan="7">Nessun log disponibile.</td>
+						<td colspan="8">Nessun log disponibile.</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</article>
+	<div x-show="analysisPopupOpen" class="admin-modal-backdrop" x-cloak @keydown.escape.window="analysisPopupOpen = false">
+		<div class="admin-modal-card" @click.outside="analysisPopupOpen = false">
+			
+			<header class="admin-modal-header">
+				<div>
+					<h3 style="margin-bottom: 0;">Risultato Analisi Logs</h3>
+					<small x-show="analysisLoading" style="color: var(--muted-color); display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+						Sto pensando... <span class="spinner" style="width: 14px; height: 14px; border-width: 2px;"></span>
+					</small>
+				</div>
+				<button type="button" class="secondary" @click="analysisPopupOpen = false" style="margin: 0; padding: 0.5rem 2rem;">Chiudi</button>
+			</header>
+
+			<section class="admin-modal-body">
+				
+				<template x-if="isTyping || analysisLoading">
+					<div class="admin-result-section">
+						<pre class="admin-modal-pre" x-text="popupTypedOutput"></pre>
+					</div>
+				</template>
+
+				<template x-if="analysisError && !isTyping && !analysisLoading">
+					<div class="admin-error-banner" style="padding: 1rem; margin-bottom: 0;">
+						<strong>Errore:</strong> <span x-text="analysisError"></span>
+					</div>
+				</template>
+
+				<template x-if="!isTyping && !analysisLoading && !analysisError && analysisResult">
+					<div class="admin-result-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+						
+						<div class="admin-result-section">
+							<p style="margin-bottom: 0.5rem;"><strong>Severity:</strong> <span x-text="analysisResult.severity || 'RAW'"></span></p>
+							<p style="margin-bottom: 0.5rem;"><strong>Attack type:</strong> <span x-text="analysisResult.attack_type || '-'"></span></p>
+							<p style="margin-bottom: 0;"><strong>Confidence:</strong> <span x-text="analysisResult.confidence ?? '-'"></span></p>
+						</div>
+
+						<template x-if="analysisResult.explanation">
+							<div class="admin-result-section">
+								<p style="margin-bottom: 0.5rem;"><strong>Explanation:</strong></p>
+								<p style="margin: 0; color: var(--color);" x-text="analysisResult.explanation"></p>
+							</div>
+						</template>
+
+						<template x-if="analysisResult.reasoning">
+							<div class="admin-result-section">
+								<p style="margin-bottom: 0.5rem;"><strong>Reasoning:</strong></p>
+								<p style="margin: 0; color: var(--muted-color); font-size: 0.95em;" x-text="analysisResult.reasoning"></p>
+							</div>
+						</template>
+
+						<template x-if="analysisResult.remediation || analysisResult.contromisure">
+							<div class="admin-result-section">
+								<p style="margin-bottom: 0.5rem;"><strong>Contromisure:</strong></p>
+								<p style="margin: 0; color: var(--muted-color); font-size: 0.95em;" x-text="analysisResult.remediation || analysisResult.contromisure"></p>
+							</div>
+						</template>
+
+						<div class="admin-result-section">
+							<p style="margin-bottom: 0.5rem;"><strong>Raw Output:</strong></p>
+							<pre class="admin-modal-pre"><code><span x-text="analysisRawOutput"></span></code></pre>
+						</div>
+					</div>
+				</template>
+
+			</section>
+		</div>
+	</div>
 </section>
 {% endblock %}

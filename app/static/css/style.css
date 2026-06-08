@@ -574,10 +574,16 @@
 
 .admin-log-message,
 .admin-log-useragent {
-	max-width: 360px;
+	min-width: 280px; /* Assicura spazio sufficiente per non farli collassare */
+	max-width: 450px;
 	white-space: pre-wrap;
 	word-break: break-word;
 	overflow-wrap: anywhere;
+}
+
+/* Allinea tutto il testo della tabella dei log in alto per una lettura più ordinata */
+.admin-table-wrap table td {
+	vertical-align: top;
 }
 
 .admin-logs {
@@ -599,6 +605,152 @@
 	font-size: 0.8rem;
 	color: var(--color);
 	word-break: break-word;
+}
+
+/* .analysis-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(6px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem;
+	z-index: 9999;
+	overflow-y: auto;
+} */
+
+/* ========================================
+   MODAL ANALISI LOGS (Admin)
+   ======================================== */
+.admin-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 15, 20, 0.85); /* Sfondo scuro semitrasparente */
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 9999;
+}
+
+.admin-modal-card {
+    background: var(--card-background-color); /* Usa il background del tema (scuro/chiaro) */
+    border: 1px solid var(--muted-border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 750px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.admin-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--muted-border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: color-mix(in srgb, var(--card-background-color) 97%, var(--color) 3%);
+}
+
+.admin-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-modal-pre {
+    margin: 0;
+    background: color-mix(in srgb, var(--background-color) 95%, var(--primary) 5%);
+    border: 1px solid var(--muted-border-color);
+    border-radius: calc(var(--border-radius) / 2);
+    padding: 1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--muted-color);
+}
+
+
+.analysis-modal-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: transparent;
+	border: none;
+	color: var(--text-color);
+	font-size: 1.75rem;
+	cursor: pointer;
+}
+
+.analysis-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+}
+
+.analysis-modal-body {
+	display: grid;
+	gap: 1rem;
+	max-height: calc(100vh - 10rem);
+	overflow: auto;
+}
+
+.analysis-modal-field {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.analysis-modal-field label {
+	font-weight: 700;
+	color: var(--muted-color);
+}
+
+.analysis-modal-value {
+	margin: 0;
+	padding: 0.75rem 1rem;
+	background: var(--background-color);
+	border: 1px solid var(--muted-border-color);
+	border-radius: 0.75rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.analysis-modal-typing {
+	margin: 0;
+	min-height: 180px;
+	background: var(--background-color);
+	border: 1px solid var(--muted-border-color);
+	border-radius: 0.75rem;
+	padding: 1rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+	overflow: auto;
+}
+
+.spinner {
+	width: 18px;
+	height: 18px;
+	border: 3px solid rgba(0, 0, 0, 0.15);
+	border-top-color: #10b981;
+	border-radius: 50%;
+	animation: spin 0.85s linear infinite;
+	display: inline-block;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 /* ========================================

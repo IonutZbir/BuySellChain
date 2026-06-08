@@ -20,7 +20,7 @@ def post_assets():
 
     role = user.get("role")
     if role != "seller":
-        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /assets POST", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /assets", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
         return jsonify({"error": "Accesso negato"}), 403
 
     title = request.form.get("title")

@@ -36,6 +36,7 @@ def create_bid():
         return jsend_response("error", message="Errore del server", code=500)
     else:
         if not result.get("validate_success"):
+            LogService.record_log(message="Offerta rifiutata" + result.get("Bid_status_reason"), level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
             return jsend_response("fail", data={"error": result.get("Bid_status_reason")}, code=400)
 
     LogService.record_log(message=Messages.OFFERTA_REGISTRATA_BL, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")

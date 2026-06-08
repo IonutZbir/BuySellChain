@@ -4,11 +4,12 @@ The top-level auxiliary file: main.aux
 A level-1 auxiliary file: introduction.aux
 A level-1 auxiliary file: system_arch.aux
 A level-1 auxiliary file: threat_model.aux
+A level-1 auxiliary file: active_log_analysis.aux
 The style file: ieeetr.bst
 Database file #1: refs.bib
 You've used 9 entries,
             1876 wiz_defined-function locations,
-            531 strings with 4771 characters,
+            532 strings with 4794 characters,
 and the built_in function-call counts, 1251 in all, are:
 = -- 125
 > -- 43

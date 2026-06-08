@@ -2,8 +2,6 @@ import enum
 from datetime import datetime
 from hashlib import sha256
 from uuid import uuid4
-from sqlalchemy import String, Date, DateTime, Enum
-from sqlalchemy.orm import Mapped, mapped_column
 import hmac
 import os
 from base64 import b64encode, b64decode
@@ -11,10 +9,6 @@ from string import hexdigits
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from flask import current_app
-
-# Importa l'istanza db che hai creato in app/__init__.py
-from app import db
-
 
 class UserRoles(enum.Enum):
     ADMIN = "admin"
@@ -337,14 +331,18 @@ class Asset:
 
 class Messages(enum.Enum):
     ACCESSO_NEGATO = "Accesso negato"
-    ACCESSO_RIUSCITO = "Accesso riuscito"
-    PREFIX_ACCESSO_NON_AUTORIZZATO = "Accesso non autorizzato -> "
+    ACCESSO_RIUSCITO = "Accesso riuscito come utente con ID: {user_id} ruolo {role}"
+    ADMIN_ACCESSO_RIUSCITO = "Accesso riuscito come utente admin"
+    ADMIN_ACCESSO_NEGATO = "Tentativo di accesso come utente admin"
+    PREFIX_ACCESSO_NON_AUTORIZZATO = "Tentativo di accesso non autorizzato su endpoint -> "
+    PREFIX_JWT_REQUIRED = "Tentativo di accesso a endpoint protetto con JWT ({endpoint}). ERRORE -> "
     ECCESSO_RICHIESTE_LOGIN = "Eccesso di richieste di login" # DA IMPLEMENTARE CON SISTEMA DI RATE LIMITING (FORSE)
-    NUOVO_UTENTE_REGISTRATO = "Nuovo utente registrato"
-    REGISTRAZIONE_ASTA_BL = "Asta registrata su Blockchain"
+    NUOVO_SELLER_REGISTRATO = "Nuovo venditore registrato. ID utente: {user_id}"
+    NUOVO_BUYER_REGISTRATO = "Nuovo acquirente registrato. ID utente: {user_id}"
+    REGISTRAZIONE_ASTA_BL = "Asta con ID {auction_id} registrata su Blockchain"
     REGISTRAZIONE_ASSET_BL = "Asset registrato su Blockchain"
     OFFERTA_REGISTRATA_BL = "Offerta registrata su Blockchain"
-    PREFIX_GET_ADMIN_ROUTE = "Accesso a route admin -> "
+    PREFIX_GET_ADMIN_ROUTE = "Accesso a route riservate ad admin -> "
 
 class Log:
     """Classe che definisce un Log presente nella Blockchain con cifratura AES-GCM"""

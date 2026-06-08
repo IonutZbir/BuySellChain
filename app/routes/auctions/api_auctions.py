@@ -35,7 +35,7 @@ def create_auction():
 
     role = user.get("role")
     if role != "seller":
-        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /auctions POST", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO.value + " /auctions", level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
         return jsonify({"error": "Accesso negato"}), 403
 
     # Validate required fields
@@ -69,7 +69,7 @@ def create_auction():
         assetId, sellerId, startTime, endTime, startingPrice, minIncr
     )
     if result:
-        LogService.record_log(message=Messages.REGISTRAZIONE_ASTA_BL, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+        LogService.record_log(message=Messages.REGISTRAZIONE_ASTA_BL.value.format(auction_id=result.get("id")), level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
     return jsend_response("success", code=200) if result else jsend_response("fail", code=400)
 
 

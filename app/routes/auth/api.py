@@ -71,8 +71,11 @@ def signin():
 
     if not result.get("success"):
         return jsonify({"status": "fail", "data": {"message": result.get("message")}}), result.get("status_code", 400)
-    LogService.record_log(message=Messages.NUOVO_UTENTE_REGISTRATO, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
-    
+    if result.get("user").role.value == "seller":
+        LogService.record_log(message=Messages.NUOVO_SELLER_REGISTRATO.value.format(user_id=result.get("user").blockChainId), level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+    else:
+        LogService.record_log(message=Messages.NUOVO_BUYER_REGISTRATO.value.format(user_id=result.get("user").blockChainId), level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+
     return _auth_response(result)
 
 
@@ -83,14 +86,13 @@ def login():
     result = UserService.login_user(payload)
 
     if not result.get("success"):
-        LogService.record_log(message=Messages.ACCESSO_NEGATO, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
         return jsonify({"status": "fail", "data": {"message": result.get("message")}}), result.get("status_code", 401)
 
     expires = timedelta(days=30) if remember else timedelta(hours=2)
     if remember:
         current_app.permanent_session_lifetime = timedelta(days=30)
 
-    LogService.record_log(message=Messages.ACCESSO_RIUSCITO, level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+    LogService.record_log(message=Messages.ACCESSO_RIUSCITO.value.format(user_id=result.get("user").blockChainId, role=result.get("user").role.value), level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
 
     return _auth_response(result, expires_delta=expires)
 

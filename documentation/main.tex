@@ -7,6 +7,8 @@
 \usepackage{geometry}
 \geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
 \usepackage[numbers, square]{natbib}
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref} % deve venire dopo hyperref
@@ -118,6 +120,8 @@
 \include{system_arch}
 
 \include{threat_model}
+
+\include{active_log_analysis}
 \addcontentsline{toc}{chapter}{Bibliografia}
 \nocite{*}
 \bibliographystyle{ieeetr}

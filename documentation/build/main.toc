@@ -1,37 +1,46 @@
 \babel@toc {italian}{}\relax 
 \babel@toc {italian}{}\relax 
-\contentsline {chapter}{\numberline {1}Introduzione}{2}{chapter.1}%
-\contentsline {chapter}{\numberline {2}Architettura del Sistema}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Gestione dell'Identità e Sicurezza}{4}{section.2.1}%
+\contentsline {chapter}{\numberline {1}Introduzione}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Architettura del Sistema}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Gestione dell'Identità e Sicurezza}{5}{section.2.1}%
 \contentsline {section}{\numberline {2.2}User Requirements Definition}{5}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Frontend}{7}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Backend (Security Gateway)}{8}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Authentication \& Authorization}{8}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Modello Dati \& Interfaccia RESTful API}{9}{subsection.2.4.2}%
-\contentsline {subsubsection}{Definizione Modello Dati}{10}{section*.7}%
-\contentsline {subsubsection}{Definizione Interfaccia RESTful API}{12}{section*.12}%
-\contentsline {subsection}{\numberline {2.4.3}Logica di Bussiness}{16}{subsection.2.4.3}%
-\contentsline {paragraph}{Registrazione e Verifica dei Venditori}{16}{section*.14}%
-\contentsline {paragraph}{Struttura Temporale delle Aste}{16}{section*.15}%
-\contentsline {paragraph}{Vincoli sulle Offerte}{16}{section*.16}%
-\contentsline {paragraph}{Aggiornamento dello Stato dell'Asta}{16}{section*.17}%
-\contentsline {paragraph}{Storico Offerte con Visibilita per Ruolo}{17}{section*.18}%
-\contentsline {paragraph}{Chiusura dell'Asta e calcolo del Vincitore}{17}{section*.19}%
-\contentsline {paragraph}{Notifiche Email di Esito Asta}{17}{section*.20}%
-\contentsline {section}{\numberline {2.5}Blockchain Layer}{18}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Database Off-Chain}{19}{section.2.6}%
-\contentsline {chapter}{\numberline {3}Definizione dell'infrastruttura e delle Zone di Sicurezza}{20}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Zona DMZ (Demilitarized Zone)}{20}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Zona IT / Enterprise (Restricted Zone)}{21}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Asset Inventory e Analisi delle Criticità}{22}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Endpoint del Security Gateway}{22}{subsection.3.3.1}%
-\contentsline {section}{\numberline {3.4}Superficie Osservabile, Inferenza e Vettori di Attacco}{23}{section.3.4}%
-\contentsline {section}{\numberline {3.5}Grafo dell'Infrastruttura e Flussi di Comunicazione}{24}{section.3.5}%
-\contentsline {section}{\numberline {3.6}Dall'Architettura alla Baseline Comportamentale (Operating Envelope)}{26}{section.3.6}%
-\contentsline {subsection}{\numberline {3.6.1}Definizione della Baseline Qualitativa}{26}{subsection.3.6.1}%
-\contentsline {chapter}{\numberline {4}Logger}{27}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Definizione Sistema di Logging}{27}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Esempi di Log e Analisi Comportamentale}{29}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}User Agent Metadata Role}{30}{subsection.4.2.1}%
-\contentsline {section}{\numberline {4.3}Monitoraggio Autenticazione \& Admin}{30}{section.4.3}%
-\contentsline {chapter}{Bibliografia}{32}{section.4.3}%
+\contentsline {section}{\numberline {2.3}Frontend}{8}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Backend (Security Gateway)}{9}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Authentication \& Authorization}{9}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Modello Dati \& Interfaccia RESTful API}{10}{subsection.2.4.2}%
+\contentsline {subsubsection}{Definizione Modello Dati}{11}{section*.7}%
+\contentsline {subsubsection}{Definizione Interfaccia RESTful API}{13}{section*.12}%
+\contentsline {subsection}{\numberline {2.4.3}Logica di Bussiness}{17}{subsection.2.4.3}%
+\contentsline {paragraph}{Registrazione e Verifica dei Venditori}{17}{section*.14}%
+\contentsline {paragraph}{Struttura Temporale delle Aste}{17}{section*.15}%
+\contentsline {paragraph}{Vincoli sulle Offerte}{17}{section*.16}%
+\contentsline {paragraph}{Aggiornamento dello Stato dell'Asta}{17}{section*.17}%
+\contentsline {paragraph}{Storico Offerte con Visibilita per Ruolo}{18}{section*.18}%
+\contentsline {paragraph}{Chiusura dell'Asta e calcolo del Vincitore}{18}{section*.19}%
+\contentsline {paragraph}{Notifiche Email di Esito Asta}{18}{section*.20}%
+\contentsline {section}{\numberline {2.5}Blockchain Layer}{19}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Database Off-Chain}{20}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Definizione dell'infrastruttura e delle Zone di Sicurezza}{21}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Zona DMZ (Demilitarized Zone)}{21}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Zona IT / Enterprise (Restricted Zone)}{22}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Asset Inventory e Analisi delle Criticità}{23}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Endpoint del Security Gateway}{23}{subsection.3.3.1}%
+\contentsline {section}{\numberline {3.4}Superficie Osservabile, Inferenza e Vettori di Attacco}{24}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Grafo dell'Infrastruttura e Flussi di Comunicazione}{25}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Dall'Architettura alla Baseline Comportamentale (Operating Envelope)}{27}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Definizione della Baseline Qualitativa}{27}{subsection.3.6.1}%
+\contentsline {chapter}{\numberline {4}Logger}{28}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Definizione Sistema di Logging}{28}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Esempi di Log e Analisi Comportamentale}{30}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}User Agent Metadata Role}{31}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Monitoraggio Autenticazione \& Admin}{31}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Analisi Attiva dei Log con il Modello IA ollama:qwen3.5}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Integrazione nell'Infrastruttura}{33}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Flusso Operativo}{34}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Come l'IA Aiuta l'Analisi dei Log}{34}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Addestramento sulla Baseline e Prompt del Modello}{35}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Addestramento e Adattamento}{36}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Esempi di Tipologie di Eventi Analizzati}{36}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Interfacciamento con l'Infrastruttura}{36}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Considerazioni sulla Sicurezza e Sul Ruolo dell'IA}{40}{section.5.5}%
+\contentsline {chapter}{Bibliografia}{41}{section.5.5}%

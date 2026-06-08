@@ -6,19 +6,24 @@ L'architettura di \textbf{BuySellChain} adotta un approccio ibrido che integra l
     \item[Frontend:] Interfaccia utente realizzata con \textbf{Jinja2} e \textbf{Alpine.js}, che fornisce reattività lato client senza richiedere una build pipeline complessa. La responsabilità è limitata alla presentazione dei dati e all'interazione utente, senza contenere logica di business critica.
     
     \item[Backend (Security Gateway):] 
-    Server applicativo implementato in \textbf{Python} con il microframework \textbf{Flask}, che funge da middleware di sicurezza tra il client pubblico e la rete privata Blockchain. Questa componente ha il ruolo critico di sanitizzare gli input, gestire le sessioni, implementare il controllo degli accessi basato su ruoli (RBAC) e prevenire l'esposizione diretta delle API del Ledger. Si occupa dell'autenticazione degli utenti tramite credenziali verificate sul database off-chain e della generazione di JWT per l'autorizzazione stateless delle operazioni successive.
+    Server applicativo implementato in \textbf{Python} con il microframework \textbf{Flask}, che funge da middleware di sicurezza tra il client pubblico e la rete privata Blockchain. Questa componente ha il ruolo critico di sanitizzare gli input, gestire le sessioni, implementare il controllo degli accessi basato su ruoli (RBAC) e prevenire l'esposizione diretta delle API del Ledger. Si occupa dell'autenticazione degli utenti tramite credenziali verificate direttamente sulla Blockchain e della generazione di JWT per l'autorizzazione stateless delle operazioni successive.
     
     \item[Blockchain Layer:] 
-    Il nucleo del sistema, basato su \textbf{Hyperledger Fabric} \cite{HyperledgerFabricDocs}, che funziona come database distribuito e immutabile per le operazioni critiche di compravendita. Questo livello è accessibile esclusivamente tramite il client Lisp fornito dal docente, che incapsula la logica di interazione con il chaincode e la gestione delle identità crittografiche (MSP). Il meccanismo di consenso distribuito valida le transazioni secondo le regole definite negli Smart Contract, garantendo l'integrità e la non-ripudiabilità delle operazioni.
-    
-    \item[Database Off-Chain:] 
-    Un database relazionale \textbf{PostgreSQL} utilizzato per la persistenza dei dati sensibili e non critici per il consenso distribuito, come i profili utente, le credenziali di accesso al portale web e l'anagrafe del sistema. L'accesso è mediato attraverso \textbf{SQLAlchemy}, un'astrazione ORM che garantisce protezione contro attacchi SQL injection. Questa separazione garantisce la conformità alle normative sulla privacy (GDPR), evitando la scrittura di dati sensibili sul Ledger immutabile. Le password sono protette mediante l'algoritmo di hashing bcrypt con salt unico per ogni utente.
+    Il nucleo del sistema, basato su \textbf{Hyperledger Fabric} \cite{HyperledgerFabricDocs}, che funge da database distribuito e immutabile per le operazioni critiche di compravendita. Questo livello è accessibile esclusivamente tramite il client Lisp fornito dal docente, che incapsula la logica di interazione con il chaincode e la gestione delle identità crittografiche (MSP). Qui sono persistiti in modo immutabile anche i riferimenti alle credenziali utente, i log di accesso e gli eventi di autenticazione, garantendo integrità, tracciabilità e non-ripudiabilità.
 \end{description}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{images/network_arch.png}
-    \caption{Schema ad alto livello dell'architettura ibrida Web 2.0 / Web 3.0}
+    \begin{tikzpicture}[node distance=2cm, >=Stealth, every node/.style={draw, rounded corners, align=center, text width=3.5cm, minimum height=1.2cm}]
+        \node (frontend) {Frontend Web \\ (Browser / Jinja2 / Alpine.js)};
+        \node[right=of frontend] (gateway) {Security Gateway \\ (Flask / JWT / API REST)};
+        \node[right=of gateway] (chain) {Hyperledger Fabric \\ (Ledger, credenziali, log di accesso)};
+        \node[below=1cm of gateway, draw=none, fill=none, text width=7.5cm] (note) {Tutte le operazioni critiche, inclusi login, gestione password e audit, sono persistite direttamente sul ledger blockchain.};
+        \draw[->, thick] (frontend) -- (gateway);
+        \draw[->, thick] (gateway) -- (chain);
+        \draw[->, thick] (note.north) -- ++(0,0.5) -| (gateway.south);
+    \end{tikzpicture}
+    \caption{Schema ad alto livello dell'architettura blockchain-only del sistema}
     \label{fig:architettura}
 \end{figure}
 
@@ -139,7 +144,7 @@ La tecnologia scelta per l'implementazione del backend è \textbf{Python} \cite{
 La sicurezza di \textbf{BuySellChain} si articola su due livelli distinti ma interconnessi: l'autenticazione degli utenti e la gestione dei permessi operativi.
 
 \begin{itemize}
-    \item \textbf{Autenticazione (Identity Verification):} Il Security Gateway agisce come punto d'ingresso unico. Verifica le credenziali dell'utente (username e password) consultando il database off-chain. Una volta validata l'identità, il sistema mappa l'utente Web 2.0 a un'identità digitale riconosciuta dalla rete Fabric, garantendo che ogni operazione sul ledger sia tracciabile e attribuibile a un attore specifico.
+    \item \textbf{Autenticazione (Identity Verification):} Il Security Gateway agisce come punto d'ingresso unico. Verifica le credenziali dell'utente (username e password) consultando il ledger Blockchain, dove sono registrati in modo immutabile anche gli stati correlati all'autenticazione. Una volta validata l'identità, il sistema mappa l'utente Web 2.0 a un'identità digitale riconosciuta dalla rete Fabric, garantendo che ogni operazione sul ledger sia tracciabile e attribuibile a un attore specifico.
     \item \textbf{Autorizzazione (Access Control):} Dopo l'autenticazione, il sistema applica politiche di controllo degli accessi basate sui ruoli (RBAC). Il backend verifica se l'utente possiede i privilegi necessari per invocare specifiche transazioni (es. solo un utente con ruolo "Venditore" può inizializzare un'asta).
 \end{itemize}
     

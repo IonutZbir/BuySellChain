@@ -1,14 +1,16 @@
 import re
 from datetime import datetime
 
+
 from email_validator import EmailNotValidError, validate_email
-from flask import current_app
+from flask import current_app, request
 
 from app import bcrypt
 from app.models.models import UserRoles, User
 from app.services.email_service import EmailService
 from app.services.guile_services import GuileService
-
+from app.services.log_services import LogService
+from app.models.models import LogType, Messages
 class UserService:
     USERS_CLASS = "Users"
 
@@ -258,6 +260,10 @@ class UserService:
 
         user = user_result.get("user")
         if not bcrypt.check_password_hash(user.passwordHash, password):
+            if user.role == UserRoles.ADMIN:
+                LogService.record_log(message=Messages.ADMIN_ACCESSO_NEGATO.value, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
+            else:
+                LogService.record_log(message=Messages.ACCESSO_NEGATO, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="POST")
             return {
                 "success": False,
                 "status_code": 401,

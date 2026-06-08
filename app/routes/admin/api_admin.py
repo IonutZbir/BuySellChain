@@ -11,9 +11,10 @@ from app.services.user_services import UserService
 api_admin = Blueprint("api_admin", __name__)
 
 
-def _ensure_admin():
+def _ensure_admin(endpoint=""):
     user = get_current_user()
     if not user or user.get("role") != "admin":
+        LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO + endpoint, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
         return None, jsend_response("fail", data={"error": "Accesso riservato agli amministratori"}, code=403)
     return user, None
 
@@ -33,7 +34,8 @@ def get_users():
     chain e il loro stato (attivo/sospeso), per permettere all'amministratore di gestire le
     utenze.
     """
-    _, error = _ensure_admin()
+    endpoint = "/users"
+    _, error = _ensure_admin(endpoint)
     if error:
         return error
 
@@ -54,7 +56,8 @@ def get_users():
                 "last_login_at": user.lastLoginAt.isoformat() if user.lastLoginAt else None,
             }
         )
-    LogService.record_log(message=Messages.PREFIX_GET_ADMIN_ROUTE.value + "/users", level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
+    
+    #LogService.record_log(message=Messages.PREFIX_GET_ADMIN_ROUTE.value + "/users", level=LogType.INFO, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
     return jsend_response("success", data={"users": users}, code=200)
 
 
@@ -66,7 +69,8 @@ def get_stats():
     aste concluse, il volume delle transazioni e il numero di asset registrati, invocando
     GetNumKeys sulle diverse classi.
     """
-    _, error = _ensure_admin()
+    endpoint = "/stats"
+    _, error = _ensure_admin(endpoint)
     if error:
         return error
 
@@ -113,7 +117,8 @@ def get_stats():
 @api_admin.route("/auctions", methods=["GET"])
 @jwt_required()
 def get_admin_auctions():
-    _, error = _ensure_admin()
+    endpoint = "/auctions"
+    _, error = _ensure_admin(endpoint)
     if error:
         return error
 
@@ -142,11 +147,11 @@ def get_admin_auctions():
 
 
 @api_admin.route("/logs", methods=["GET"])
-#@jwt_required()
+@jwt_required()
 def get_admin_logs():
-    # _, error = _ensure_admin()
-    # if error:
-        # return error
+    _, error = _ensure_admin()
+    if error:
+        return error
 
     result = LogService.list_logs(limit=120)
     if not result.get("success"):

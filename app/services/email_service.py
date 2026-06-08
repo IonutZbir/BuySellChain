@@ -4,14 +4,9 @@ from flask import current_app
 from flask_mail import Message
 from sqlalchemy import select
 from app.models.models import User, BidStatus
-from app import db
+from app.services.guile_services import GuileService
 
 class EmailService:
-    @staticmethod
-    def _get_user_email(user_id):
-        query = select(User).where(User.blockChainId == user_id)
-        user = db.session.execute(query).scalars().first()
-        return user.email if user else None
 
     @staticmethod
     def _parse_bid_timestamp(timestamp_value):
@@ -26,6 +21,29 @@ class EmailService:
     @staticmethod
     def _format_amount(value):
         return "{:,.2f}".format(float(value or 0)).replace(',', 'X').replace('.', ',').replace('X', '.')
+
+    @staticmethod
+    def _get_user_email(user_id):
+        if not user_id:
+            return None
+
+        result = GuileService.GetKV(Class="Users", key=str(user_id))
+        if not isinstance(result, dict) or "error" in result:
+            return None
+
+        answer = result.get("answer", {})
+        if not isinstance(answer, dict):
+            return None
+
+        value = answer.get("value")
+        if not isinstance(value, dict):
+            return None
+
+        try:
+            user = User.from_json(value)
+            return user.email if user and getattr(user, "email", None) else None
+        except Exception:
+            return None
 
     @staticmethod
     def _build_winner_message(auction_id, winning_amount, seller_email):
@@ -186,8 +204,8 @@ class EmailService:
         mail = current_app.extensions.get('mail')
         recipient_email_winner = EmailService._get_user_email(winner_id)
         recipient_email_seller = EmailService._get_user_email(seller_id)
-        current_app.logger.info(f"Preparing to send email to winner: {winner_id}")
-        current_app.logger.info(f"Preparing to send email to seller: {seller_id}")
+        current_app.logger.info(f"Preparing to send email to winner: {winner_id} -> {recipient_email_winner}")
+        current_app.logger.info(f"Preparing to send email to seller: {seller_id} -> {recipient_email_seller}")
         try:
             if not recipient_email_winner:
                 return {"success": False, "error": f"Email not found for user {winner_id}"}
