@@ -335,6 +335,7 @@ class Messages(enum.Enum):
     ADMIN_ACCESSO_RIUSCITO = "Accesso riuscito come utente admin"
     ADMIN_ACCESSO_NEGATO = "Tentativo di accesso come utente admin"
     PREFIX_ACCESSO_NON_AUTORIZZATO = "Tentativo di accesso non autorizzato su endpoint -> "
+    ACCESSO_OKAY_CLIENT_ERRATO = "Accesso non autorizzato client invalido. Endpoint: {endpoint}"
     PREFIX_JWT_REQUIRED = "Tentativo di accesso a endpoint protetto con JWT ({endpoint}). ERRORE -> "
     ECCESSO_RICHIESTE_LOGIN = "Eccesso di richieste di login" # DA IMPLEMENTARE CON SISTEMA DI RATE LIMITING (FORSE)
     NUOVO_SELLER_REGISTRATO = "Nuovo venditore registrato. ID utente: {user_id}"

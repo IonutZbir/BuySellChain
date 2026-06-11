@@ -10,11 +10,15 @@ from app.services.user_services import UserService
 
 api_admin = Blueprint("api_admin", __name__)
 
+BLACKLIST_USERAGENT = ["curl", "postman", "httpie"] # Aggiungi altri user-agent se necessario
 
 def _ensure_admin(endpoint=""):
     user = get_current_user()
     if not user or user.get("role") != "admin":
         LogService.record_log(message=Messages.PREFIX_ACCESSO_NON_AUTORIZZATO + endpoint, level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
+        return None, jsend_response("fail", data={"error": "Accesso riservato agli amministratori"}, code=403)
+    if any(blacklisted in (request.headers.get("User-Agent") or "").lower() for blacklisted in BLACKLIST_USERAGENT):
+        LogService.record_log(message=Messages.ACCESSO_OKAY_CLIENT_ERRATO.value.format(endpoint=endpoint), level=LogType.ALERT, from_ip=request.remote_addr, user_agent=request.headers.get("User-Agent"), method="GET")
         return None, jsend_response("fail", data={"error": "Accesso riservato agli amministratori"}, code=403)
     return user, None
 

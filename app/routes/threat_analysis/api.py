@@ -1,3 +1,7 @@
+import json
+import os
+from datetime import datetime
+
 from flask import Blueprint, current_app, request
 from flask_jwt_extended import get_current_user, jwt_required
 
@@ -56,6 +60,28 @@ def analyzed_logs():
     # Avvia l'analisi tramite ThreatService
    
     ai_result = ThreatService.analyze_logs(logs)
+
+    # Salvataggio locale dei dati di analisi AI
+    try:
+        log_dir = os.path.join(current_app.root_path, "logs")
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        filename = os.path.join(log_dir, f"ai_logs_analysis_{timestamp}.json")
+
+        analysis_dump = {
+            "analyzed_at_utc": timestamp,
+            "source_endpoint": "/api/v1/analyze/analyze-logs",
+            "requested_by": user.get("email") if isinstance(user, dict) else None,
+            "input_logs": logs,
+            "ai_result": ai_result,
+        }
+
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(analysis_dump, f, ensure_ascii=False, indent=2)
+
+        current_app.logger.info(f"Threat Analyst API: saved AI analysis record to {filename}")
+    except Exception as save_exc:
+        current_app.logger.error(f"Threat Analyst API: failed to save AI analysis record - {save_exc}")
 
     if isinstance(ai_result, dict) and ai_result.get("error"):
         current_app.logger.error("Threat Analyst API: Ollama analysis failed - " + ai_result.get("detail", "unknown error"))
